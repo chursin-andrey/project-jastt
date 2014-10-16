@@ -1,0 +1,10 @@
+https://developer.atlassian.com/display/JIRADEV/JIRA+REST+API+Example+-+Query+issues
+https://confluence.atlassian.com/pages/viewpage.action?pageId=293830712
+https://developer.atlassian.com/display/JIRADEV/JIRA+REST+API+Example+-+Basic+Authentication
+https://www.base64encode.org/
+https://developer.atlassian.com/display/JIRADEV/JIRA+REST+API+Example+-+Query+issues
+
+https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/search?jql=assignee=vbichev
+https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/search?jql=project=PSLDE
+https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/search?jql=project=PSLDE&fields=id,key
+
