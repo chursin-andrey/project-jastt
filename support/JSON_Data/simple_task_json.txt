@@ -1,0 +1,146 @@
+{
+		"expand": "editmeta,renderedFields,transitions,changelog,operations",
+		"id": "56180",
+		"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/issue/56180",
+		"key": "PSLDE-211",
+		"fields": {
+			"progress": {
+				"progress": 57600,
+				"total": 57600,
+				"percent": 100
+			},
+			"summary": "PROLAB SM-Auftrag",
+			"issuetype": {
+				"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/issuetype/1",
+				"id": "1",
+				"description": "A problem which impairs or prevents the functions of the product.",
+				"iconUrl": "https://seu30.gdc-sbr01.t-systems.com/jira/images/icons/issuetypes/bug.png",
+				"name": "Bug",
+				"subtask": false
+			},
+			"votes": {
+				"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/issue/PSLDE-211/votes",
+				"votes": 0,
+				"hasVoted": false
+			},
+			"fixVersions": [],
+			"resolution": {
+				"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/resolution/1",
+				"id": "1",
+				"description": "A fix for this issue is checked into the tree and tested.",
+				"name": "Fixed"
+			},
+			"resolutiondate": "2014-10-10T08:37:00.000+0200",
+			"timespent": 57600,
+			"creator": {
+				"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/user?username=lanashki",
+				"name": "lanashki",
+				"emailAddress": "Lilia.Anashkina@t-systems.com",
+				"avatarUrls": {
+					"16x16": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?size=xsmall&avatarId=10152",
+					"24x24": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?size=small&avatarId=10152",
+					"32x32": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?size=medium&avatarId=10152",
+					"48x48": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?avatarId=10152"
+				},
+				"displayName": "Anashkina, Lilia",
+				"active": true
+			},
+			"reporter": {
+				"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/user?username=lanashki",
+				"name": "lanashki",
+				"emailAddress": "Lilia.Anashkina@t-systems.com",
+				"avatarUrls": {
+					"16x16": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?size=xsmall&avatarId=10152",
+					"24x24": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?size=small&avatarId=10152",
+					"32x32": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?size=medium&avatarId=10152",
+					"48x48": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?avatarId=10152"
+				},
+				"displayName": "Anashkina, Lilia",
+				"active": true
+			},
+			"aggregatetimeoriginalestimate": 57600,
+			"customfield_11401": null,
+			"customfield_11400": null,
+			"created": "2014-10-10T08:30:44.000+0200",
+			"updated": "2014-10-10T08:37:00.000+0200",
+			"description": "1) After Vorabversand the date for selected position schould change, if this date is in past.\r\n2) The number of SM-Auftrag schould be in Angebot and Teilrechnung in Positions->Kontierung.\r\n3) Processing of incorrect entered meaning of partner in table\r\n4) Change AG partner when Angebot is created. ",
+			"priority": {
+				"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/priority/3",
+				"iconUrl": "https://seu30.gdc-sbr01.t-systems.com/jira/images/icons/priorities/major.png",
+				"name": "Major",
+				"id": "3"
+			},
+			"duedate": "2014-10-09",
+			"customfield_10001": null,
+			"customfield_10002": null,
+			"issuelinks": [],
+			"watches": {
+				"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/issue/PSLDE-211/watchers",
+				"watchCount": 1,
+				"isWatching": false
+			},
+			"customfield_10000": null,
+			"customfield_10602": null,
+			"customfield_11405": null,
+			"customfield_11404": null,
+			"customfield_11403": null,
+			"subtasks": [],
+			"customfield_11402": null,
+			"status": {
+				"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/status/5",
+				"description": "A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.",
+				"iconUrl": "https://seu30.gdc-sbr01.t-systems.com/jira/images/icons/statuses/resolved.png",
+				"name": "Resolved",
+				"id": "5",
+				"statusCategory": {
+					"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/statuscategory/3",
+					"id": 3,
+					"key": "done",
+					"colorName": "green",
+					"name": "Complete"
+				}
+			},
+			"labels": [],
+			"workratio": 100,
+			"assignee": {
+				"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/user?username=lanashki",
+				"name": "lanashki",
+				"emailAddress": "Lilia.Anashkina@t-systems.com",
+				"avatarUrls": {
+					"16x16": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?size=xsmall&avatarId=10152",
+					"24x24": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?size=small&avatarId=10152",
+					"32x32": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?size=medium&avatarId=10152",
+					"48x48": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/useravatar?avatarId=10152"
+				},
+				"displayName": "Anashkina, Lilia",
+				"active": true
+			},
+			"aggregatetimeestimate": 0,
+			"project": {
+				"self": "https://seu30.gdc-sbr01.t-systems.com/jira/rest/api/2/project/12033",
+				"id": "12033",
+				"key": "PSLDE",
+				"name": "OneErp PSL DE",
+				"avatarUrls": {
+					"16x16": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/projectavatar?size=xsmall&pid=12033&avatarId=12631",
+					"24x24": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/projectavatar?size=small&pid=12033&avatarId=12631",
+					"32x32": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/projectavatar?size=medium&pid=12033&avatarId=12631",
+					"48x48": "https://seu30.gdc-sbr01.t-systems.com/jira/secure/projectavatar?pid=12033&avatarId=12631"
+				}
+			},
+			"versions": [],
+			"environment": null,
+			"timeestimate": 0,
+			"lastViewed": null,
+			"aggregateprogress": {
+				"progress": 57600,
+				"total": 57600,
+				"percent": 100
+			},
+			"customfield_10012": "1_*:*_1_*:*_376000_*|*_5_*:*_1_*:*_0",
+			"components": [],
+			"timeoriginalestimate": 57600,
+			"customfield_10011": null,
+			"aggregatetimespent": 57600
+		}
+	},
