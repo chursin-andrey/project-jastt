@@ -18,7 +18,7 @@
 		</changeSet>	
 
 <changeSet id="user_table" author="jaast" context="initial">
-			<createTable tableName="user">
+			<createTable tableName="user_">
 				<column name="id" autoIncrement="true" type="int">
 					<constraints primaryKey="true" primaryKeyName="PK_user"/>
 				</column>
@@ -64,7 +64,7 @@
 			<createTable tableName="permission">
 				<column name="user_id" type="integer(100)"> 
 					<constraints nullable="false" foreignKeyName="FK_permission_user"
-						referencedTableName="user" referencedColumnNames="id"/> 
+						referencedTableName="user_" referencedColumnNames="id"/> 
 				</column>
 				<column name="project_id" type="integer(100)"> 
 					<constraints nullable="false" foreignKeyName="FK_permission_project"
@@ -87,6 +87,7 @@
 			</createTable>
 		</changeSet>	
 		
+		<changeSet id="issue_table" author="jaast" context="initial">
 		<changeSet id="issue_table" author="jaast" context="initial">
 			<createTable tableName="issue">
 				<column name="id" autoIncrement="true" type="int">
