@@ -93,6 +93,7 @@
 			<column name="created">2014-10-21</column>
 			<column name="updated">2014-10-21</column>
 			<column name="priority">Minor</column>
+			<column name="summary">summary1</column>
 			<column name="time_spent">0</column>
 			<column name="version">1.0.1</column>
 			<column name="project_id">12510</column>
@@ -106,6 +107,7 @@
 			<column name="created">2014-10-21</column>
 			<column name="updated">2014-10-21</column>
 			<column name="priority">Minor</column>
+			<column name="summary">summary2</column>
 			<column name="time_spent">10000</column>
 			<column name="version">2.1.1</column>
 			<column name="project_id">2</column>
