@@ -119,7 +119,10 @@
 				<column name="priority" type="varchar(50)"> 
 					<constraints nullable="false"/> 
 				</column>
-				<column name="time_spent" type="double(10)"> 
+				<column name="summary" type="varchar(50)"> 
+					<constraints nullable="false"/> 
+				</column>				
+				<column name="time_spent" type="integer(100)"> 
 					<constraints nullable="false"/> 
 				</column>
 				<column name="version" type="varchar(10)"> 
