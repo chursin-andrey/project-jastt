@@ -8,7 +8,7 @@ import java.util.Set;
 import com.jastt.business.domain.entities.Permission;
 import com.jastt.business.domain.entities.Server;
 
-class User implements Serializable{
+public class User extends PersistentEntity<Integer> implements Serializable{
 	
 	private Integer id;
 	private Server server;

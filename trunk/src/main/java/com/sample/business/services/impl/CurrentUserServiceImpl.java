@@ -5,17 +5,17 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jastt.dal.providers.UserDataProvider;
-import com.jastt.utils.annotations.SessionScope;
 import com.sample.business.domain.entities.User;
 import com.sample.business.services.CurrentUserService;
+import com.sample.dal.providers.UsersDataProvider;
+import com.sample.utils.annotations.SessionScope;
 
 @Service
 @SessionScope
 public class CurrentUserServiceImpl implements CurrentUserService {
 
 	@Autowired
-	private transient UserDataProvider dataProvider;
+	private transient UsersDataProvider dataProvider;
 
 	@Override
 	public User getCurrentUser() {
