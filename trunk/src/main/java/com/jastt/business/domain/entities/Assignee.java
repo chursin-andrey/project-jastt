@@ -1,28 +1,23 @@
 package com.jastt.business.domain.entities;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-import com.jastt.business.domain.entities.Issue;
-
-
-class Assignee implements Serializable{
+public class Assignee extends PersistentEntity<Integer>{
 	
-	private Integer id;
+	private static final long serialVersionUID = -6761832289105928380L;
 	private String name;
 	private String email;
-	private Set<Issue> issues = new HashSet<Issue>(0);
 	
 	
-	public Integer getId() {
-		return id;
+	public Assignee(){	
+	
 	}
 	
-	public void setId(Integer id) {
-		this.id = id;
+	public Assignee(String name, String email) {
+		super();
+		this.name = name;
+		this.email = email;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -39,12 +34,5 @@ class Assignee implements Serializable{
 		this.email = email;
 	}
 	
-	public Set<Issue> getIssues() {
-		return issues;
-	}
-	
-	public void setIssues(Set<Issue> issues) {
-		this.issues = issues;
-	}	
-		
+			
 }

@@ -1,32 +1,27 @@
 package com.jastt.business.domain.entities;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-import com.jastt.business.domain.entities.Issue;
-import com.jastt.business.domain.entities.Permission;
 import com.jastt.business.domain.entities.Server;
 
-class Project implements Serializable{
+public class Project extends PersistentEntity<Integer>{
 	
-	private Integer id;
+	private static final long serialVersionUID = -1896715988263639452L;
 	private Server server;
 	private String key;
 	private String name;
-	private Set<Permission> permissions = new HashSet<Permission>(0);
-	private Set<Issue> issues = new HashSet<Issue>(0);
-	
-	
-	
-	public Integer getId() {
-		return id;
+
+	public Project(){
+		
 	}
 	
-	public void setId(Integer id) {
-		this.id = id;
+	public Project(Server server, String key, String name) {
+		super();
+		this.server = server;
+		this.key = key;
+		this.name = name;
 	}
-	
+
+
 	public Server getServer() {
 		return server;
 	}
@@ -51,20 +46,5 @@ class Project implements Serializable{
 		this.name = name;
 	}
 	
-	public Set<Permission> getPermissions() {
-		return permissions;
-	}
-	
-	public void setPermissions(Set<Permission> permissions) {
-		this.permissions = permissions;
-	}
-	
-	public Set<Issue> getIssues() {
-		return issues;
-	}
-	
-	public void setIssues(Set<Issue> issues) {
-		this.issues = issues;
-	}
 	
 }

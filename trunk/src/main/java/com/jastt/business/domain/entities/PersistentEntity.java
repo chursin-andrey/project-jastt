@@ -9,8 +9,8 @@ import java.io.Serializable;
  * 
  * @param <T>
  */
-public abstract class PersistentEntity<T extends Serializable> implements
-		Serializable {
+public abstract class PersistentEntity<T extends Serializable> implements Serializable {	
+	
 	private static final long serialVersionUID = 1L;
 	private T id;
 
