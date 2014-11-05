@@ -9,12 +9,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.jastt.utils.annotations.DefaultProfile;
-import com.jastt.utils.annotations.UnitTestProfile;
 import com.sample.business.exceptions.IllegalCredentialsException;
 import com.sample.business.exceptions.UserNotFoundException;
 import com.sample.business.services.fakes.UsersDataProviderFake;
 import com.sample.utils.TestConstants;
+import com.sample.utils.annotations.DefaultProfile;
+import com.sample.utils.annotations.UnitTestProfile;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:testApplicationContext.xml" })

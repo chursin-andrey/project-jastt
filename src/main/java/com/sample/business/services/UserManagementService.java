@@ -2,10 +2,10 @@ package com.sample.business.services;
 
 import java.util.List;
 
-import com.jastt.dal.exceptions.DaoException;
 import com.sample.business.domain.entities.User;
 import com.sample.business.exceptions.IllegalCredentialsException;
 import com.sample.business.exceptions.UserNotFoundException;
+import com.sample.dal.exceptions.DaoException;
 
 public interface UserManagementService {
 

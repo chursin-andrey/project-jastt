@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jastt.dal.exceptions.DaoException;
-import com.jastt.dal.providers.UserDataProvider;
-import com.jastt.dal.providers.pagination.LoadOptions;
 import com.sample.business.domain.entities.User;
 import com.sample.business.exceptions.IllegalCredentialsException;
 import com.sample.business.exceptions.UserNotFoundException;
 import com.sample.business.services.UserManagementService;
+import com.sample.dal.exceptions.DaoException;
+import com.sample.dal.providers.UsersDataProvider;
+import com.sample.dal.providers.pagination.LoadOptions;
 
 @Service
 public class UserManagementServiceImpl implements UserManagementService {
@@ -21,7 +21,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	private static final Logger LOG = LoggerFactory.getLogger(UserManagementServiceImpl.class);
 
 	@Autowired
-	private UserDataProvider dataProvider;
+	private UsersDataProvider dataProvider;
 
 	@Override
 	public void updatePassword(String email, String oldPassword, String newPassword) throws UserNotFoundException,

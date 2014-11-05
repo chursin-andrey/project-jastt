@@ -1,7 +1,8 @@
 package com.jastt.dal.providers;
 
-import com.jastt.dal.entities.User;
+import com.jastt.dal.entities.UserEntity;
 import com.jastt.dal.providers.base.PageableDataProvider;
+import com.jastt.business.domain.entities.User;
 
 
 

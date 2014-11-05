@@ -4,17 +4,17 @@ import java.io.Serializable;
 
 import org.springframework.stereotype.Repository;
 
-import com.jastt.dal.exceptions.DaoException;
-import com.jastt.dal.providers.UserDataProvider;
-import com.jastt.dal.providers.pagination.LoadOptions;
-import com.jastt.dal.providers.pagination.PagedList;
-import com.jastt.utils.annotations.UnitTestProfile;
 import com.sample.business.domain.entities.User;
+import com.sample.dal.exceptions.DaoException;
+import com.sample.dal.providers.UsersDataProvider;
+import com.sample.dal.providers.pagination.LoadOptions;
+import com.sample.dal.providers.pagination.PagedList;
 import com.sample.utils.TestConstants;
+import com.sample.utils.annotations.UnitTestProfile;
 
 @Repository
 @UnitTestProfile
-public class UsersDataProviderFake implements UserDataProvider {
+public class UsersDataProviderFake implements UsersDataProvider {
 
 	private User user;
 

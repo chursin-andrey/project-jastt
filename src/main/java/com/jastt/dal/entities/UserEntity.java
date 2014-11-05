@@ -27,9 +27,8 @@ import javax.persistence.UniqueConstraint;
 		@UniqueConstraint(columnNames = "LOGIN"),
 		@UniqueConstraint(columnNames = "EMAIL"),
 		@UniqueConstraint(columnNames = "PASSWORD") })
-public class UserEntity implements java.io.Serializable {
+public class UserEntity extends GenericDalEntity<Integer> implements java.io.Serializable {
 
-	private Integer id;
 	private ServerEntity serverEntity;
 	private String login;
 	private String firstName;
@@ -68,16 +67,6 @@ public class UserEntity implements java.io.Serializable {
 		this.permissionEntities = permissionEntities;
 	}
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "ID", unique = true, nullable = false)
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SERVER_ID", nullable = false)

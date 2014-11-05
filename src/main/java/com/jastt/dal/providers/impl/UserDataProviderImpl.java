@@ -8,7 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jastt.business.domain.entities.User;
+import com.jastt.dal.entities.UserEntity;
 import com.jastt.dal.providers.UserDataProvider;
+import com.jastt.utils.annotations.DefaultProfile;
 
 
 @Repository
@@ -20,7 +23,7 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 	@Transactional
 	@Override
 	public User getUserByEmail(String email) {
-		Session session = getSession();
+		Session session = sessionFactory.getCurrentSession();
 
 		User user = null;
 
@@ -30,7 +33,7 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 
 			UserEntity dataEntity = (UserEntity) criteria.uniqueResult();
 			if (dataEntity != null) {
-				user = mapToDomainObject(dataEntity);
+				user = mappingService.map(dataEntity, User.class);
 			}
 		} catch (Exception ex) {
 			LOG.error(String.format("Error loading user by email=%s", email), ex);
