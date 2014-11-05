@@ -19,20 +19,24 @@ import com.atlassian.jira.rest.client.api.domain.ServerInfo;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 
 public class App {
-	private static URI JIRA_URI = URI.create("https://jira.atlassian.com");
-    private static final String JIRA_USERNAME = "buslov84";
-    private static final String JIRA_PASSWORD = "NdQp9AQCpb";
+//	private static URI JIRA_URI = URI.create("https://jira.atlassian.com");
+//    private static final String JIRA_USERNAME = "buslov84";
+//    private static final String JIRA_PASSWORD = "NdQp9AQCpb";
+    
+	private static URI JIRA_URI = URI.create("https://seu30.gdc-sbr01.t-systems.com/jira/");
+    private static final String JIRA_USERNAME = "vbichev";
+    private static final String JIRA_PASSWORD = "wiw1!SIS";
     
     public static void main( String[] args ) {
-    	String issueKey ="STASH-2524";//https://jira.atlassian.com/browse/STASH-2524
+    	String issueKey ="PSLDE-229";//https://jira.atlassian.com/browse/STASH-2524
     	
     	testConnection();
     	    	
-//    	getProjects();
+    	getProjects();
     	
-//    	getIssues();    	
+    	getIssues();    	
     	
-//    	getIssueInfo(issueKey);
+    	getIssueInfo(issueKey);
     	
 //    	getIssueInfoFromIssueList(issueKey);
     	
@@ -67,7 +71,8 @@ public class App {
     public static void getIssues() {
 //    	String jql = "project = ANERDS AND assignee = nmuldoon"; 
 //    	String jql = "project = ANERDS AND summary !~ solahart AND assignee is not empty";
-    	String jql = "timespent > 0 AND assignee is not EMPTY and project != TST";
+//    	String jql = "timespent > 0 AND assignee is not EMPTY";
+    	String jql = "project=PSLDE";
     	
     	Iterable<Issue> issues = getIssuesByQuery(jql);
     	int i = 0;
@@ -127,9 +132,10 @@ public class App {
     	JiraRestClient jrc = createJiraRestClient();
     	
     	SearchRestClient searchClient = jrc.getSearchClient();
-    	SearchResult results = searchClient.searchJql(jql, null, null, fields).claim();
-//    	SearchResult results = searchClient.searchJql(jql, -1, null, fields).claim();
-    	
+//    	SearchResult results = searchClient.searchJql(jql, null, null, fields).claim();
+    	SearchResult results = searchClient.searchJql(jql, -1, null, fields).claim();
+    	int total = results.getTotal();
+    	System.out.println("total number of issues: " + total);
     	closeJiraRestClient(jrc);
     	return results.getIssues();
     }

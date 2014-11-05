@@ -13,10 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.jastt.dal.exceptions.DaoException;
+import com.jastt.dal.providers.UserDataProvider;
+import com.jastt.dal.providers.pagination.LoadOptions;
+import com.jastt.utils.CollectionUtils;
 import com.sample.business.domain.entities.User;
-import com.sample.dal.exceptions.DaoException;
-import com.sample.dal.providers.pagination.LoadOptions;
-import com.sample.utils.CollectionUtils;
 import com.sample.utils.HsqlDatabase;
 import com.sample.utils.TestConstants;
 
@@ -25,7 +26,7 @@ import com.sample.utils.TestConstants;
 public class UsersDataProviderTest {
 
 	@Autowired
-	private UsersDataProvider dataProvider;
+	private UserDataProvider dataProvider;
 
 	@BeforeClass
 	public static void setUp() {

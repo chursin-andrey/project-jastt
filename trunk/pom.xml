@@ -9,7 +9,7 @@
 	<url></url>
 
 	<properties>
-		<spring.version>3.2.4.RELEASE</spring.version>
+		<spring.version>4.1.1.RELEASE</spring.version>
 		<mojarra.version>2.2.4</mojarra.version>
 		<prime.faces.version>4.0</prime.faces.version>
 		<shiro.version>1.2.2</shiro.version>
@@ -56,6 +56,11 @@
 
 
 		<!-- Spring Framework -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>

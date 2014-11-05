@@ -12,13 +12,13 @@ import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.Realm;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.jastt.dal.providers.UserDataProvider;
 import com.sample.business.domain.entities.User;
-import com.sample.dal.providers.UsersDataProvider;
 
 /**
  * 
  * This is custom implementation of {@link Realm} which uses custom
- * {@link UsersDataProvider} for authentication of users. See
+ * {@link UserDataProvider} for authentication of users. See
  * spring-shiro-security.xml for details <br>
  * <br>
  * Current implementation supports only {@link UsernamePasswordToken}
@@ -29,7 +29,7 @@ import com.sample.dal.providers.UsersDataProvider;
 public class HibernateRealm extends AuthenticatingRealm {
 
 	@Autowired
-	private UsersDataProvider dataProvider;
+	private UserDataProvider dataProvider;
 
 	public HibernateRealm() {
 		super();

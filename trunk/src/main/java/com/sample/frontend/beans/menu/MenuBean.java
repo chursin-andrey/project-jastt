@@ -3,7 +3,7 @@ package com.sample.frontend.beans.menu;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.sample.utils.annotations.SessionScope;
+import com.jastt.utils.annotations.SessionScope;
 
 @Component
 @SessionScope

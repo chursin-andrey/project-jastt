@@ -8,7 +8,7 @@
 		</layout>
 	</appender>
 
-	<logger name="com.sample" level="WARN" />
+	<logger name="com.jastt" level="WARN" />
 
 
 	<root level="WARN">
