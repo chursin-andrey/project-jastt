@@ -1,14 +1,13 @@
 package com.jastt.business.domain.entities;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Project;
 
-class Issue implements Serializable {
+public class Issue extends PersistentEntity<Integer>{
 	
-	private Integer id;
+	private static final long serialVersionUID = -3505282155291252607L;
 	private String version;
 	private Assignee assignee;
 	private Project project;
@@ -20,15 +19,29 @@ class Issue implements Serializable {
 	private String priority;
 	private double timeSpent;
 	
-	
-	public Integer getId() {
-		return id;
+	public Issue(){
+		
 	}
 	
-	public void setId(Integer id) {
-		this.id = id;
-	}
 	
+	public Issue(String version, Assignee assignee, Project project,
+			String key, String issueType, String status, Date created,
+			Date updated, String priority, double timeSpent) {
+		
+		super();
+		this.version = version;
+		this.assignee = assignee;
+		this.project = project;
+		this.key = key;
+		this.issueType = issueType;
+		this.status = status;
+		this.created = created;
+		this.updated = updated;
+		this.priority = priority;
+		this.timeSpent = timeSpent;
+	}
+
+
 	public String getVersion() {
 		return version;
 	}
@@ -108,6 +121,5 @@ class Issue implements Serializable {
 	public void setTimeSpent(double timeSpent) {
 		this.timeSpent = timeSpent;
 	}
-	
 	
 }

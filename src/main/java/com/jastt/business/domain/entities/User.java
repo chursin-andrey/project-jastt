@@ -1,16 +1,12 @@
 package com.jastt.business.domain.entities;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import com.jastt.business.domain.entities.Permission;
 import com.jastt.business.domain.entities.Server;
 
-public class User extends PersistentEntity<Integer> implements Serializable{
+public class User extends PersistentEntity<Integer>{
 	
-	private Integer id;
+	private static final long serialVersionUID = 468724781884407064L;
 	private Server server;
 	private String login;
 	private String firstName;
@@ -18,17 +14,24 @@ public class User extends PersistentEntity<Integer> implements Serializable{
 	private String password;
 	private String email;
 	private Date birthday;
-	private Set<Permission> permissions = new HashSet<Permission>(0);
-	
-	
-	public Integer getId() {
-		return id;
+
+	public User() {
+		
 	}
 	
-	public void setId(Integer id) {
-		this.id = id;
+	public User(Server server, String login, String firstName, String lastName,
+			String password, String email, Date birthday) {	
+		super();
+		this.server = server;
+		this.login = login;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+		this.email = email;
+		this.birthday = birthday;
 	}
-	
+
+
 	public Server getServer() {
 		return server;
 	}
@@ -84,14 +87,6 @@ public class User extends PersistentEntity<Integer> implements Serializable{
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
-	
-	public Set<Permission> getPermissions() {
-		return permissions;
-	}
-	
-	public void setPermissions(Set<Permission> permissions) {
-		this.permissions = permissions;
-	}
-	
+		
 	
 }
