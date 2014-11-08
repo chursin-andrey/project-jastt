@@ -60,10 +60,12 @@
 	<changeSet id="permission_table_test_data" author="jaast"
 		context="v1.0,test">
 		<insert tableName="permission">
+			<column name="id">1</column>
 			<column name="user_id">1</column>
 			<column name="project_id">12510</column>
 		</insert>
 		<insert tableName="permission">
+<column name="id">2</column>
 			<column name="user_id">1</column>
 			<column name="project_id">2</column>
 		</insert>
