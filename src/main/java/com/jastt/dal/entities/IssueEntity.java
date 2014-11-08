@@ -1,13 +1,16 @@
 package com.jastt.dal.entities;
 
-// Generated 05.11.2014 13:34:24 by Hibernate Tools 4.0.0
+// Generated 08.11.2014 14:19:16 by Hibernate Tools 4.0.0
 
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,7 +24,7 @@ import javax.persistence.Version;
  */
 @Entity
 @Table(name = "ISSUE", schema = "PUBLIC", catalog = "PUBLIC")
-public class IssueEntity implements java.io.Serializable {
+public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Serializable {
 
 	private Integer id;
 	private String version;
@@ -37,6 +40,21 @@ public class IssueEntity implements java.io.Serializable {
 	private int timeSpent;
 
 	public IssueEntity() {
+	}
+
+	public IssueEntity(AssigneeEntity assigneeEntity,
+			ProjectEntity projectEntity, String key, String issueType,
+			String status, Date created, Date updated, String summary,
+			int timeSpent) {
+		this.assigneeEntity = assigneeEntity;
+		this.projectEntity = projectEntity;
+		this.key = key;
+		this.issueType = issueType;
+		this.status = status;
+		this.created = created;
+		this.updated = updated;
+		this.summary = summary;
+		this.timeSpent = timeSpent;
 	}
 
 	public IssueEntity(AssigneeEntity assigneeEntity,
@@ -67,7 +85,7 @@ public class IssueEntity implements java.io.Serializable {
 	}
 
 	@Version
-	@Column(name = "VERSION", nullable = false, length = 10)
+	@Column(name = "VERSION", length = 10)
 	public String getVersion() {
 		return this.version;
 	}
@@ -143,7 +161,7 @@ public class IssueEntity implements java.io.Serializable {
 		this.updated = updated;
 	}
 
-	@Column(name = "PRIORITY", nullable = false, length = 50)
+	@Column(name = "PRIORITY", length = 50)
 	public String getPriority() {
 		return this.priority;
 	}

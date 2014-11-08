@@ -1,13 +1,15 @@
 package com.jastt.dal.entities;
 
-// Generated 05.11.2014 13:34:24 by Hibernate Tools 4.0.0
+// Generated 08.11.2014 14:19:16 by Hibernate Tools 4.0.0
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+
+import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,36 +19,33 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PERMISSION", schema = "PUBLIC", catalog = "PUBLIC")
-public class PermissionEntity implements java.io.Serializable {
+public class PermissionEntity extends GenericDalEntity<Integer> implements java.io.Serializable {
 
-	private PermissionEntityId id;
+	private Integer id;
 	private UserEntity userEntity;
 	private ProjectEntity projectEntity;
 
 	public PermissionEntity() {
 	}
 
-	public PermissionEntity(PermissionEntityId id, UserEntity userEntity,
-			ProjectEntity projectEntity) {
-		this.id = id;
+	public PermissionEntity(UserEntity userEntity, ProjectEntity projectEntity) {
 		this.userEntity = userEntity;
 		this.projectEntity = projectEntity;
 	}
 
-	@EmbeddedId
-	@AttributeOverrides({
-			@AttributeOverride(name = "userId", column = @Column(name = "USER_ID", nullable = false)),
-			@AttributeOverride(name = "projectId", column = @Column(name = "PROJECT_ID", nullable = false)) })
-	public PermissionEntityId getId() {
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "ID", unique = true, nullable = false)
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(PermissionEntityId id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USER_ID", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "USER_ID", nullable = false)
 	public UserEntity getUserEntity() {
 		return this.userEntity;
 	}
@@ -56,7 +55,7 @@ public class PermissionEntity implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PROJECT_ID", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "PROJECT_ID", nullable = false)
 	public ProjectEntity getProjectEntity() {
 		return this.projectEntity;
 	}
