@@ -71,6 +71,9 @@
 		
 		<changeSet id="permission_table" author="jaast" context="initial">
 			<createTable tableName="permission">
+				<column name="id" autoIncrement="true" type="int">
+					<constraints primaryKey="true" primaryKeyName="PK_permission"/>
+				</column>			
 				<column name="user_id" type="integer(100)"> 
 					<constraints nullable="false" foreignKeyName="FK_permission_user"
 						referencedTableName="user_" referencedColumnNames="id"/> 
@@ -117,7 +120,7 @@
 					<constraints nullable="false"/> 
 				</column>
 				<column name="priority" type="varchar(50)"> 
-					<constraints nullable="false"/> 
+					<constraints nullable="true"/> 
 				</column>
 				<column name="summary" type="varchar(50)"> 
 					<constraints nullable="false"/> 
@@ -126,7 +129,7 @@
 					<constraints nullable="false"/> 
 				</column>
 				<column name="version" type="varchar(10)"> 
-					<constraints nullable="false"/> 
+					<constraints nullable="true"/> 
 				</column>
 				<column name="project_id" type="integer(100)"> 
 					<constraints nullable="false" foreignKeyName="FK_issue_project"
