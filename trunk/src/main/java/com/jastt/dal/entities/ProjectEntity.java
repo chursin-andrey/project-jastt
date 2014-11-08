@@ -1,14 +1,17 @@
 package com.jastt.dal.entities;
 
-// Generated 05.11.2014 13:34:24 by Hibernate Tools 4.0.0
+// Generated 08.11.2014 14:19:16 by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,7 +24,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "PROJECT", schema = "PUBLIC", catalog = "PUBLIC", uniqueConstraints = @UniqueConstraint(columnNames = "NAME"))
-public class ProjectEntity implements java.io.Serializable {
+public class ProjectEntity extends GenericDalEntity<Integer> implements java.io.Serializable {
 
 	private Integer id;
 	private ServerEntity serverEntity;
