@@ -4,10 +4,10 @@ import org.springframework.stereotype.Service;
 
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
-import com.jastt.business.services.jira.JIRAProjectService;
+import com.jastt.business.services.jira.JiraProjectService;
 
 @Service("jiraProjectService")
-public class JIRAProjectServiceImpl implements JIRAProjectService {
+public class JiraProjectServiceImpl implements JiraProjectService {
 
 	@Override
 	public Project getProjectByKey(User user, String projectKey) {

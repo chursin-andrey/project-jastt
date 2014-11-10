@@ -1,6 +1,6 @@
 package com.jastt.business.services.jira.impl;
 
-interface JIRAConnectionService {
+interface JiraConnectionService {
 
-	JIRAConnection getJIRAConnection(String serverURL, String user, String password);
+	JiraConnection getJiraConnection(String serverUrl, String username, String password);
 }

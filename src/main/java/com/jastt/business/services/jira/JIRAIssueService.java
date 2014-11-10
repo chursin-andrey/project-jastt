@@ -6,9 +6,9 @@ import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
 
-public interface JIRAIssueService {
+public interface JiraIssueService {
 
-	//return issues only with assignee and timespent not null  
+	//getAllIssues methods return issues only with assignee and timespent not null  
 	Issue getIssueByKey(User user, String issueKey);
 	Iterable<Issue> getAllIssuesForProject(User user, Project project);
 	Iterable<Issue> getAllIssuesForProject(User user, Project project, Date fromDate);
