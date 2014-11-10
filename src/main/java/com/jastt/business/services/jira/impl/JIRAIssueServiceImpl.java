@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
-import com.jastt.business.services.jira.JiraIssueService;
+import com.jastt.business.services.jira.JIRAIssueService;
 
 @Service("jiraIssueService")
-public class JiraIssueServiceImpl implements JiraIssueService {
+public class JIRAIssueServiceImpl implements JIRAIssueService {
 
 	@Override
 	public Issue getIssueByKey(User user, String issueKey) {
