@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 
-class JiraConnection implements Closeable {
+class JIRAConnection implements Closeable {
 
 	protected JiraRestClient restClient = null;
 	
