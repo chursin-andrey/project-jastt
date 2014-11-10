@@ -1,9 +1,9 @@
 package com.jastt.business.services.jira.impl;
 
-class JIRAConnectionServiceImpl implements JIRAConnectionService {
+class JiraConnectionServiceImpl implements JiraConnectionService {
 
 	@Override
-	public JIRAConnection getJIRAConnection(String serverURL, String user,
+	public JiraConnection getJiraConnection(String serverUrl, String username,
 			String password) {
 		
 		return null;
