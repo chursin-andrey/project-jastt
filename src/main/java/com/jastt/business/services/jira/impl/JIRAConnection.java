@@ -1,8 +1,18 @@
 package com.jastt.business.services.jira.impl;
 
 import java.io.Closeable;
+import java.io.IOException;
 
-interface JIRAConnection extends Closeable {
+import com.atlassian.jira.rest.client.api.JiraRestClient;
 
-	void open(String serverURL, String user, String password);
+class JIRAConnection implements Closeable {
+
+	protected JiraRestClient restClient = null;
+	
+	@Override
+	public void close() throws IOException {
+		
+
+	}
+
 }

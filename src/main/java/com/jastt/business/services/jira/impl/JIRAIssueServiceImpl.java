@@ -2,11 +2,14 @@ package com.jastt.business.services.jira.impl;
 
 import java.util.Date;
 
+import org.springframework.stereotype.Service;
+
 import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.services.jira.JIRAIssueService;
 
+@Service("jiraIssueService")
 public class JIRAIssueServiceImpl implements JIRAIssueService {
 
 	@Override
