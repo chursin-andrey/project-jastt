@@ -1,5 +1,7 @@
 package com.jastt.dal.providers.impl;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -40,6 +42,42 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 		}
 
 		return user;
+	}
+
+	@Override
+	public void addUser(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteUser(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public User editUser(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updatePassword(String newPassword) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public User getUserByLogin(String login) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> getAllUsers() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
