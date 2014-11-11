@@ -26,9 +26,9 @@ public class MapperBuilder extends BeanMappingBuilder {
 		mapping(PermissionEntity.class, Permission.class).fields("userEntity","user").fields("projectEntity","project");	
 		mapping(ProjectEntity.class, Project.class).fields("serverEntity","server");	
 		mapping(ServerEntity.class, Server.class);	
-		mapping(UserEntity.class, User.class).fields("serverEntity", "server");
+		mapping(UserEntity.class, User.class).fields("serverEntity", "server");		
 		
 	}
 	
-	
 }
+
