@@ -21,7 +21,6 @@ import javax.persistence.Table;
 @Table(name = "PERMISSION")
 public class PermissionEntity extends GenericDalEntity<Integer> implements java.io.Serializable {
 
-	private Integer id;
 	private UserEntity userEntity;
 	private ProjectEntity projectEntity;
 
@@ -33,16 +32,6 @@ public class PermissionEntity extends GenericDalEntity<Integer> implements java.
 		this.projectEntity = projectEntity;
 	}
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "ID", unique = true, nullable = false)
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID", nullable = false)
