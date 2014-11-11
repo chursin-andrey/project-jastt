@@ -25,12 +25,6 @@
 				<column name="login" type="varchar(20)"> 
 					<constraints unique="true" uniqueConstraintName="UQ_user_login" nullable="false"/> 
 				</column>
-				<column name="first_name" type="varchar(128)">
-				<constraints nullable="false" />
-			</column>
-			<column name="last_name" type="varchar(256)">
-				<constraints nullable="false" />
-			</column>
 				<column name="password" type="varchar(20)"> 
 					<constraints unique="true" uniqueConstraintName="UQ_user_password" nullable="false"/> 
 				</column>
@@ -41,9 +35,6 @@
 					<constraints nullable="false" foreignKeyName="FK_user_server"
 						referencedTableName="server" referencedColumnNames="id"/> 
 				</column>
-				<column name="birthday" type="timestamp">
-				<constraints nullable="false" />
-			</column>
 			</createTable>
 		</changeSet>	
 		 

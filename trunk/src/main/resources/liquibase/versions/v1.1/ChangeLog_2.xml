@@ -22,22 +22,16 @@
 		<insert tableName="user_">
 			<column name="id">1</column>
 			<column name="login">user</column>
-			<column name="first_name">Student 3</column>
-			<column name="last_name">Surname 3</column>
 			<column name="password">psw</column>
 			<column name="email">user@email.test</column>
 			<column name="server_id">1</column>
-			<column name="birthday" valueDate="1980-01-01T00:00:00" />
 		</insert>
 		<insert tableName="user_">
 			<column name="id">2</column>
 			<column name="login">user1</column>
-			<column name="first_name">Student 3</column>
-			<column name="last_name">Surname 3</column>
 			<column name="password">psw1</column>
 			<column name="email">user1@email.test</column>
 			<column name="server_id">1</column>
-			<column name="birthday" valueDate="1980-01-01T00:00:00" />
 		</insert>
 	</changeSet>
 	
