@@ -8,6 +8,7 @@ import com.jastt.business.domain.entities.Project;
 public class Issue extends PersistentEntity<Integer>{
 	
 	private static final long serialVersionUID = -3505282155291252607L;
+	
 	private String version;
 	private Assignee assignee;
 	private Project project;
@@ -17,7 +18,8 @@ public class Issue extends PersistentEntity<Integer>{
 	private Date created;
 	private Date updated;
 	private String priority;
-	private double timeSpent;
+	private String summary;
+	private int timeSpent;
 	
 	public Issue(){
 		
@@ -26,7 +28,7 @@ public class Issue extends PersistentEntity<Integer>{
 	
 	public Issue(String version, Assignee assignee, Project project,
 			String key, String issueType, String status, Date created,
-			Date updated, String priority, double timeSpent) {
+			Date updated, String priority, int timeSpent) {
 		
 		super();
 		this.version = version;
@@ -114,12 +116,23 @@ public class Issue extends PersistentEntity<Integer>{
 		this.priority = priority;
 	}
 	
-	public double getTimeSpent() {
+	public int getTimeSpent() {
 		return timeSpent;
 	}
 	
-	public void setTimeSpent(double timeSpent) {
+	public void setTimeSpent(int timeSpent) {
 		this.timeSpent = timeSpent;
 	}
+
+
+	public String getSummary() {
+		return summary;
+	}
+
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+	
 	
 }
