@@ -1,14 +1,17 @@
-package com.jastt.dal.entities.test;
+package com.jastt.dal.entities;
 
 // Generated 11.11.2014 21:37:59 by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,9 +27,8 @@ import javax.persistence.UniqueConstraint;
 		@UniqueConstraint(columnNames = "PASSWORD"),
 		@UniqueConstraint(columnNames = "EMAIL"),
 		@UniqueConstraint(columnNames = "LOGIN") })
-public class UserEntity implements java.io.Serializable {
+public class UserEntity extends GenericDalEntity<Integer> implements java.io.Serializable {
 
-	private Integer id;
 	private ServerEntity serverEntity;
 	private String login;
 	private String password;
@@ -52,17 +54,6 @@ public class UserEntity implements java.io.Serializable {
 		this.password = password;
 		this.email = email;
 		this.permissionEntities = permissionEntities;
-	}
-
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "ID", unique = true, nullable = false)
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

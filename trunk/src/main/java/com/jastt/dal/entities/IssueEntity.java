@@ -26,7 +26,6 @@ import javax.persistence.Version;
 @Table(name = "ISSUE")
 public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Serializable {
 
-	private Integer id;
 	private String version;
 	private AssigneeEntity assigneeEntity;
 	private ProjectEntity projectEntity;
@@ -71,17 +70,6 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 		this.priority = priority;
 		this.summary = summary;
 		this.timeSpent = timeSpent;
-	}
-
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "ID", unique = true, nullable = false)
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	@Version

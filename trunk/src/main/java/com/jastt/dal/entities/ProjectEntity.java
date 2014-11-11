@@ -26,7 +26,6 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "PROJECT", uniqueConstraints = @UniqueConstraint(columnNames = "NAME"))
 public class ProjectEntity extends GenericDalEntity<Integer> implements java.io.Serializable {
 
-	private Integer id;
 	private ServerEntity serverEntity;
 	private String key;
 	private String name;
@@ -51,17 +50,6 @@ public class ProjectEntity extends GenericDalEntity<Integer> implements java.io.
 		this.name = name;
 		this.permissionEntities = permissionEntities;
 		this.issueEntities = issueEntities;
-	}
-
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "ID", unique = true, nullable = false)
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
