@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.jastt.business.domain.entities.User;
 
-public interface UserManagementService {
+public interface UserService {
 	
 	User getUserByLogin(String login);
 	

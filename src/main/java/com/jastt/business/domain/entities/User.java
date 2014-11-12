@@ -1,6 +1,5 @@
 package com.jastt.business.domain.entities;
 
-import java.util.Date;
 
 import com.jastt.business.domain.entities.Server;
 
@@ -13,14 +12,14 @@ public class User extends PersistentEntity<Integer>{
 	private String lastName;
 	private String password;
 	private String email;
-	private Date birthday;
+	
 
 	public User() {
 		
 	}
 	
 	public User(Server server, String login, String firstName, String lastName,
-			String password, String email, Date birthday) {	
+			String password, String email) {	
 		super();
 		this.server = server;
 		this.login = login;
@@ -28,7 +27,7 @@ public class User extends PersistentEntity<Integer>{
 		this.lastName = lastName;
 		this.password = password;
 		this.email = email;
-		this.birthday = birthday;
+
 	}
 
 
@@ -80,13 +79,6 @@ public class User extends PersistentEntity<Integer>{
 		this.email = email;
 	}
 	
-	public Date getBirthday() {
-		return birthday;
-	}
-	
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-		
+
 	
 }
