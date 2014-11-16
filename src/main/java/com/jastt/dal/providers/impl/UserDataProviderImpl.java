@@ -1,7 +1,5 @@
 package com.jastt.dal.providers.impl;
 
-import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -39,45 +37,55 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 			}
 		} catch (Exception ex) {
 			LOG.error(String.format("Error loading user by email=%s", email), ex);
-		}
+		} finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
 
 		return user;
 	}
 
+	@Transactional	
 	@Override
-	public void addUser(User user) {
-		// TODO Auto-generated method stub
+	public void updatePassword(User user, String newPassword) {
+		Session session = sessionFactory.getCurrentSession();
+
+		try {
+			user.setPassword(newPassword);
+		} catch (Exception ex) {
+			LOG.error(String.format("Error update user pas by user=%s", user), ex);
+		} finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
 		
 	}
 
-	@Override
-	public void deleteUser(User user) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public User editUser(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void updatePassword(String newPassword) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	@Transactional
 	@Override
 	public User getUserByLogin(String login) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = sessionFactory.getCurrentSession();
+		
+		User user = null;
+		try {
+			Criteria criteria = session.createCriteria(UserEntity.class);
+			criteria.add(Restrictions.eq("login", login));
+
+			UserEntity dataEntity = (UserEntity) criteria.uniqueResult();
+			if (dataEntity != null) {
+				user = mappingService.map(dataEntity, User.class);
+			}
+		} catch (Exception ex) {
+			LOG.error(String.format("Error loading user by login=%s", login), ex);
+		} finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+		return user;
 	}
 
-	@Override
-	public List<User> getAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

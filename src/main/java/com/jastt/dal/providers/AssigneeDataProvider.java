@@ -1,7 +1,5 @@
 package com.jastt.dal.providers;
 
-import java.util.List;
-
 import com.jastt.dal.entities.AssigneeEntity;
 import com.jastt.dal.providers.base.PageableDataProvider;
 import com.jastt.business.domain.entities.Assignee;
@@ -15,5 +13,5 @@ public interface AssigneeDataProvider extends PageableDataProvider<AssigneeEntit
 	Assignee getAssigneeByName(String name);
 	Assignee getAssigneeByProject(Project project);
 	Assignee getAssigneeByIssues(Issue issue);
-	List<Assignee> getAllAssignee();
+	
 }

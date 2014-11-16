@@ -1,7 +1,6 @@
 package com.jastt.dal.providers;
 
-import java.util.Date;
-import java.util.List;
+
 
 import com.jastt.dal.entities.IssueEntity;
 import com.jastt.dal.providers.base.PageableDataProvider;
@@ -14,8 +13,5 @@ public interface IssueDataProvider extends PageableDataProvider<IssueEntity, Iss
 
 	Issue getIssueByKey(String key);
 	Issue getIssueByStatus(String status);
-	Issue getIssueByDateCreated(Date date);
-	Issue getIssueByDateUpdated(Date date);
 	Issue getIssueByProject(Project project);
-	List<Issue> getAllIssues();
 }
