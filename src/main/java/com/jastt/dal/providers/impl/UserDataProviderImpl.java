@@ -1,5 +1,7 @@
 package com.jastt.dal.providers.impl;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -85,6 +87,28 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
             }
         }
 		return user;
+	}
+	
+	//to remove
+	@Transactional
+	@Override
+	public List<User> getAllUsers()
+	{
+		return null;
+	}
+	
+	@Transactional
+	@Override
+	public void addUser(User user)
+	{
+	
+	}
+	
+	@Transactional
+	@Override
+	public void editUser(User user);
+	{
+		
 	}
 
 
