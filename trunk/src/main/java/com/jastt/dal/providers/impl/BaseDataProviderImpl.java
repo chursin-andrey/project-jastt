@@ -38,6 +38,8 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 
 	protected static final Logger LOG = LoggerFactory.getLogger(BaseDataProviderImpl.class);
 
+	private static final int ArrayList = 0;
+
 	@Autowired
 	protected SessionFactory sessionFactory;
 	
@@ -124,19 +126,44 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 	@Override
 	public void merge(K entity, Class<T> dalEntityClass) {
 		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			T dataEntity = mappingService.map(entity, dalEntityClass);
+			session.merge(dataEntity);
+		} catch (HibernateException ex) {
+        	LOG.error("Hibernate error occured while creating or updating data entity", ex.getMessage());	
+        	throw new DaoException(ex);
+		} catch (Exception ex) {
+			LOG.error("Unknown error occured while creating or updating data entity", ex.getMessage());
+			throw new DaoException(ex);
+		}
 		
 	}
 
 	@Override
 	public void delete(K entity, Class<T> dalEntityClass) {
 		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			T dataEntity = mappingService.map(entity, dalEntityClass);
+			session.delete(dataEntity);
+		} catch (HibernateException ex) {
+        	LOG.error("Hibernate error occured while creating or updating data entity", ex.getMessage());	
+        	throw new DaoException(ex);
+		} catch (Exception ex) {
+			LOG.error("Unknown error occured while creating or updating data entity", ex.getMessage());
+			throw new DaoException(ex);
+		}
 		
 	}
 
 	@Override
 	public List<K> findAll(Class<T> dalEntityClass, Class<K> domainEntityClass) {
 		// TODO Auto-generated method stub
-		return null;
+        Session session = sessionFactory.getCurrentSession();
+
+        List<K> result = new ArrayList<>();
+		return result;
 	}
 
 	private void fillCriteria(Criteria source, LoadOptions loadOptions, boolean countOnly) {
