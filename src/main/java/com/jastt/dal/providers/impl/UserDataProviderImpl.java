@@ -106,10 +106,9 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 	
 	@Transactional
 	@Override
-	public void editUser(User user);
-	{
-		
+	public void editUser(User user) {
 	}
+
 
 
 }
