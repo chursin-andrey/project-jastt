@@ -110,7 +110,9 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 			cr.setMaxResults(1);
 			@SuppressWarnings("unchecked")
 			T dalEntity = (T) cr.uniqueResult();
-			businessEntity = mappingService.map(dalEntity, domainEntityClass);
+			if (dalEntity != null) {
+				businessEntity = mappingService.map(dalEntity, domainEntityClass);
+			}
 		} catch (HibernateException ex) {
         	LOG.error("Hibernate error occured while loading business entity", ex.getMessage());
         	throw new DaoException(ex);

@@ -81,11 +81,7 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 			}
 		} catch (Exception ex) {
 			LOG.error(String.format("Error loading user by login=%s", login), ex);
-		} finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+		} 
 		return user;
 	}
 	
