@@ -72,7 +72,6 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 		this.timeSpent = timeSpent;
 	}
 
-	@Version
 	@Column(name = "VERSION", length = 10)
 	public String getVersion() {
 		return this.version;
