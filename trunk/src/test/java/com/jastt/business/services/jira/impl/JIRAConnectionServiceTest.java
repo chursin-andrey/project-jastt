@@ -3,6 +3,7 @@ package com.jastt.business.services.jira.impl;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Properties;
@@ -40,14 +41,13 @@ public class JIRAConnectionServiceTest {
 
 	@Test
 	@Ignore
-	public void testConnection() {
+	public void getJiraConnection_ExistingServerAndUser_ConnectionIsEstablished() throws IOException {
 		//TODO: Autowire
     	JIRAConnectionService jcs = new JIRAConnectionServiceImpl();
-    	JIRAConnection conn = jcs.getJiraConnection(serverUrl, username, password);
-    	
-    	MetadataRestClient metaClient = conn.restClient.getMetadataClient();
+    	JiraConnection conn = jcs.getJiraConnection(serverUrl, username, password);
     	
     	try {
+    		MetadataRestClient metaClient = conn.restClient.getMetadataClient();
 	    	ServerInfo info = metaClient.getServerInfo().claim();
 	    	assertEquals(URI.create(serverUrl), info.getBaseUri());
     	} finally {
