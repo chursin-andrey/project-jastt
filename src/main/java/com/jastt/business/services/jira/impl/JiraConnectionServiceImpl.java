@@ -9,7 +9,7 @@ import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientF
 class JIRAConnectionServiceImpl implements JIRAConnectionService {
 
 	@Override
-	public JIRAConnection getJiraConnection(String serverUrl, String username,
+	public JiraConnection getJiraConnection(String serverUrl, String username,
 			String password) {
 		
 		//TODO: verify serverUrl
@@ -18,7 +18,7 @@ class JIRAConnectionServiceImpl implements JIRAConnectionService {
 		JiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
 		JiraRestClient jrc = factory.createWithBasicHttpAuthentication(jiraURL, username, password);
 		
-		return new JIRAConnection(jrc);
+		return new JiraConnection(jrc);
 	}
 
 }
