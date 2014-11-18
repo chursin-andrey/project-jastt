@@ -109,6 +109,12 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 	public void editUser(User user) {
 	}
 
+	@Override
+	public void deleteUserByLogin(String login) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 }

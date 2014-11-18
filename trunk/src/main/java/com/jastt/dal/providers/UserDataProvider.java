@@ -17,7 +17,7 @@ public interface UserDataProvider extends PageableDataProvider<UserEntity, User,
 	public List<User> getAllUsers();
 	public void addUser(User user);
 	public void editUser(User user);
-	
+	public void deleteUserByLogin(String login);
 	
 	
 	

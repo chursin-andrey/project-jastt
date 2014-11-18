@@ -1,5 +1,8 @@
 package com.jastt.dal.providers.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -8,8 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
+import com.jastt.business.enums.IssueStatusEnum;
+import com.jastt.business.enums.IssueTypeEnum;
 import com.jastt.dal.entities.IssueEntity;
 import com.jastt.dal.providers.IssueDataProvider;
 import com.jastt.utils.annotations.DefaultProfile;
@@ -96,6 +102,26 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
         }
 
 		return iss;
+	}
+
+	@Override
+	public Issue getLatestIssue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void saveIssues(List<Issue> issues) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Issue> getIssues(Project project, IssueStatusEnum status,
+			List<Assignee> assignees, IssueTypeEnum issueType, Date fromDate,
+			Date toDate) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
