@@ -1,5 +1,7 @@
 package com.jastt.dal.providers.impl;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -8,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jastt.business.domain.entities.Project;
+import com.jastt.business.domain.entities.User;
 import com.jastt.dal.entities.ProjectEntity;
 import com.jastt.dal.providers.ProjectDataProvider;
 
@@ -65,6 +68,12 @@ public class ProjectDataProviderImpl extends BaseDataProviderImpl<ProjectEntity,
         }
 
 		return prj;
+	}
+
+	@Override
+	public List<Project> getAvailableProjectsForUser(User currentUser) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
