@@ -9,5 +9,4 @@ import java.util.*;
 public interface AssigneeService {
 	public List<Assignee> getAllAssignees();
 	public List<Assignee> getAssigneesByProject(Project project);
-	public List<Assignee> getAssigneesByIssueType(Project project, IssueTypeEnum issueType);
 }
