@@ -1,19 +1,15 @@
 package com.jastt.business.services.jira.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.Properties;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import com.atlassian.jira.rest.client.api.MetadataRestClient;
-import com.atlassian.jira.rest.client.api.domain.ServerInfo;
 
 public class JIRAConnectionServiceTest {
 
@@ -42,17 +38,7 @@ public class JIRAConnectionServiceTest {
 	@Test
 	@Ignore
 	public void getJiraConnection_ExistingServerAndUser_ConnectionIsEstablished() throws IOException {
-		//TODO: Autowire
-    	JIRAConnectionService jcs = new JIRAConnectionServiceImpl();
-    	JiraConnection conn = jcs.getJiraConnection(serverUrl, username, password);
-    	
-    	try {
-    		MetadataRestClient metaClient = conn.restClient.getMetadataClient();
-	    	ServerInfo info = metaClient.getServerInfo().claim();
-	    	assertEquals(URI.create(serverUrl), info.getBaseUri());
-    	} finally {
-    		conn.close();
-    	}
+		fail("Not yet implemented");
 	}
 
 }

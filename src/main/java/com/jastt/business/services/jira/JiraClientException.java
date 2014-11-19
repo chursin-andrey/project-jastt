@@ -1,12 +1,18 @@
 package com.jastt.business.services.jira;
 
-public class JiraClientException extends Exception {
+import java.io.IOException;
+
+public class JiraClientException extends IOException {
 	
 	private static final long serialVersionUID = 1L;
 
 	private Integer statusCode;
 	
 	public JiraClientException() {
+	}
+	
+	public JiraClientException(String descr) {
+		super(descr);
 	}
 
 	public JiraClientException(String descr, int statusCode) {
