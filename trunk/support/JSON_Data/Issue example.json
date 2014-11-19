@@ -1,0 +1,361 @@
+{
+	"expand": "renderedFields,names,schema,transitions,operations,editmeta,changelog",
+	"id": "182560",
+	"self": "https://jira.atlassian.com/rest/api/2/issue/182560",
+	"key": "STASH-2524",
+	"fields": {
+		"progress": {
+			"progress": 10800,
+			"total": 21600,
+			"percent": 50
+		},
+		"summary": "Stash startup pages \"install git\" and \"upgrade git\" have no links or instructions",
+		"timetracking": {
+			"remainingEstimate": "3h",
+			"timeSpent": "3h",
+			"remainingEstimateSeconds": 10800,
+			"timeSpentSeconds": 10800
+		},
+		"issuetype": {
+			"self": "https://jira.atlassian.com/rest/api/2/issuetype/1",
+			"id": "1",
+			"description": "A problem which impairs or prevents the functions of the product.",
+			"iconUrl": "https://jira.atlassian.com/images/icons/issuetypes/bug.png",
+			"name": "Bug",
+			"subtask": false
+		},
+		"customfield_14733": "0|100eio:",
+		"customfield_14734": "0|10j8z4:",
+		"timespent": 10800,
+		"customfield_14731": "2|xzfdjs:",
+		"customfield_14732": "0|10l44o:",
+		"customfield_10230": null,
+		"reporter": {
+			"self": "https://jira.atlassian.com/rest/api/2/user?username=mwatson%40atlassian.com",
+			"name": "mwatson@atlassian.com",
+			"emailAddress": "mwatson at atlassian dot com",
+			"avatarUrls": {
+				"16x16": "https://jira.atlassian.com/secure/useravatar?size=xsmall&ownerId=mwatson%40atlassian.com&avatarId=66440",
+				"24x24": "https://jira.atlassian.com/secure/useravatar?size=small&ownerId=mwatson%40atlassian.com&avatarId=66440",
+				"32x32": "https://jira.atlassian.com/secure/useravatar?size=medium&ownerId=mwatson%40atlassian.com&avatarId=66440",
+				"48x48": "https://jira.atlassian.com/secure/useravatar?ownerId=mwatson%40atlassian.com&avatarId=66440"
+			},
+			"displayName": "Matthew Watson [Atlassian]",
+			"active": true,
+			"timeZone": "Australia/Sydney"
+		},
+		"customfield_14532": null,
+		"customfield_14531": "<div class=\"notify info\" style=\"margin-bottom: 10px;\">\r\n<p>Uniquely (we think), Atlassian allows any of our users to create bug reports and feature requests directly, without having to go through a support system.</p>\r\n\r\n<p>However, if your problem is not a bug, or if you're unsure, please use our support system first - you'll get help faster if our support staff are alerted directly.</p>\r\n\r\n<p>How to decide? Well, this may help: if you've found something our developers should fix, raise a bug report here; if you were about to attach a log file, sounds like you want to raise a support request at <a href=\"https://support.atlassian.com\">Atlassian Support System</a>.</p>\r\n\r\n<p>Thanks for telling us about your experience with Stash.</p>\r\n</div>",
+		"customfield_13231": "3_*:*_1_*:*_68071860_*|*_1_*:*_2_*:*_49590527779_*|*_10026_*:*_1_*:*_7161342640_*|*_6_*:*_1_*:*_0_*|*_10030_*:*_1_*:*_4683972",
+		"updated": "2014-03-02T23:25:40.348+0000",
+		"created": "2012-05-14T06:48:34.099+0000",
+		"customfield_10180": null,
+		"priority": {
+			"self": "https://jira.atlassian.com/rest/api/2/priority/3",
+			"iconUrl": "https://jira.atlassian.com/images/icons/priorities/major.png",
+			"name": "Major",
+			"id": "3"
+		},
+		"description": "The page just says Stash can't run and the user needs to install or upgrade git.\r\n\r\nWhen they do, git may now be in the PATH, but only for new shell/command terminals.\r\n\r\nThe page should link to the correct git download where is says \"install/upgrade git\" and should have a page of instructions on how to do this (including how to restart Stash).\r\n\r\nTalk to [~pwatson] about how we might structure our install docs so we can link to a page that has unix and windows install instructions.\r\n\r\nMake the johnson link to this page.",
+		"customfield_13430": null,
+		"issuelinks": [],
+		"customfield_13230": "2012-05-14 07:15:25.363",
+		"customfield_14430": null,
+		"subtasks": [],
+		"status": {
+			"self": "https://jira.atlassian.com/rest/api/2/status/6",
+			"description": "The issue is considered finished, the resolution is correct. Issues which are closed can be reopened.",
+			"iconUrl": "https://jira.atlassian.com/images/icons/statuses/closed.png",
+			"name": "Closed",
+			"id": "6",
+			"statusCategory": {
+				"self": "https://jira.atlassian.com/rest/api/2/statuscategory/3",
+				"id": 3,
+				"key": "done",
+				"colorName": "green",
+				"name": "Done"
+			}
+		},
+		"customfield_10575": null,
+		"labels": [],
+		"workratio": -1,
+		"customfield_12832": null,
+		"customfield_12531": "Not Started",
+		"customfield_12833": null,
+		"project": {
+			"self": "https://jira.atlassian.com/rest/api/2/project/13310",
+			"id": "13310",
+			"key": "STASH",
+			"name": "Stash",
+			"avatarUrls": {
+				"16x16": "https://jira.atlassian.com/secure/projectavatar?size=xsmall&pid=13310&avatarId=20098",
+				"24x24": "https://jira.atlassian.com/secure/projectavatar?size=small&pid=13310&avatarId=20098",
+				"32x32": "https://jira.atlassian.com/secure/projectavatar?size=medium&pid=13310&avatarId=20098",
+				"48x48": "https://jira.atlassian.com/secure/projectavatar?pid=13310&avatarId=20098"
+			},
+			"projectCategory": {
+				"self": "https://jira.atlassian.com/rest/api/2/projectCategory/10031",
+				"id": "10031",
+				"description": "",
+				"name": "Atlassian Products"
+			}
+		},
+		"customfield_12931": null,
+		"environment": null,
+		"aggregateprogress": {
+			"progress": 10800,
+			"total": 21600,
+			"percent": 50
+		},
+		"lastViewed": "2014-10-28T17:44:58.794+0000",
+		"components": [{
+			"self": "https://jira.atlassian.com/rest/api/2/component/17592",
+			"id": "17592",
+			"name": "Documentation"
+		},
+		{
+			"self": "https://jira.atlassian.com/rest/api/2/component/18595",
+			"id": "18595",
+			"name": "Installation"
+		}],
+		"comment": {
+			"startAt": 0,
+			"maxResults": 1,
+			"total": 1,
+			"comments": [{
+				"self": "https://jira.atlassian.com/rest/api/2/issue/182560/comment/573272",
+				"id": "573272",
+				"author": {
+					"self": "https://jira.atlassian.com/rest/api/2/user?username=pwatson",
+					"name": "pwatson",
+					"emailAddress": "pwatson at atlassian dot com",
+					"avatarUrls": {
+						"16x16": "https://jira.atlassian.com/secure/useravatar?size=xsmall&ownerId=pwatson&avatarId=66765",
+						"24x24": "https://jira.atlassian.com/secure/useravatar?size=small&ownerId=pwatson&avatarId=66765",
+						"32x32": "https://jira.atlassian.com/secure/useravatar?size=medium&ownerId=pwatson&avatarId=66765",
+						"48x48": "https://jira.atlassian.com/secure/useravatar?ownerId=pwatson&avatarId=66765"
+					},
+					"displayName": "Paul Watson [Atlassian]",
+					"active": true,
+					"timeZone": "Etc/UTC"
+				},
+				"body": "I've published https://confluence.atlassian.com/display/STASH/Installing+and+upgrading+Git",
+				"updateAuthor": {
+					"self": "https://jira.atlassian.com/rest/api/2/user?username=pwatson",
+					"name": "pwatson",
+					"emailAddress": "pwatson at atlassian dot com",
+					"avatarUrls": {
+						"16x16": "https://jira.atlassian.com/secure/useravatar?size=xsmall&ownerId=pwatson&avatarId=66765",
+						"24x24": "https://jira.atlassian.com/secure/useravatar?size=small&ownerId=pwatson&avatarId=66765",
+						"32x32": "https://jira.atlassian.com/secure/useravatar?size=medium&ownerId=pwatson&avatarId=66765",
+						"48x48": "https://jira.atlassian.com/secure/useravatar?ownerId=pwatson&avatarId=66765"
+					},
+					"displayName": "Paul Watson [Atlassian]",
+					"active": true,
+					"timeZone": "Etc/UTC"
+				},
+				"created": "2014-03-02T23:25:14.376+0000",
+				"updated": "2014-03-02T23:25:14.376+0000"
+			}]
+		},
+		"timeoriginalestimate": null,
+		"customfield_10150": ["mwatson@atlassian.com(mwatson@atlassian.com)",
+		"pwatson(pwatson)"],
+		"customfield_11436": "112232",
+		"customfield_11435": "112216",
+		"votes": {
+			"self": "https://jira.atlassian.com/rest/api/2/issue/STASH-2524/votes",
+			"votes": 1,
+			"hasVoted": false
+		},
+		"customfield_12231": null,
+		"customfield_12230": null,
+		"resolution": {
+			"self": "https://jira.atlassian.com/rest/api/2/resolution/1",
+			"id": "1",
+			"description": "A fix for this issue is checked into the tree and tested.",
+			"name": "Fixed"
+		},
+		"fixVersions": [{
+			"self": "https://jira.atlassian.com/rest/api/2/version/37791",
+			"id": "37791",
+			"name": "2.10.0",
+			"archived": false,
+			"released": true,
+			"releaseDate": "2013-12-17"
+		}],
+		"resolutiondate": "2014-03-02T23:25:40.193+0000",
+		"creator": {
+			"self": "https://jira.atlassian.com/rest/api/2/user?username=mwatson%40atlassian.com",
+			"name": "mwatson@atlassian.com",
+			"emailAddress": "mwatson at atlassian dot com",
+			"avatarUrls": {
+				"16x16": "https://jira.atlassian.com/secure/useravatar?size=xsmall&ownerId=mwatson%40atlassian.com&avatarId=66440",
+				"24x24": "https://jira.atlassian.com/secure/useravatar?size=small&ownerId=mwatson%40atlassian.com&avatarId=66440",
+				"32x32": "https://jira.atlassian.com/secure/useravatar?size=medium&ownerId=mwatson%40atlassian.com&avatarId=66440",
+				"48x48": "https://jira.atlassian.com/secure/useravatar?ownerId=mwatson%40atlassian.com&avatarId=66440"
+			},
+			"displayName": "Matthew Watson [Atlassian]",
+			"active": true,
+			"timeZone": "Australia/Sydney"
+		},
+		"aggregatetimeoriginalestimate": null,
+		"customfield_12430": null,
+		"customfield_10160": "20649600",
+		"customfield_12431": null,
+		"customfield_12432": null,
+		"customfield_12433": null,
+		"customfield_12831": null,
+		"customfield_12434": null,
+		"customfield_12830": null,
+		"customfield_12435": null,
+		"customfield_12730": null,
+		"watches": {
+			"self": "https://jira.atlassian.com/rest/api/2/issue/STASH-2524/watchers",
+			"watchCount": 3,
+			"isWatching": false
+		},
+		"worklog": {
+			"startAt": 0,
+			"maxResults": 20,
+			"total": 2,
+			"worklogs": [{
+				"self": "https://jira.atlassian.com/rest/api/2/issue/182560/worklog/120597",
+				"author": {
+					"self": "https://jira.atlassian.com/rest/api/2/user?username=pwatson",
+					"name": "pwatson",
+					"emailAddress": "pwatson at atlassian dot com",
+					"avatarUrls": {
+						"16x16": "https://jira.atlassian.com/secure/useravatar?size=xsmall&ownerId=pwatson&avatarId=66765",
+						"24x24": "https://jira.atlassian.com/secure/useravatar?size=small&ownerId=pwatson&avatarId=66765",
+						"32x32": "https://jira.atlassian.com/secure/useravatar?size=medium&ownerId=pwatson&avatarId=66765",
+						"48x48": "https://jira.atlassian.com/secure/useravatar?ownerId=pwatson&avatarId=66765"
+					},
+					"displayName": "Paul Watson [Atlassian]",
+					"active": true,
+					"timeZone": "Etc/UTC"
+				},
+				"updateAuthor": {
+					"self": "https://jira.atlassian.com/rest/api/2/user?username=pwatson",
+					"name": "pwatson",
+					"emailAddress": "pwatson at atlassian dot com",
+					"avatarUrls": {
+						"16x16": "https://jira.atlassian.com/secure/useravatar?size=xsmall&ownerId=pwatson&avatarId=66765",
+						"24x24": "https://jira.atlassian.com/secure/useravatar?size=small&ownerId=pwatson&avatarId=66765",
+						"32x32": "https://jira.atlassian.com/secure/useravatar?size=medium&ownerId=pwatson&avatarId=66765",
+						"48x48": "https://jira.atlassian.com/secure/useravatar?ownerId=pwatson&avatarId=66765"
+					},
+					"displayName": "Paul Watson [Atlassian]",
+					"active": true,
+					"timeZone": "Etc/UTC"
+				},
+				"comment": "Added sections to the draft.",
+				"created": "2013-12-09T07:18:38.526+0000",
+				"updated": "2013-12-09T07:18:38.526+0000",
+				"started": "2013-12-09T07:16:00.000+0000",
+				"timeSpent": "1h",
+				"timeSpentSeconds": 3600,
+				"id": "120597"
+			},
+			{
+				"self": "https://jira.atlassian.com/rest/api/2/issue/182560/worklog/120598",
+				"author": {
+					"self": "https://jira.atlassian.com/rest/api/2/user?username=pwatson",
+					"name": "pwatson",
+					"emailAddress": "pwatson at atlassian dot com",
+					"avatarUrls": {
+						"16x16": "https://jira.atlassian.com/secure/useravatar?size=xsmall&ownerId=pwatson&avatarId=66765",
+						"24x24": "https://jira.atlassian.com/secure/useravatar?size=small&ownerId=pwatson&avatarId=66765",
+						"32x32": "https://jira.atlassian.com/secure/useravatar?size=medium&ownerId=pwatson&avatarId=66765",
+						"48x48": "https://jira.atlassian.com/secure/useravatar?ownerId=pwatson&avatarId=66765"
+					},
+					"displayName": "Paul Watson [Atlassian]",
+					"active": true,
+					"timeZone": "Etc/UTC"
+				},
+				"updateAuthor": {
+					"self": "https://jira.atlassian.com/rest/api/2/user?username=pwatson",
+					"name": "pwatson",
+					"emailAddress": "pwatson at atlassian dot com",
+					"avatarUrls": {
+						"16x16": "https://jira.atlassian.com/secure/useravatar?size=xsmall&ownerId=pwatson&avatarId=66765",
+						"24x24": "https://jira.atlassian.com/secure/useravatar?size=small&ownerId=pwatson&avatarId=66765",
+						"32x32": "https://jira.atlassian.com/secure/useravatar?size=medium&ownerId=pwatson&avatarId=66765",
+						"48x48": "https://jira.atlassian.com/secure/useravatar?ownerId=pwatson&avatarId=66765"
+					},
+					"displayName": "Paul Watson [Atlassian]",
+					"active": true,
+					"timeZone": "Etc/UTC"
+				},
+				"comment": "Completed Linux section",
+				"created": "2013-12-09T07:19:25.573+0000",
+				"updated": "2013-12-09T07:19:25.573+0000",
+				"started": "2013-12-09T07:18:00.000+0000",
+				"timeSpent": "2h",
+				"timeSpentSeconds": 7200,
+				"id": "120598"
+			}]
+		},
+		"customfield_11631": null,
+		"customfield_11130": "2448",
+		"customfield_10651": null,
+		"customfield_10653": null,
+		"assignee": {
+			"self": "https://jira.atlassian.com/rest/api/2/user?username=pwatson",
+			"name": "pwatson",
+			"emailAddress": "pwatson at atlassian dot com",
+			"avatarUrls": {
+				"16x16": "https://jira.atlassian.com/secure/useravatar?size=xsmall&ownerId=pwatson&avatarId=66765",
+				"24x24": "https://jira.atlassian.com/secure/useravatar?size=small&ownerId=pwatson&avatarId=66765",
+				"32x32": "https://jira.atlassian.com/secure/useravatar?size=medium&ownerId=pwatson&avatarId=66765",
+				"48x48": "https://jira.atlassian.com/secure/useravatar?ownerId=pwatson&avatarId=66765"
+			},
+			"displayName": "Paul Watson [Atlassian]",
+			"active": true,
+			"timeZone": "Etc/UTC"
+		},
+		"attachment": [{
+			"self": "https://jira.atlassian.com/rest/api/2/attachment/93375",
+			"id": "93375",
+			"filename": "git-version.png",
+			"author": {
+				"self": "https://jira.atlassian.com/rest/api/2/user?username=ssaasen",
+				"name": "ssaasen",
+				"emailAddress": "ssaasen at atlassian dot com",
+				"avatarUrls": {
+					"16x16": "https://jira.atlassian.com/secure/useravatar?size=xsmall&ownerId=ssaasen&avatarId=66276",
+					"24x24": "https://jira.atlassian.com/secure/useravatar?size=small&ownerId=ssaasen&avatarId=66276",
+					"32x32": "https://jira.atlassian.com/secure/useravatar?size=medium&ownerId=ssaasen&avatarId=66276",
+					"48x48": "https://jira.atlassian.com/secure/useravatar?ownerId=ssaasen&avatarId=66276"
+				},
+				"displayName": "Stefan Saasen [Atlassian]",
+				"active": true,
+				"timeZone": "Australia/Sydney"
+			},
+			"created": "2013-06-04T04:55:01.190+0000",
+			"size": 29868,
+			"mimeType": "image/png",
+			"content": "https://jira.atlassian.com/secure/attachment/93375/git-version.png",
+			"thumbnail": "https://jira.atlassian.com/secure/thumbnail/93375/_thumb_93375.png"
+		}],
+		"customfield_14130": null,
+		"aggregatetimeestimate": 10800,
+		"versions": [{
+			"self": "https://jira.atlassian.com/rest/api/2/version/26032",
+			"id": "26032",
+			"name": "1.0.1",
+			"archived": false,
+			"released": true,
+			"releaseDate": "2012-05-07"
+		}],
+		"customfield_12131": null,
+		"customfield_14330": null,
+		"customfield_14735": "0|10j8s8:",
+		"timeestimate": 10800,
+		"customfield_11531": null,
+		"customfield_11431": "142532",
+		"customfield_11930": ["com.atlassian.greenhopper.service.sprint.Sprint@4ce7aa1b[rapidViewId=<null>,state=CLOSED,name=2.1-M2 Xmas Special,startDate=2012-12-16T23:41:13.756Z,endDate=2013-01-01T23:41:13.756Z,completeDate=2013-01-06T22:36:35.064Z,id=315]"],
+		"customfield_12130": null,
+		"aggregatetimespent": 10800
+	}
+}
