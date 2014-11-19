@@ -7,6 +7,5 @@ import com.jastt.business.enums.IssueTypeEnum;
 import java.util.*;
 
 public interface AssigneeService {
-	public List<Assignee> getAllAssignees();
 	public List<Assignee> getAssigneesByProject(Project project);
 }
