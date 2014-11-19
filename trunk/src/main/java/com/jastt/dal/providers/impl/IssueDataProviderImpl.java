@@ -124,4 +124,10 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 		return null;
 	}
 
+	@Override
+	public Issue getLatestIssue(List<Project> projects) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

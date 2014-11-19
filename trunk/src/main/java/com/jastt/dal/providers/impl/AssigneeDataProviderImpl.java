@@ -1,6 +1,8 @@
 package com.jastt.dal.providers.impl;
 
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -21,85 +23,13 @@ import com.jastt.utils.annotations.DefaultProfile;
 @DefaultProfile
 public class AssigneeDataProviderImpl extends BaseDataProviderImpl<AssigneeEntity, Assignee, Integer> implements AssigneeDataProvider {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(IssueDataProviderImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AssigneeDataProviderImpl.class);
 
-	@Transactional
+
 	@Override
-	public Assignee getAssigneeByName(String name) {
-		Session session = sessionFactory.getCurrentSession();
-
-		Assignee assig = null;
-
-		try {
-			Criteria criteria = session.createCriteria(AssigneeEntity.class);
-			criteria.add(Restrictions.eq("name", name));
-
-			AssigneeEntity dataEntity = (AssigneeEntity) criteria.uniqueResult();
-			if (dataEntity != null) {
-				assig = mappingService.map(dataEntity, Assignee.class);
-			}
-		} catch (Exception ex) {
-			LOG.error(String.format("Error loading Assignee by name=%s", name), ex);
-		} finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-
-		return assig;
-	}
-	
-	@Transactional
-	@Override
-	public Assignee getAssigneeByProject(Project project) {
-		Session session = sessionFactory.getCurrentSession();
-
-		Assignee assig = null;
-
-		try {
-			Criteria criteria = session.createCriteria(AssigneeEntity.class);
-			criteria.add(Restrictions.eq("project", project));
-
-			AssigneeEntity dataEntity = (AssigneeEntity) criteria.uniqueResult();
-			if (dataEntity != null) {
-				assig = mappingService.map(dataEntity, Assignee.class);
-			}
-		} catch (Exception ex) {
-			LOG.error(String.format("Error loading Assignee by project=%s", project), ex);
-		} finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-
-		return assig;
-
-	}
-	
-	@Transactional
-	@Override
-	public Assignee getAssigneeByIssues(Issue issue) {
-		Session session = sessionFactory.getCurrentSession();
-
-		Assignee assig = null;
-
-		try {
-			Criteria criteria = session.createCriteria(AssigneeEntity.class);
-			criteria.add(Restrictions.eq("issue", issue));
-
-			AssigneeEntity dataEntity = (AssigneeEntity) criteria.uniqueResult();
-			if (dataEntity != null) {
-				assig = mappingService.map(dataEntity, Assignee.class);
-			}
-		} catch (Exception ex) {
-			LOG.error(String.format("Error loading Assignee by issue=%s", issue), ex);
-		} finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-
-		return assig;
+	public List<Assignee> getAssigneesByProject(Project project) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
