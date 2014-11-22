@@ -18,12 +18,6 @@ import com.jastt.business.services.jira.JiraIssueService;
 public class JiraIssueServiceImpl implements JiraIssueService {
 
 	@Override
-	public Issue getIssueByKey(User user, String issueKey) throws JiraClientException {
-		
-		return null;
-	}
-
-	@Override
 	public Set<Issue> getAllIssuesForProject(User user, Project project) throws JiraClientException {
 		String jql = String.format("project = %s and timeSpent > 0 and assignee is not null", 
 				project.getKey());
@@ -31,33 +25,33 @@ public class JiraIssueServiceImpl implements JiraIssueService {
 		
 		JiraClient jc = new JiraClient(user.getServer().getUrl(), 
 				user.getLogin(), user.getPassword());
-		List<com.atlassian.jira.rest.client.api.domain.Issue> issueList = 
-				jc.getAllIssuesByQuery(jql);
-		for (com.atlassian.jira.rest.client.api.domain.Issue issue : issueList) {
-			Issue iss = new Issue();
+		Set<com.atlassian.jira.rest.client.api.domain.Issue> jiraIssueSet = 
+				jc.getAllIssuesByQuery(jql, -1);
+		for (com.atlassian.jira.rest.client.api.domain.Issue jiraIssue : jiraIssueSet) {
+			Issue issue = new Issue();
 			
-			iss.setKey(issue.getKey());
-			iss.setProject(project);
-			iss.setSummary(issue.getSummary());
-			iss.setIssueType(issue.getIssueType().getName());
-			iss.setStatus(issue.getStatus().getName());
-			iss.setCreated(issue.getCreationDate().toDate());
-			iss.setUpdated(issue.getUpdateDate().toDate());
-			if (issue.getPriority() != null) iss.setPriority(issue.getPriority().getName());
-			if (issue.getTimeTracking() != null)
-				if (issue.getTimeTracking().getTimeSpentMinutes() != null) {
-					iss.setTimeSpent(issue.getTimeTracking().getTimeSpentMinutes());
+			issue.setKey(jiraIssue.getKey());
+			issue.setProject(project);
+			issue.setSummary(jiraIssue.getSummary());
+			issue.setIssueType(jiraIssue.getIssueType().getName());
+			issue.setStatus(jiraIssue.getStatus().getName());
+			issue.setCreated(jiraIssue.getCreationDate().toDate());
+			issue.setUpdated(jiraIssue.getUpdateDate().toDate());
+			if (jiraIssue.getPriority() != null) issue.setPriority(jiraIssue.getPriority().getName());
+			if (jiraIssue.getTimeTracking() != null)
+				if (jiraIssue.getTimeTracking().getTimeSpentMinutes() != null) {
+					issue.setTimeSpent(jiraIssue.getTimeTracking().getTimeSpentMinutes());
 				}
-			if (issue.getAssignee() != null) {
+			if (jiraIssue.getAssignee() != null) {
 				Assignee assignee = new Assignee();
 				
-				assignee.setName(issue.getAssignee().getDisplayName());
-				assignee.setEmail(issue.getAssignee().getEmailAddress());
+				assignee.setName(jiraIssue.getAssignee().getDisplayName());
+				assignee.setEmail(jiraIssue.getAssignee().getEmailAddress());
 				
-				iss.setAssignee(assignee);
+				issue.setAssignee(assignee);
 			}
 			
-			issueSet.add(iss);
+			issueSet.add(issue);
 		}
 		
 		return null;//return issueSet;
@@ -67,7 +61,7 @@ public class JiraIssueServiceImpl implements JiraIssueService {
 	public Set<Issue> getAllIssuesForProject(User user, Project project,
 			DateTime fromDate) throws JiraClientException {
 		String jql = String.format("project = %s and timeSpent > 0 and assignee is not null "
-				+ "and created > %d and updated > %d", 
+				+ "and updated > %d", 
 				project.getKey(), fromDate.getMillis());
 		
 		return null;
