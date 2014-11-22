@@ -7,8 +7,8 @@
 		</encoder>
 	</appender>
 
+	<logger name="com.jastt" level="TRACE" />
 	<logger name="com.sample" level="TRACE" />
-
 
 	<root level="WARN">
 		<appender-ref ref="STDOUT" />
