@@ -1,7 +1,6 @@
 package com.jastt.business.services.jira.impl;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -16,26 +15,20 @@ import com.jastt.business.services.jira.JiraProjectService;
 public class JiraProjectServiceImpl implements JiraProjectService {
 
 	@Override
-	public Project getProjectByKey(User user, String projectKey) throws JiraClientException {
-		
-		return null;
-	}
-
-	@Override
 	public Set<Project> getAllProjects(User user) throws JiraClientException {    	
     	Set<Project> projectSet = new HashSet<Project>(); 
 		
 		JiraClient jc = new JiraClient(user.getServer().getUrl(), 
 				user.getLogin(), user.getPassword());
-		List<BasicProject> projectList = jc.getAllProjects();
-		for (BasicProject project : projectList) {
-			Project pr = new Project();
+		Set<BasicProject> jiraProjectSet = jc.getAllProjects();
+		for (BasicProject jiraProject : jiraProjectSet) {
+			Project project = new Project();
 			
-			pr.setServer(user.getServer());
-			pr.setKey(project.getKey());
-			if (project.getName() == null) pr.setName("") ; else pr.setName(project.getName()); 
+			project.setServer(user.getServer());
+			project.setKey(jiraProject.getKey());
+			if (jiraProject.getName() == null) project.setName(""); else project.setName(jiraProject.getName()); 
 			
-			projectSet.add(pr);
+			projectSet.add(project);
 		}
 		
 		return null;//return projectSet;
