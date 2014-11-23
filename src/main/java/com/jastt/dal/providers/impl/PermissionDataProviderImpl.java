@@ -39,11 +39,7 @@ public class PermissionDataProviderImpl extends BaseDataProviderImpl<PermissionE
 			}
 		} catch (Exception ex) {
 			LOG.error(String.format("Error loading Permission by user=%s", user), ex);
-		} finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+		}
 
 		return perm;
 	}
@@ -65,11 +61,7 @@ public class PermissionDataProviderImpl extends BaseDataProviderImpl<PermissionE
 			}
 		} catch (Exception ex) {
 			LOG.error(String.format("Error loading Permission by project=%s", project), ex);
-		} finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+		}
 
 		return perm;
 	}

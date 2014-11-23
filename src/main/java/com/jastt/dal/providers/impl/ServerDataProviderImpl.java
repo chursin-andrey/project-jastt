@@ -37,11 +37,7 @@ public class ServerDataProviderImpl extends BaseDataProviderImpl<ServerEntity, S
 			}
 		} catch (Exception ex) {
 			LOG.error(String.format("Error loading server by url=%s", url), ex);
-		} finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+		}
 
 		return server;
 	}
@@ -63,11 +59,7 @@ public class ServerDataProviderImpl extends BaseDataProviderImpl<ServerEntity, S
 			}
 		} catch (Exception ex) {
 			LOG.error(String.format("Error loading server by name=%s", name), ex);
-		} finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+		}
 
 		return server;
 	}
