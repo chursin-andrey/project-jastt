@@ -1,17 +1,22 @@
 package com.jastt.dal.providers.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
+import com.jastt.dal.entities.AssigneeEntity;
 import com.jastt.dal.entities.ProjectEntity;
+import com.jastt.dal.exceptions.DaoException;
 import com.jastt.dal.providers.ProjectDataProvider;
 
 public class ProjectDataProviderImpl extends BaseDataProviderImpl<ProjectEntity, Project, Integer> implements ProjectDataProvider {
@@ -35,11 +40,7 @@ public class ProjectDataProviderImpl extends BaseDataProviderImpl<ProjectEntity,
 			}
 		} catch (Exception ex) {
 			LOG.error(String.format("Error loading Project by name=%s", name), ex);
-		} finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+		}
 
 		return prj;
 	}
@@ -61,19 +62,33 @@ public class ProjectDataProviderImpl extends BaseDataProviderImpl<ProjectEntity,
 			}
 		} catch (Exception ex) {
 			LOG.error(String.format("Error loading Project by key=%s", key), ex);
-		} finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+		}
 
 		return prj;
 	}
 
+	@Transactional
 	@Override
 	public List<Project> getAvailableProjectsForUser(User currentUser) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Project> resultList = new ArrayList<>();
+		List<ProjectEntity> entityList = new ArrayList<>();
+		try{
+			Session session = sessionFactory.getCurrentSession();
+			Criteria prjCriteria = session.createCriteria(Project.class).add(
+					Restrictions.eq("userEntity.id", currentUser.getId()));
+			entityList = prjCriteria.list();
+			for (ProjectEntity pj : entityList) {
+				Project prjt = mappingService.map(pj, Project.class);
+				resultList.add(prjt);
+			}
+		} catch (HibernateException ex) {
+        	LOG.error("Hibernate error occured while getting Project", ex.getMessage());
+        	throw new DaoException(ex);
+		} catch (Exception ex) {
+			LOG.error("Hibernate error occured while getting Project", ex.getMessage());
+			throw new DaoException(ex);
+		}
+		return resultList;
 	}
 
 }

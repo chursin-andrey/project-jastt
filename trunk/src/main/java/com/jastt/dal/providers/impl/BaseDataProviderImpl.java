@@ -142,6 +142,7 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 		
 	}
 
+	@Transactional
 	@Override
 	public void delete(K entity, Class<T> dalEntityClass) {
 		// TODO Auto-generated method stub
@@ -159,13 +160,30 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 		
 	}
 
+	@Transactional
 	@Override
 	public List<K> findAll(Class<T> dalEntityClass, Class<K> domainEntityClass) {
-		// TODO Auto-generated method stub
-        Session session = sessionFactory.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 
-        List<K> result = new ArrayList<>();
-		return result;
+		List<K> businessEntities = new ArrayList<>();
+
+		try {
+			@SuppressWarnings("unchecked")
+			List<T> dataEntities = session.createCriteria(dalEntityClass).list();
+
+			for (T de : dataEntities) {
+				K businessEntity = mappingService.map(de, domainEntityClass);
+				businessEntities.add(businessEntity);
+			}
+		} catch (HibernateException ex) {
+        	LOG.error("Hibernate error occured while loading business entities", ex.getMessage());
+        	throw new DaoException(ex);
+		} catch (Exception ex) {
+			LOG.error("Unknown error occured while loading business entities", ex.getMessage());
+			throw new DaoException(ex);
+		}
+		
+		return businessEntities;
 	}
 
 	private void fillCriteria(Criteria source, LoadOptions loadOptions, boolean countOnly) {
