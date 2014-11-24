@@ -37,11 +37,11 @@ class JiraClient {
 		this.password = password;
 	}
 	
-	public JiraClient(String serverUrl, String username, String password) /*throws JiraClientException*/ {
+	public JiraClient(String serverUrl, String username, String password) throws JiraClientException {
 		try {
 			this.serverUrl = new URI(serverUrl);
 		} catch (URISyntaxException e) {
-			//TODO: throw new JiraClientException(e.getMessage());
+			throw new JiraClientException(e);
 		}
 		this.username = username;
 		this.password = password;
@@ -53,72 +53,68 @@ class JiraClient {
     			.createWithBasicHttpAuthentication(serverUrl, username, password);
     }
 	
-	private void closeJiraRestClient(JiraRestClient jrc) {
-		try {
-			jrc.close();
-		} catch (IOException e) {
-			//TODO: Send message in Logger
-		}
-	}
-	//TODO: throws JiraClientException
-	public ServerInfo getServerInfo() {
-		JiraRestClient jrc = createJiraRestClient();
-		
+	public ServerInfo getServerInfo() throws JiraClientException {
 		ServerInfo info = null;
+		
 		try {
-			MetadataRestClient metaClient = jrc.getMetadataClient();
-			info = metaClient.getServerInfo().claim();
-		} finally {
-			closeJiraRestClient(jrc);
+			try (JiraRestClient jrc = createJiraRestClient()) {
+				MetadataRestClient metaClient = jrc.getMetadataClient();
+				info = metaClient.getServerInfo().claim();
+			}
+		} catch (RestClientException e) {
+			throw new JiraClientException(e);
+		} catch (IOException e) {
+			throw new JiraClientException(e);
 		}
 		
 		return info;
 	}
 	
-	public Set<BasicProject> getAllProjects() /*throws JiraClientException*/ {
-    	JiraRestClient jrc = createJiraRestClient();
-    	
+	public Set<BasicProject> getAllProjects() throws JiraClientException {    	
     	Set<BasicProject> projectSet = new HashSet<BasicProject>();
+    	
     	try {
-			try {
+			try (JiraRestClient jrc = createJiraRestClient()) {
 				ProjectRestClient projectClient = jrc.getProjectClient();
 				Iterable<BasicProject> projects = projectClient.getAllProjects().claim();
 				for (BasicProject project : projects) projectSet.add(project);
-			} finally {
-				closeJiraRestClient(jrc);
 			}
 		} catch (RestClientException e) {
-			//TODO: throw new JiraClientException(e.getMessage(), e.getStatusCode().orNull());
+			throw new JiraClientException(e);
+		} catch (IOException e) {
+			throw new JiraClientException(e);
 		}
     	
     	return projectSet;
     }
-	//TODO: throws JiraClientException 
-	public int getTotalNumberOfIssuesForQuery(final String jql) {
-		JiraRestClient jrc = createJiraRestClient();
-		
+	 
+	public int getTotalNumberOfIssuesForQuery(final String jql) throws JiraClientException {
 		int total = 0;
+		
 		try {
-    		SearchRestClient searchClient = jrc.getSearchClient();
-    		SearchResult results = searchClient.searchJql(jql, 0, null, null).claim();
-    		total = results.getTotal();
-    	} finally {
-    		closeJiraRestClient(jrc);
-    	}
+			try (JiraRestClient jrc = createJiraRestClient()) {
+				SearchRestClient searchClient = jrc.getSearchClient();
+				SearchResult results = searchClient.searchJql(jql, 0, null, null).claim();
+				total = results.getTotal();
+			}
+		} catch (RestClientException e) {
+			throw new JiraClientException(e);
+		} catch (IOException e) {
+			throw new JiraClientException(e);
+		}
 		
 		return total;
 	}
 	
-	public Set<Issue> getAllIssuesByQuery(final String jql, final Integer maxResults) /*throws JiraClientException*/ {
+	public Set<Issue> getAllIssuesByQuery(final String jql, final Integer maxResults) throws JiraClientException {
 		String[] requiredFields = {"project", "summary", "issuetype", "status", "created", "updated", "priority", 
     			"timetracking", "versions", "assignee"};
     	Set<String> fields = new HashSet<String>(Arrays.asList(requiredFields));
-		
-    	JiraRestClient jrc = createJiraRestClient();
     	
     	Set<Issue> issueSet = new HashSet<Issue>();
+    	
     	try {
-			try {
+			try (JiraRestClient jrc = createJiraRestClient()) {
 				SearchRestClient searchClient = jrc.getSearchClient();
 	    		int total = 0, startAt = 0;
 	    		do {	    			
@@ -129,11 +125,11 @@ class JiraClient {
 		    		for(Issue issue : issues) issueSet.add(issue);
 		    		startAt = issueSet.size();
 	    		} while (startAt < total);
-			} finally {
-				closeJiraRestClient(jrc);
 			}
 		} catch (RestClientException e) {
-			//TODO: throw new JiraClientException(e.getMessage(), e.getStatusCode().orNull());
+			throw new JiraClientException(e);
+		} catch (IOException e) {
+			throw new JiraClientException(e);
 		}
 		
 		return issueSet;

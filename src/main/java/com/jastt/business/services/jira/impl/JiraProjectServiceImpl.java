@@ -3,6 +3,7 @@ package com.jastt.business.services.jira.impl;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.atlassian.jira.rest.client.api.domain.BasicProject;
@@ -22,16 +23,21 @@ public class JiraProjectServiceImpl implements JiraProjectService {
 				user.getLogin(), user.getPassword());
 		Set<BasicProject> jiraProjectSet = jc.getAllProjects();
 		for (BasicProject jiraProject : jiraProjectSet) {
-			Project project = new Project();
-			
+			Project project = convertJiraProjectToProjectEntity(jiraProject);			
 			project.setServer(user.getServer());
-			project.setKey(jiraProject.getKey());
-			if (jiraProject.getName() == null) project.setName(""); else project.setName(jiraProject.getName()); 
-			
 			projectSet.add(project);
 		}
 		
-		return null;//return projectSet;
+		return projectSet;
+	}
+	
+	static Project convertJiraProjectToProjectEntity(BasicProject jiraProject) {
+		Project project = new Project();
+		
+		project.setKey(jiraProject.getKey());
+		project.setName(StringUtils.defaultString(jiraProject.getName()));
+		
+		return project;
 	}
 
 }
