@@ -1,8 +1,11 @@
 package com.jastt.business.domain.entities;
 
 
+import javax.faces.bean.ManagedBean;
+
 import com.jastt.business.domain.entities.Server;
 
+@ManagedBean(name="userBean")
 public class User extends PersistentEntity<Integer>{
 	
 	private static final long serialVersionUID = 468724781884407064L;
