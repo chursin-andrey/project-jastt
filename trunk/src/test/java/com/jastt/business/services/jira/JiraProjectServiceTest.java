@@ -1,11 +1,9 @@
-package com.jastt.business.services.jira.impl;
+package com.jastt.business.services.jira;
 
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -19,8 +17,8 @@ import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
-import com.jastt.business.services.jira.JiraClientException;
-import com.jastt.business.services.jira.JiraProjectService;
+import com.jastt.business.services.jira.impl.JiraProjectServiceImpl;
+import com.jastt.business.services.jira.impl.client.JiraClient;
 
 public class JiraProjectServiceTest {
 
@@ -48,30 +46,6 @@ public class JiraProjectServiceTest {
 		user.setServer(server);
 		user.setLogin(prop.getProperty("username"));
 		user.setPassword(prop.getProperty("password"));
-	}
-
-	@Test
-	public void convertJiraProjectToProjectEntity() 
-			throws URISyntaxException {
-		BasicProject jiraProject = new BasicProject(new URI("tmp"), "key", null, "name");
-		assertNotNull(jiraProject.getKey());
-		assertNotNull(jiraProject.getName());
-		
-		Project project = JiraProjectServiceImpl.convertJiraProjectToProjectEntity(jiraProject);
-		assertEquals(jiraProject.getKey(), project.getKey());
-		assertEquals(jiraProject.getName(), project.getName());
-	}
-	
-	@Test
-	public void convertJiraProjectToProjectEntity_JiraProjectNameIsNull_ProjectEntityNameIsEmpty() 
-			throws URISyntaxException {
-		BasicProject jiraProject = new BasicProject(new URI("tmp"), "key", null, null);
-		assertNotNull(jiraProject.getKey());
-		assertNull(jiraProject.getName());
-		
-		Project project = JiraProjectServiceImpl.convertJiraProjectToProjectEntity(jiraProject);
-		assertEquals(jiraProject.getKey(), project.getKey());
-		assertTrue(project.getName().isEmpty());
 	}
 	
 	@Test

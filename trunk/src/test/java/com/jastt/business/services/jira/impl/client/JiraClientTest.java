@@ -1,4 +1,4 @@
-package com.jastt.business.services.jira.impl;
+package com.jastt.business.services.jira.impl.client;
 
 import static org.junit.Assert.*;
 
@@ -99,8 +99,8 @@ public class JiraClientTest {
 		if (someProject == null) {
 			LOG.info(String.format("No project found", MAX_ISSUES_NUM));
 			fail();
-		}		
-		LOG.info("Project found: " + someProject.getKey());
+		}
+		LOG.info(String.format("Project found: %s, Total number of issues: %d", someProject.getKey(), total));
 		
 		int maxResults = total/5 + 1;
 		String jql = String.format("project = %s", someProject.getKey());
@@ -140,5 +140,4 @@ public class JiraClientTest {
 		}
 	}
 	
-
 }

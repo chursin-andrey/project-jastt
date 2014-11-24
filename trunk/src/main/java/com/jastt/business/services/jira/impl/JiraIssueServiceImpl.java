@@ -1,7 +1,6 @@
 package com.jastt.business.services.jira.impl;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.joda.time.DateTime;
@@ -13,6 +12,7 @@ import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraIssueService;
+import com.jastt.business.services.jira.impl.client.JiraClient;
 
 @Service("jiraIssueService")
 public class JiraIssueServiceImpl implements JiraIssueService {
@@ -26,7 +26,7 @@ public class JiraIssueServiceImpl implements JiraIssueService {
 		JiraClient jc = new JiraClient(user.getServer().getUrl(), 
 				user.getLogin(), user.getPassword());
 		Set<com.atlassian.jira.rest.client.api.domain.Issue> jiraIssueSet = 
-				jc.getAllIssuesByQuery(jql, -1);
+				jc.getAllIssuesByQuery(jql);
 		for (com.atlassian.jira.rest.client.api.domain.Issue jiraIssue : jiraIssueSet) {
 			Issue issue = new Issue();
 			
