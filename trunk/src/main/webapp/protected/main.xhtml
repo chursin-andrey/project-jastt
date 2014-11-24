@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+ 
+    <h:head>
+        <title>JIRA Activity Simple Time Tracker</title>
+    </h:head>
+    <h:body>
+		<ui:include src="/templates/header.xhtml" />
+		
+  
+
+<h:form>
+	<h:panelGrid columns="4" width="1040"  cellspacing="20">
+		<h:outputLabel value="Project:" ><br /><br />
+			<h:selectOneMenu value="" style="width:200px;">
+   				<f:selectItem itemValue="jastt" itemLabel="JASTT" />
+   				<f:selectItem itemValue="jira" itemLabel="JIRA" />
+			</h:selectOneMenu>
+		</h:outputLabel>
+
+		<h:outputLabel value="Task:" ><br /><br />
+			<h:selectOneMenu value="" style="width:200px;">
+   				<f:selectItem itemValue="all" itemLabel="All" />
+   				<f:selectItem itemValue="last" itemLabel="Last" />
+			</h:selectOneMenu>
+		</h:outputLabel>
+
+		<h:outputLabel value="Member:" ><br /><br />
+			<h:selectOneMenu value="" style="width:200px;">
+   				<f:selectItem itemValue="1" itemLabel="Evgene Morozov" />
+   				<f:selectItem itemValue="2" itemLabel="Ivan Prohorov" />
+			</h:selectOneMenu>
+		</h:outputLabel>
+
+		<h:commandButton value="Add" action="result" style="width:150px;"/>
+	</h:panelGrid>
+	
+		<h:panelGrid columns="4" width="1040"  cellspacing="20">
+		<h:outputLabel value="Time:" ><br /><br />
+			<h:selectOneMenu value="" style="width:200px;">
+   				<f:selectItem itemValue="alltime" itemLabel="AllTime" />
+   				<f:selectItem itemValue="last" itemLabel="Last" />
+			</h:selectOneMenu>
+		</h:outputLabel>
+
+		<h:outputLabel value="Status:" ><br /><br />
+			<h:selectOneMenu value="" style="width:200px;">
+   				<f:selectItem itemValue="all" itemLabel="All" />
+   				<f:selectItem itemValue="last" itemLabel="Last" />
+			</h:selectOneMenu>
+		</h:outputLabel>
+
+		<h:outputLabel value="Members:" ><br /><br />
+			<h:selectOneMenu value="" style="width:200px;">
+   				<f:selectItem itemValue="1" itemLabel="Evgene Morozov" />
+   				<f:selectItem itemValue="2" itemLabel="Ivan Prohorov" />
+			</h:selectOneMenu>
+		</h:outputLabel>
+
+		<h:commandButton value="Clear" action="result" style="width:150px;"/>
+	</h:panelGrid>
+</h:form>
+
+    </h:body>
+</html>

@@ -4,7 +4,7 @@
 	<display-name>JavaEE Quickstart</display-name>
 
 	<welcome-file-list>
-		<welcome-file>protected/dashboard.xhtml</welcome-file>
+		<welcome-file>protected/main.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<error-page>
@@ -74,8 +74,10 @@
 		</init-param>
 	</filter>
 
+	<!--
 	<filter-mapping>
 		<filter-name>shiroFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	</filter-mapping> 
+	-->
 </web-app>
