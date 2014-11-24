@@ -1,34 +1,32 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
-<head>
-<title>Insert title here</title>
-</head>
-<body>
-	<h2>Login</h2>
-	<h:form id="login" class="login">
-		<h:panelGrid columns="3">
-			<h:outputLabel for="username" value="Username:" />
-			<h:inputText id="username" required="true" />
-			<h:message for="username" />
-
-			<h:outputLabel for="password" value="Password" />
-			<h:inputSecret id="password" required="true" />
-			<h:message for="password" />
-
-			<h:outputLabel for="rememberMe" value="Remember Me" />
-			<h:selectBooleanCheckbox id="rememberMe" />
-			<h:panelGroup />
-
-			<h:panelGroup />
-			<h:commandButton value="Login" styleClass="login-button" />
-			<h:panelGroup styleClass="error"
-				rendered="#{not facesContext.validationFailed}">
-                #{shiroLoginFailure}
-            </h:panelGroup>
-		</h:panelGrid>
-	</h:form>
-</body>
+	
+	<h:head>
+        <title>JIRA Activity Simple Time Tracker</title>
+    </h:head>
+    
+	<h:body>
+		<ui:composition template="/templates/commonLayout.xhtml">
+			<ui:define name="content">
+    			<h3>Login</h3>
+				<h:form id="login" class="login">
+					<h:panelGrid columns="3">
+						<h:outputLabel for="username" value="Username:" />
+						<h:inputText id="username" required="true" />
+						<h:message for="username" />
+						<h:outputLabel for="password" value="Password" />
+						<h:inputSecret id="password" required="true" />
+						<h:message for="password" />
+						<h:outputLabel for="rememberMe" value="Remember Me" />
+						<h:selectBooleanCheckbox id="rememberMe" />
+						<h:commandButton value="Login" styleClass="" />
+					</h:panelGrid>
+				</h:form>
+    		</ui:define>
+		</ui:composition>>
+	</h:body>
 </html>
