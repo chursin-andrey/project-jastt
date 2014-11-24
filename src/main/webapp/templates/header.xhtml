@@ -1,56 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 <h:head />
 <h:body>
-	<ui:composition>
-		<div>
-			<div id="navBarItem">
-				<h:form>
-					<ul class="mainMenu">
-						<li><p:commandLink class="#{menuBean.cssClass('dashboard')}"
-								actionListener="#{menuBean.click('dashboard')}"
-								action="/protected/dashboard.xhtml">
-								<span>Dashboard</span>
-							</p:commandLink></li>
-						<li><p:commandLink class="#{menuBean.cssClass('students')}"
-								actionListener="#{menuBean.click('students')}"
-								action="/protected/students/students.xhtml">
-								<span>Students</span>
-							</p:commandLink></li>
-						<li><p:commandLink class="#{menuBean.cssClass('teachers')}"
-								actionListener="#{menuBean.click('teachers')}"
-								action="/protected/teachers/teachers.xhtml">
-								<span>Teachers</span>
-							</p:commandLink></li>
-						<li><p:commandLink class="#{menuBean.cssClass('reviews')}"
-								actionListener="#{menuBean.click('reviews')}"
-								action="/protected/reviews/reviews.xhtml">
-								<span>Reviews</span>
-							</p:commandLink></li>
-						<li><p:commandLink class="#{menuBean.cssClass('courses')}"
-								actionListener="#{menuBean.click('courses')}"
-								action="/protected/courses/courses.xhtml">
-								<span>Courses</span>
-							</p:commandLink></li>
-						<li><p:commandLink class="#{menuBean.cssClass('subjects')}"
-								actionListener="#{menuBean.click('subjects')}"
-								action="/protected/subjects/subjects.xhtml">
-								<span>Subjects</span>
-							</p:commandLink></li>
-					</ul>
-				</h:form>
-			</div>
-		</div>
+<h:panelGrid columns="4" width="1040" cellspacing="10">
+<h:graphicImage width="200" value="jastt_logo.jpg" />
+<center><div><H2>JIRA Activity Simple Time Tracker</H2></div></center>
 
-		<div id="pageHeader" style="clear: both;">
-			<ui:insert name="pageHeader" />
-		</div>
-	</ui:composition>
+<h:form><div>Language: </div><h:selectOneMenu value="">
+   	<f:selectItem itemValue="eng" itemLabel="English" />
+   	<f:selectItem itemValue="ru" itemLabel="Russian" />
+</h:selectOneMenu>
+</h:form>
+</h:panelGrid>
 </h:body>
-</html>
+</ui:composition>

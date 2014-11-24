@@ -22,8 +22,8 @@
 			<map>
 				<entry key="authc">
 					<bean class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
-						<property name="usernameParam" value="login:username" />
-						<property name="passwordParam" value="login:password" />
+						<property name="usernameParam" value="admin" />
+						<property name="passwordParam" value="1234" />
 						<property name="rememberMeParam" value="login:rememberMe" />
 					</bean>
 				</entry>
