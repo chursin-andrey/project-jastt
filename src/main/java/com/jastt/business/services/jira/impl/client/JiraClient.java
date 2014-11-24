@@ -1,4 +1,4 @@
-package com.jastt.business.services.jira.impl;
+package com.jastt.business.services.jira.impl.client;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,7 +23,7 @@ import com.atlassian.jira.rest.client.api.domain.ServerInfo;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import com.jastt.business.services.jira.JiraClientException;
 
-class JiraClient {
+public class JiraClient {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JiraClient.class);
 	
@@ -48,26 +48,28 @@ class JiraClient {
 	}
 	
 	private JiraRestClient createJiraRestClient() {
-    	JiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
-    	return factory
-    			.createWithBasicHttpAuthentication(serverUrl, username, password);
+    	try {
+			JiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
+			return factory
+					.createWithBasicHttpAuthentication(serverUrl, username, password);
+		} catch (Exception ex) {
+			LOG.error("Error at creating JiraRestClient", ex);
+			throw ex;
+		}
     }
 	
-	public ServerInfo getServerInfo() throws JiraClientException {
-		ServerInfo info = null;
-		
+	ServerInfo getServerInfo() throws JiraClientException {
 		try {
 			try (JiraRestClient jrc = createJiraRestClient()) {
 				MetadataRestClient metaClient = jrc.getMetadataClient();
-				info = metaClient.getServerInfo().claim();
+				ServerInfo info = metaClient.getServerInfo().claim();
+				return info;
 			}
 		} catch (RestClientException e) {
 			throw new JiraClientException(e);
 		} catch (IOException e) {
 			throw new JiraClientException(e);
 		}
-		
-		return info;
 	}
 	
 	public Set<BasicProject> getAllProjects() throws JiraClientException {    	
@@ -88,25 +90,21 @@ class JiraClient {
     	return projectSet;
     }
 	 
-	public int getTotalNumberOfIssuesForQuery(final String jql) throws JiraClientException {
-		int total = 0;
-		
+	int getTotalNumberOfIssuesForQuery(final String jql) throws JiraClientException {
 		try {
 			try (JiraRestClient jrc = createJiraRestClient()) {
 				SearchRestClient searchClient = jrc.getSearchClient();
 				SearchResult results = searchClient.searchJql(jql, 0, null, null).claim();
-				total = results.getTotal();
+				return results.getTotal();
 			}
 		} catch (RestClientException e) {
 			throw new JiraClientException(e);
 		} catch (IOException e) {
 			throw new JiraClientException(e);
 		}
-		
-		return total;
 	}
 	
-	public Set<Issue> getAllIssuesByQuery(final String jql, final Integer maxResults) throws JiraClientException {
+	Set<Issue> getAllIssuesByQuery(final String jql, final Integer maxResults) throws JiraClientException {
 		String[] requiredFields = {"project", "summary", "issuetype", "status", "created", "updated", "priority", 
     			"timetracking", "versions", "assignee"};
     	Set<String> fields = new HashSet<String>(Arrays.asList(requiredFields));
@@ -116,7 +114,8 @@ class JiraClient {
     	try {
 			try (JiraRestClient jrc = createJiraRestClient()) {
 				SearchRestClient searchClient = jrc.getSearchClient();
-	    		int total = 0, startAt = 0;
+	    		
+				int total = 0, startAt = 0;
 	    		do {	    			
 	    			SearchResult results = searchClient.searchJql(jql, maxResults, startAt, fields).claim();
 		    		total = results.getTotal();
@@ -133,5 +132,9 @@ class JiraClient {
 		}
 		
 		return issueSet;
+	}
+	
+	public Set<Issue> getAllIssuesByQuery(final String jql) throws JiraClientException {
+		return getAllIssuesByQuery(jql, -1);
 	}
 }
