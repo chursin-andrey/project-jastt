@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.ServerInfo;
+import com.jastt.business.services.jira.JiraClientException;
 
 public class JiraClientTest {
 
@@ -47,17 +48,17 @@ public class JiraClientTest {
 	}
 
 	@Test
-	public void testGettingConnectionToJiraServer() {
+	public void getConnectionToJiraServer() throws JiraClientException {
 		ServerInfo info = jc.getServerInfo();
 		assertNotNull("serverInfo must be not null", info);
 		assertEquals(serverUrl, info.getBaseUri().toString());
 	}
 	
 	@Test
-	public void getAllProjects_MandatoryFieldsAreNotNull() {
+	public void getAllProjects_MandatoryFieldsAreNotNull() throws JiraClientException {
 		Set<BasicProject> projectSet = jc.getAllProjects();
 		
-		LOG.info(String.format("Found %d projects", projectSet.size()));
+		LOG.info(String.format("Found %d projects on current JIRA server", projectSet.size()));
 		
 		for (BasicProject project : projectSet) {
 			assertNotNull("projectKey must be not null", project.getKey());
@@ -65,7 +66,7 @@ public class JiraClientTest {
 	}
 	
 	@Test
-	public void getTotalNumberOfIssuesForQuery() {
+	public void getTotalNumberOfIssuesForQuery() throws JiraClientException {
 		Set<BasicProject> projectSet = jc.getAllProjects();
 		if (projectSet.size() == 0) {
 			LOG.info("No projects found");
@@ -80,14 +81,15 @@ public class JiraClientTest {
 	}
 	
 	@Test
-	public void getAllIssuesByQuery_IssuesArePaginated_AllIssuesLoaded() {
+	public void getAllIssuesByQuery_IssuesArePaginated_AllIssuesLoaded() throws JiraClientException {
 		final int MAX_ISSUES_NUM = 1;
 		
 		Set<BasicProject> projectSet = jc.getAllProjects();
 		
 		BasicProject someProject = null; 
 		int total = 0;
-		//search for a project with total number of issues > MAX_ISSUES_NUM
+		
+		LOG.info(String.format("Search for a project with total number of issues > %d", MAX_ISSUES_NUM));
 		for (BasicProject project : projectSet) {
 			LOG.trace("Test project: " + project.getKey());
 			String jql = String.format("project = %s", project.getKey());
@@ -95,7 +97,7 @@ public class JiraClientTest {
 			if (total > MAX_ISSUES_NUM) {someProject = project; break;}
 		}
 		if (someProject == null) {
-			LOG.info(String.format("No project with total number of issues > %d found", MAX_ISSUES_NUM));
+			LOG.info(String.format("No project found", MAX_ISSUES_NUM));
 			fail();
 		}		
 		LOG.info("Project found: " + someProject.getKey());
@@ -107,11 +109,12 @@ public class JiraClientTest {
 	}
 	
 	@Test
-	public void getAllIssuesByQuery_MandatoryFieldsAreNotNull() {
+	public void getAllIssuesByQuery_MandatoryFieldsAreNotNull() throws JiraClientException {
 		Set<BasicProject> projectSet = jc.getAllProjects();
 		
-		BasicProject someProject = null; 
-		//search for a project with at least one issue
+		BasicProject someProject = null;
+		
+		LOG.info("Search for a project with at least one issue");
 		for (BasicProject project : projectSet) {
 			LOG.trace("Test project: " + project.getKey());
 			String jql = String.format("project = %s", project.getKey());
@@ -119,7 +122,7 @@ public class JiraClientTest {
 			if (total > 0) {someProject = project; break;}
 		}
 		if (someProject == null) {
-			LOG.info(String.format("No project with at least one issue found"));
+			LOG.info(String.format("No project found"));
 			fail();
 		}		
 		LOG.info("Project found: " + someProject.getKey());
