@@ -1,9 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"      
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-
-</html>      
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"      
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/commonLayout.xhtml">
+	
+	<ui:define name="content">
+		<div align="left">
+			<h:form>
+				<p:commandButton value="Add User" action="#{authBean.addUser()}" />
+				<br /> <br />
+				<p:dataTable>
+    				<p:column headerText="Name">
+        				<h:outputText value="" />
+    				</p:column>
+ 
+    				<p:column headerText="Login">
+        				<p:outputLabel value="" />
+    				</p:column>
+ 
+    				<p:column headerText="User Role">
+        				<p:outputLabel value="" />
+    				</p:column>
+ 
+    				<p:column headerText="Change Info">
+        				<p:outputLabel value="Edit" />
+        				<p:outputLabel value="Delete" />
+    				</p:column>
+    				
+				</p:dataTable>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>    
