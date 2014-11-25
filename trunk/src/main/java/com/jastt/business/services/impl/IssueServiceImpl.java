@@ -126,12 +126,12 @@ public class IssueServiceImpl implements IssueService {
 		
 		try{	
 			Set<Project> projects_set = jiraProjectService.getAllProjects(user);
-			List<Project> projects = new ArrayList<Project>();
-			for(Project project: projects_set){
+			List<Project> projects = new ArrayList<Project>(projects_set);
+			/*for(Project project: projects_set){
 				projects.add(project);
-			}
+			}*/
 			
-			if(!projects.isEmpty()){
+			if(projects.isEmpty()){
 				logger.info("User "+user.getLogin()+" has none of projects.");
 				return;	
 			}
