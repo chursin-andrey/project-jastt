@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
@@ -27,7 +28,7 @@ import com.jastt.business.services.jira.JiraProjectService;
 import com.jastt.dal.providers.IssueDataProvider;
 import com.sun.xml.bind.v2.TODO;
 
-
+@Service
 public class IssueServiceImpl implements IssueService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
@@ -124,7 +125,11 @@ public class IssueServiceImpl implements IssueService {
 	public void update(User user){
 		
 		try{	
-			Set<Project> projects = jiraProjectService.getAllProjects(user);
+			Set<Project> projects_set = jiraProjectService.getAllProjects(user);
+			List<Project> projects = new ArrayList<Project>();
+			for(Project project: projects_set){
+				projects.add(project);
+			}
 			
 			if(!projects.isEmpty()){
 				logger.info("User "+user.getLogin()+" has none of projects.");
@@ -132,7 +137,7 @@ public class IssueServiceImpl implements IssueService {
 			}
 			
 			List<Issue> issues = new ArrayList<Issue>();
-			Issue latestIssue = issueDataProvider.getLatestIssue();
+			Issue latestIssue = issueDataProvider.getLatestIssue(projects);
 			
 			if(latestIssue == null){
 				for(Project project : projects){		
