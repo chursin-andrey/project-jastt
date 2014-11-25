@@ -6,22 +6,32 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
-<h:head> </h:head>
+	
+<h:head>
+	<title>JASTT Jira Activity Simple Time Tracker</title>
+</h:head>
 <h:body>
-	<h:outputStylesheet></h:outputStylesheet>
 	<h:form>
-		<p:toolbar>
-			<p:toolbarGroup align="left">
-				<h:graphicImage value="../resources/img/jastt_logo.png" />
-			</p:toolbarGroup>
-			<p:toolbarGroup align="right">
-				<p:tabMenu activeIndex="1" >
-					<p:menuitem value="Admin Panel" />
-					<p:menuitem value="Reports" />
-					<p:menuitem value="Help" />
-				</p:tabMenu>
-			</p:toolbarGroup>
-		</p:toolbar>
+		<h:panelGrid columns="3" width="1040" cellspacing="10">
+			<h:panelGroup>
+				<h:graphicImage width="200" value="/resources/img/jastt_logo.png" />
+			</h:panelGroup>
+			<h:panelGroup>
+				<h1>JIRA Activity Simple Time Tracker</h1>
+				<p>
+					<p:commandLink value="Admin Panel" />&nbsp;
+					<p:commandLink value="Report" />&nbsp;
+					<p:commandLink value="Help" />
+				</p>
+			</h:panelGroup>
+			<h:panelGroup>
+				Language:&nbsp;
+				<h:selectOneMenu value="">
+   					<f:selectItem itemValue="eng" itemLabel="English" />
+   					<f:selectItem itemValue="ru" itemLabel="Russian" />
+				</h:selectOneMenu>
+			</h:panelGroup>
+		</h:panelGrid>
 	</h:form>
 </h:body>
 </html>
