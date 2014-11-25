@@ -17,14 +17,16 @@
 					<h:panelGrid columns="3">
 						<h:outputLabel for="username" value="Username:" />
 						<h:inputText id="username" required="true" />
-						<h:message for="username" />
+					    <!--  <h:message for="username" />-->
+					    
 						<h:outputLabel for="password" value="Password" />
 						<h:inputSecret id="password" required="true" />
-						<h:message for="password" />
+						<!-- <h:message for="password" />-->
+						
 						<h:outputLabel for="rememberMe" value="Remember Me" />
 						<h:selectBooleanCheckbox id="rememberMe" />
 						<br />
-						<h:commandButton value="Login"/>
+						<h:commandButton value="Login" action="#{authBean.doLogin}"/>
 					</h:panelGrid>
 				</h:form>
     		</ui:define>
