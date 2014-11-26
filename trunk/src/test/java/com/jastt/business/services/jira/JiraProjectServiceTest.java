@@ -4,11 +4,13 @@ import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,14 +26,61 @@ public class JiraProjectServiceTest {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JiraProjectServiceTest.class);
 	
-	private User user;
-	private JiraProjectService jiraProjectService = new JiraProjectServiceImpl();
+	private static User user;
+	private static Set<Project> projectSet;
+	private static JiraProjectService jiraProjectService = new JiraProjectServiceImpl();
 	
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		user = createUser();
+		projectSet = jiraProjectService.getAllProjects(user);
+		if (projectSet.isEmpty()) throw new Exception("No project found");
+		LOG.info(String.format("Found %d projects on current JIRA server", projectSet.size()));
+	}
+	
+	@Test
+	public void getAllProjects_AllProjectsInTheSameServer() {
+		for (Project project : projectSet) {
+			assertSame(user.getServer(), project.getServer());
+		}
+	}
+	
+	@Test
+	public void getAllProjects_ProjectKeysAreUnique() {
+		Set<String> projectKeys = new HashSet<String>();
+		for (Project project : projectSet) {
+			assertNotNull(project.getKey());
+			projectKeys.add(project.getKey());
+		}
+		assertEquals(projectKeys.size(), projectSet.size());
+	}
+	
+	@Test
+	public void getAllProjects_JiraProjectsAndProjectEntitiesContainTheSameData() throws JiraClientException {
+		final String serverUrl = user.getServer().getUrl();
+		final String username = user.getLogin();
+		final String password = user.getPassword();
+		
+		JiraClient jiraClient = new JiraClient(serverUrl, username, password);		
+		Set<BasicProject> jiraProjectSet = jiraClient.getAllProjects();
+		
+		assertEquals(jiraProjectSet.size(), projectSet.size());
+		
+		Map<String, BasicProject> jiraProjectMap = new HashMap<String, BasicProject>();
+		for (BasicProject jiraProject : jiraProjectSet) {
+			jiraProjectMap.put(jiraProject.getKey(), jiraProject);
+		}
+		
+		for (Project project : projectSet) {
+			compareProjects(jiraProjectMap.get(project.getKey()), project);
+		}
+	}
+	
+	private static User createUser() throws Exception {
 		Properties prop = new Properties();
 		
-		InputStream in = getClass().getClassLoader().getResourceAsStream("jira_connection.properties");
+		InputStream in = JiraIssueServiceTest.class
+				.getClassLoader().getResourceAsStream("jira_connection.properties");
 		if (in == null) throw new FileNotFoundException("Property file not found");
 		try {
 			prop.load(in);
@@ -42,37 +91,20 @@ public class JiraProjectServiceTest {
 		Server server = new Server();
 		server.setUrl(prop.getProperty("jira.url"));
 		
-		user = new User();
+		User user = new User();
 		user.setServer(server);
 		user.setLogin(prop.getProperty("username"));
 		user.setPassword(prop.getProperty("password"));
+		return user;
 	}
 	
-	@Test
-	public void getAllProjects_AllProjectsLoaded() throws JiraClientException {
-		final String serverUrl = user.getServer().getUrl();
-		final String username = user.getLogin();
-		final String password = user.getPassword();
-
-		JiraClient jiraClient = new JiraClient(serverUrl, username, password);
-		
-		Set<BasicProject> jiraProjectSet = jiraClient.getAllProjects();
-		Set<Project> projectSet = jiraProjectService.getAllProjects(user);
-		
-		for (Project project : projectSet) {
-			assertSame(user.getServer(), project.getServer());
+	private void compareProjects(BasicProject jiraProject, Project project) {
+		assertEquals(jiraProject.getKey(), project.getKey());
+		if (jiraProject.getName() != null) {
+			assertEquals(jiraProject.getName(), project.getName());
+		} else {
+			assertTrue(project.getName().isEmpty());
 		}
-		
-		Set<String> jiraProjectKeys = new HashSet<String>();
-		for (BasicProject jiraProject : jiraProjectSet) {
-			jiraProjectKeys.add(jiraProject.getKey());
-		}
-		Set<String> projectKeys = new HashSet<String>();
-		for (Project project : projectSet) {
-			projectKeys.add(project.getKey());
-		}
-		
-		assertEquals(jiraProjectKeys, projectKeys);
 	}
 
 }
