@@ -245,6 +245,7 @@
 		          <excludes>
 		            <exclude>**/JiraClientTest.java</exclude>
 		            <exclude>**/JiraProjectServiceTest.java</exclude>
+		            <exclude>**/JiraIssueServiceTest.java</exclude>
 		          </excludes>
 		        </configuration>
       		</plugin>

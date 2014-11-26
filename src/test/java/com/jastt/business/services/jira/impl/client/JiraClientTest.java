@@ -29,7 +29,6 @@ public class JiraClientTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		
 		Properties prop = new Properties();
 		
 		InputStream in = getClass().getClassLoader().getResourceAsStream("jira_connection.properties");
@@ -50,7 +49,6 @@ public class JiraClientTest {
 	@Test
 	public void getConnectionToJiraServer() throws JiraClientException {
 		ServerInfo info = jc.getServerInfo();
-		assertNotNull("serverInfo must be not null", info);
 		assertEquals(serverUrl, info.getBaseUri().toString());
 	}
 	
@@ -59,17 +57,13 @@ public class JiraClientTest {
 		Set<BasicProject> projectSet = jc.getAllProjects();
 		
 		LOG.info(String.format("Found %d projects on current JIRA server", projectSet.size()));
-		
-		for (BasicProject project : projectSet) {
-			assertNotNull("projectKey must be not null", project.getKey());
-		}
 	}
 	
 	@Test
 	public void getTotalNumberOfIssuesForQuery() throws JiraClientException {
 		Set<BasicProject> projectSet = jc.getAllProjects();
-		if (projectSet.size() == 0) {
-			LOG.info("No projects found");
+		if (projectSet.isEmpty()) {
+			LOG.info("No project found");
 			fail();
 		}
 		
@@ -82,62 +76,30 @@ public class JiraClientTest {
 	
 	@Test
 	public void getAllIssuesByQuery_IssuesArePaginated_AllIssuesLoaded() throws JiraClientException {
-		final int MAX_ISSUES_NUM = 1;
+		final int minNumberOfIssues = 1;
 		
 		Set<BasicProject> projectSet = jc.getAllProjects();
 		
 		BasicProject someProject = null; 
 		int total = 0;
 		
-		LOG.info(String.format("Search for a project with total number of issues > %d", MAX_ISSUES_NUM));
+		LOG.info(String.format("Search for a project with total number of issues > %d", minNumberOfIssues));
 		for (BasicProject project : projectSet) {
 			LOG.trace("Test project: " + project.getKey());
 			String jql = String.format("project = %s", project.getKey());
 			total = jc.getTotalNumberOfIssuesForQuery(jql);
-			if (total > MAX_ISSUES_NUM) {someProject = project; break;}
-		}
-		if (someProject == null) {
-			LOG.info(String.format("No project found", MAX_ISSUES_NUM));
-			fail();
-		}
-		LOG.info(String.format("Project found: %s, Total number of issues: %d", someProject.getKey(), total));
-		
-		int maxResults = total/5 + 1;
-		String jql = String.format("project = %s", someProject.getKey());
-		Set<Issue> issueSet = jc.getAllIssuesByQuery(jql, maxResults);
-		assertEquals(total, issueSet.size());
-	}
-	
-	@Test
-	public void getAllIssuesByQuery_MandatoryFieldsAreNotNull() throws JiraClientException {
-		Set<BasicProject> projectSet = jc.getAllProjects();
-		
-		BasicProject someProject = null;
-		
-		LOG.info("Search for a project with at least one issue");
-		for (BasicProject project : projectSet) {
-			LOG.trace("Test project: " + project.getKey());
-			String jql = String.format("project = %s", project.getKey());
-			int total = jc.getTotalNumberOfIssuesForQuery(jql);
-			if (total > 0) {someProject = project; break;}
+			if (total > minNumberOfIssues) { someProject = project; break; }
 		}
 		if (someProject == null) {
 			LOG.info(String.format("No project found"));
 			fail();
-		}		
-		LOG.info("Project found: " + someProject.getKey());
-		
-		String jql = String.format("project = %s", someProject.getKey());
-		Set<Issue> issueSet = jc.getAllIssuesByQuery(jql, -1);
-		for (Issue issue : issueSet) {
-			assertNotNull("issueKey must be not null", issue.getKey());
-			assertNotNull("issue must belong to a project", issue.getProject());
-			assertNotNull("issueSummary must be not null", issue.getSummary());
-			assertNotNull("issueType must be not null", issue.getIssueType().getName());
-			assertNotNull("issueStatus must be not null", issue.getStatus().getName());
-			assertNotNull("issueCreationDate must be not null", issue.getCreationDate());
-			assertNotNull("issueUpdateDate must be not null", issue.getUpdateDate());
 		}
+		LOG.info(String.format("Project found: %s, Total number of issues: %d", someProject.getKey(), total));
+		
+		int pageSize = total/5 + 1;
+		String jql = String.format("project = %s", someProject.getKey());
+		Set<Issue> issueSet = jc.getAllIssuesByQuery(jql, pageSize);
+		assertEquals(total, issueSet.size());
 	}
 	
 }
