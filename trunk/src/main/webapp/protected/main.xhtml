@@ -10,9 +10,10 @@
         <title>JIRA Activity Simple Time Tracker</title>
     </h:head>
     <h:body>
-		<ui:include src="/templates/header.xhtml" />
+		<ui:include src="/templates/commonHeader.xhtml" />
 		
 	<h:form>
+
 	<h:panelGrid columns="4" width="1040"  cellspacing="20">
 		<h:outputLabel value="Project:" ><br /><br />
 			<h:selectOneMenu value="" style="width:200px;">
@@ -38,9 +39,14 @@
 		<h:commandButton value="Add" action="result" style="width:150px;"/>
 		</h:panelGrid>
 	
-		<h:panelGrid columns="4" width="1040"  cellspacing="20">
+		<h:panelGrid columns="5" width="1040"  cellspacing="20">
+		<h:selectOneRadio value="" layout="pageDirection" >
+            <f:selectItem itemValue="1" itemLabel="#{userBean.login}" />
+            <f:selectItem itemValue="2" itemLabel="" />
+        </h:selectOneRadio>	
+		
 		<h:outputLabel value="Time:" ><br /><br />
-			<h:selectOneMenu value="" style="width:200px;">
+			<h:selectOneMenu value="" style="width:150px;">
    				<f:selectItem itemValue="alltime" itemLabel="AllTime" />
    				<f:selectItem itemValue="last" itemLabel="Last" />
 			</h:selectOneMenu>
@@ -61,6 +67,11 @@
 		</h:outputLabel>
 
 		<h:commandButton value="Clear" action="result" style="width:150px;"/>
+	</h:panelGrid>
+	<h:panelGrid columns="3" width="400"  cellspacing="20">
+	<h:commandButton value="Show" action="show" style="width:100px;"/>
+	<h:commandButton value="Cancel" action="cancel" style="width:100px;"/>
+	<h:commandButton value="Update" action="update" style="width:100px;"/>
 	</h:panelGrid>
 </h:form>
 
