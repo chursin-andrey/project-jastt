@@ -12,8 +12,7 @@
 	<welcome-file-list>
 		<welcome-file>public/login.xhtml</welcome-file>
 	</welcome-file-list>
-
-	<!-- 
+ 
 	<error-page>
 		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
 		<location>/public/login.xhtml</location>
@@ -22,10 +21,8 @@
 	<session-config>
 		<session-timeout>15</session-timeout>
 	</session-config>
- 	-->
  	
-	<!-- Spring Framework Integration -->
-	<!-- 
+	<!-- Spring Framework Integration --> 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/applicationContext.xml</param-value>
@@ -42,7 +39,6 @@
 	<listener>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
-	 -->
 	 
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
