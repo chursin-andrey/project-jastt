@@ -6,30 +6,60 @@
     template="/templates/commonLayout.xhtml">
 	
 	<ui:define name="content">
-		<div align="left">
-			<h:form>
-				<p:commandButton value="Add User" action="#{authBean.addUser()}" />
-				<br /> <br />
+		<h:form>
+			<div align="left">
+				<h:panelGrid>
+					<p:commandButton value="Add User" type="button" onclick="PF('dlgCreateAccount').show();" action="#{authBean.addUser()}" />
+				</h:panelGrid>
+				
+				<p:dialog header="Create User Account" widgetVar="dlgCreateAccount" modal="true" minHeight="600">
+					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+						<p:outputLabel for="name" value="Name:" />
+						<p:inputText id="name" required="true" />
+						<p:outputLabel for="login" value="Login:"/>
+						<p:inputText id="login" required="true" />
+						
+						<p:outputLabel for="pwd1" value="Password:" />
+						<p:password id="pwd1" match="pwd2" required="true" />
+						<p:outputLabel for="pwd2" value="Retype Password:" />
+						<p:password id="pwd2" match="pwd1" required="true" />
+										
+						<p:outputLabel for="url" value="URL:" />
+						<p:inputMask id="url" mask="https://" required="true" />
+						<p:outputLabel for="userRole" value="User Role:" />
+									
+						<p:selectOneMenu id="userRole" value="User Role:" style="width:125px" required="true" >
+   							<f:selectItem id="userIndex" itemLabel="User" itemValue="User" />
+   							<f:selectItem id="adminIndex" itemValue="Admin" itemLabel="Admin" />
+						</p:selectOneMenu>
+						
+						<p:commandButton value="Save" id="saveUser" icon="ui-icon-disk" />
+						<p:commandButton value="Cancel" id="cancelEditing" />
+					</h:panelGrid>									
+				</p:dialog>
+				
+				<p:spacer height="10" />
+				
 				<p:dataTable>
     				<p:column headerText="Name">
-        				<h:outputText value="" />
+    					<h:outputText value="Corben Dallas" />
     				</p:column>
  
     				<p:column headerText="Login">
-        				<p:outputLabel value="" />
+    					<h:outputText value="corbendallas" />
     				</p:column>
  
-    				<p:column headerText="User Role">
-        				<p:outputLabel value="" />
+    				<p:column headerText="Role">
+    					<h:outputText value="admin" />
     				</p:column>
  
-    				<p:column headerText="Change Info">
-        				<p:outputLabel value="Edit" />
-        				<p:outputLabel value="Delete" />
-    				</p:column>
-    				
+    				<p:column headerText="">
+        				<p:commandButton value="Edit" />
+        				<p:commandButton value="Delete" />
+    				</p:column>	
 				</p:dataTable>
-			</h:form>
-		</div>
+				
+			</div>
+		</h:form>
 	</ui:define>
 </ui:composition>    
