@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jastt.business.domain.entities.Assignee;
@@ -18,7 +19,10 @@ import com.jastt.dal.entities.AssigneeEntity;
 import com.jastt.dal.entities.ProjectEntity;
 import com.jastt.dal.exceptions.DaoException;
 import com.jastt.dal.providers.ProjectDataProvider;
+import com.jastt.utils.annotations.DefaultProfile;
 
+@Repository
+@DefaultProfile
 public class ProjectDataProviderImpl extends BaseDataProviderImpl<ProjectEntity, Project, Integer> implements ProjectDataProvider {
 
 	private static final Logger LOG = LoggerFactory.getLogger(IssueDataProviderImpl.class);

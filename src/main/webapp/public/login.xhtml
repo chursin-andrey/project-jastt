@@ -5,17 +5,18 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	template="/templates/commonLayout.xhtml">
+	
 	<ui:define name="content">
-    	<h3>Login</h3>
+    	<h3>Login to JASTT</h3>
 		<h:form id="login" class="login" >
 			<h:panelGrid columns="3">
 				<p:outputLabel for="username" value="Username:" />
 				<p:inputText id="username" required="true" />
-			    <!--  <h:message for="username" />-->
+			    <h:message for="username" />
 				    
 				<p:outputLabel for="password" value="Password" />
 				<p:password id="password"  required="true" />
-				<!-- <h:message for="password" />-->
+				<h:message for="password" />
 						
 				<p:outputLabel for="rememberMe" value="Remember Me" />
 				<p:selectBooleanCheckbox id="rememberMe" />
@@ -24,4 +25,5 @@
 				</h:panelGrid>
 		</h:form>
     </ui:define>
+    
 </ui:composition>
