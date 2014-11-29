@@ -16,9 +16,17 @@
 			<h:panelGroup>
 				<h1>JIRA Activity Simple Time Tracker</h1>
 				<p>
-					<p:commandLink value="Admin Panel" />&nbsp;
-					<p:commandLink value="Report" />&nbsp;
-					<p:commandLink value="Help" />
+					<p:commandLink value="Admin Panel" class=""
+						actionListener="#{menuBean.click('admin')}"
+						action="/protected/admin.xhtml">
+						<span>AdminPanel</span>
+					</p:commandLink>
+					&nbsp;
+					<p:commandLink value="Report" class=""
+						actionListener="#{menuBean.click('report')}"
+						action="/protected/main.xhtml">
+						<span>Report</span>
+					</p:commandLink>
 				</p>
 			</h:panelGroup>
 		</h:panelGrid>
