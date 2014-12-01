@@ -1,5 +1,6 @@
 package com.jastt.frontend.beans.users;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,22 +18,26 @@ import com.jastt.frontend.beans.LoginBean;
 
 
 @Component
-@Scope(value="session")
-public class UserListBean {
+@Scope("request")
+
+public class UserListBean implements Serializable{
+	
+	private static final long serialVersionUID = 2092800049856823809L;
+
 	private static final Logger LOG = LoggerFactory.getLogger(UserListBean.class);
 	
 	private List<User> users;
 	
-	//@Autowired
-	//private UserService userService;
+	@Autowired
+	private UserService userService;
 	
 	@PostConstruct
 	public void init(){
-		//users = userService.getAllUsers();
+		users = userService.getAllUsers();
 		
-		users = new ArrayList<User>();
+		//users = new ArrayList<User>();
 		
-		//temporary block, for test
+		/*//temporary block, for test
 		for(int i=0; i<=10; i++){
 			User u = new User();
 			u.setId(i);
@@ -40,7 +45,7 @@ public class UserListBean {
 			u.setFirstName("TestUserName"+i);
 			users.add(u );
 		}
-		//--------			
+		//--------		*/	
 	}
 	
 	public List<User> getUsers() {

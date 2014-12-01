@@ -19,7 +19,7 @@ import com.jastt.dal.providers.UserDataProvider;
 import com.jastt.utils.annotations.DefaultProfile;
 
 
-@Repository
+@Repository(value="userDataProvider")
 @DefaultProfile
 public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User, Integer> implements UserDataProvider {
 
@@ -92,7 +92,6 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 			Criteria criteria = session.createCriteria(UserEntity.class);
 			List<UserEntity> userEntities = criteria.list();
 			if(userEntities != null){
-				
 				for(UserEntity userEntity : userEntities){
 					users.add(mappingService.map(userEntity, User.class));
 				}

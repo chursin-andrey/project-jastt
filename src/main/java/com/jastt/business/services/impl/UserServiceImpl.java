@@ -9,14 +9,17 @@ import org.springframework.stereotype.Service;
 
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.services.UserService;
+import com.jastt.dal.entities.UserEntity;
 import com.jastt.dal.providers.UserDataProvider;
+import com.jastt.dal.providers.base.GenericDataProvider;
 
-//@Service
+@Service(value="userService")
 public class UserServiceImpl implements UserService{
-	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);	
+	private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);	
 	
 	@Autowired
 	private UserDataProvider userDataProvider;
+		
 	
 	@Override
 	public User getUserByLogin(String login) {
@@ -25,7 +28,9 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<User> getAllUsers() {
-		return userDataProvider.getAllUsers();
+		//List<User> users =  userDataProvider.findAll(UserEntity.class, User.class);		
+		List<User> users = userDataProvider.getAllUsers();	
+		return users;		
 	}
 
 	@Override
