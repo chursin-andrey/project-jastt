@@ -4,7 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"      
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      
  
     <h:head>
         <title>JIRA Activity Simple Time Tracker</title>
@@ -73,6 +75,54 @@
 	<h:commandButton value="Cancel" action="cancel" style="width:100px;"/>
 	<h:commandButton value="Update" action="update" style="width:100px;"/>
 	</h:panelGrid>
+	
+	<h:form id="form">	
+		<p:tabView activeIndex="0">
+			<p:tab title="Details">
+       			 <p:panel id="panel1" header="Details" value="Heder">
+					<p:dataTable var="details" id="Details" lazy="true">
+						<f:facet name="header">Total Elapsed Time              
+           					<p:commandButton id="toggler" type="button" value="Column" style="float:right" icon="ui-icon-calculator"/>
+    						<p:column datasource="Details" trigger="toggler"/>
+                			<p:outputPanel>
+                				<h:outputText value="hours:"/> 
+		        				<p:inputText id="globalFilter1" onkeyup="PF('Details').filter()" style="width:250px" placeholder="hours"/>
+                    			<h:outputText value="	minuts:"/>
+                    			<p:inputText id="globalFilter2" onkeyup="PF('Detailse').filter()" style="width:250px" placeholder="minuts"/>
+                			</p:outputPanel>            
+            			</f:facet>
+            			<p:column headerText="Date"/>
+						<p:column headerText="Member"/>
+						<p:column headerText="Project"/>
+						<p:column headerText="Task"/>
+						<p:column headerText="Status"/>
+						<p:column headerText="Summary"/>
+						<p:column headerText="Hours"/>
+					</p:dataTable>
+				</p:panel>
+			</p:tab>
+        	<p:tab title="Report">        
+        		<p:panel id="panel2" header="Report" value="Heder">
+					<p:dataTable var="report" id="Report" lazy="true">
+						<f:facet name="header">Total Elapsed Time              
+                			<p:commandButton id="toggler" type="button" value="Column" style="float:right" icon="ui-icon-calculator"/>
+                			<p:column datasource="Report" trigger="toggler"/>
+               				<p:outputPanel>
+                    			<h:outputText value="hours:"/> 
+                    			<p:inputText id="globalFilter1" onkeyup="PF('Report').filter()" style="width:250px" placeholder="hours"/>
+                    			<h:outputText value="	minuts:"/>
+                    			<p:inputText id="globalFilter2" onkeyup="PF('Report').filter()" style="width:250px" placeholder="minuts"/>
+                			</p:outputPanel>
+                		</f:facet>
+						<p:column headerText="Member"/>
+						<p:column headerText="Project"/>
+						<p:column headerText="Task"/>
+						<p:column headerText="Hours"/>
+					</p:dataTable>
+				</p:panel>
+        	</p:tab>
+    	</p:tabView>
+	</h:form>
 </h:form>
 
     </h:body>
