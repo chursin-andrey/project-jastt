@@ -1,6 +1,7 @@
 package com.jastt.dal.providers.impl;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -79,12 +80,28 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 		return user;
 	}
 	
-	//to remove
+
 	@Transactional
 	@Override
 	public List<User> getAllUsers()
 	{
-		return null;
+		Session session = sessionFactory.getCurrentSession();
+		
+		List<User> users = new ArrayList<User>();
+		try {
+			Criteria criteria = session.createCriteria(UserEntity.class);
+			List<UserEntity> userEntities = criteria.list();
+			if(userEntities != null){
+				
+				for(UserEntity userEntity : userEntities){
+					users.add(mappingService.map(userEntity, User.class));
+				}
+			}
+		} catch (Exception ex) {
+			LOG.error(String.format("Error loading user"), ex);
+		}
+		return users;
+		
 	}
 	
 	
