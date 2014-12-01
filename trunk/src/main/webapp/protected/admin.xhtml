@@ -40,23 +40,30 @@
 				
 				<p:spacer height="10" />
 				
-				<p:dataTable>
-    				<p:column headerText="Name">
-    					<h:outputText value="Corben Dallas" />
-    				</p:column>
- 
+				<p:dataTable var="user" value="#{userListBean.users}">
+    				
+    				
     				<p:column headerText="Login">
-    					<h:outputText value="corbendallas" />
+    					<h:outputText value="#{user.login}" />
+    				</p:column>
+    				
+    				<p:column headerText="Name">
+    					<h:outputText value="#{user.firstName}" />
+    				</p:column>
+    				
+    				<p:column headerText="">
+        				<p:commandLink value="Edit" style="margin:  5px"/>
+        				<p:commandLink value="Delete" style="margin:  5px"/>
     				</p:column>
  
-    				<p:column headerText="Role">
+    				<!--  <p:column headerText="Role">
     					<h:outputText value="admin" />
     				</p:column>
  
     				<p:column headerText="">
         				<p:commandButton value="Edit" />
         				<p:commandButton value="Delete" />
-    				</p:column>	
+    				</p:column>	-->
 				</p:dataTable>
 				
 			</div>

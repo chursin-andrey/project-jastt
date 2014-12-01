@@ -8,12 +8,13 @@ import org.springframework.stereotype.Component;
 @Component(value="authBean")
 @Scope("session")
 public class LoginBean {
-	private static final Logger logger = LoggerFactory.getLogger(LoginBean.class);
+	
+	private static final Logger LOG = LoggerFactory.getLogger(LoginBean.class);
 	
 	public String doLogin() {
 		//TODO
 		
 		return "/protected/main.xhtml";
+		
 	}
-
 }
