@@ -6,12 +6,17 @@
     template="/templates/commonLayout.xhtml">
 	
 	<ui:define name="content">
-		<h:form>
-			<div align="left">
+			
+		
+		<div align="left">
+		
+		<h:form >	
 				<h:panelGrid>
-					<p:commandButton value="Add User" type="button" onclick="PF('dlgCreateAccount').show();" action="#{authBean.addUser()}" />
+					<p:commandButton value="Add User" type="button" onclick="PF('dlgCreateAccount').show();"  />
 				</h:panelGrid>
+		 </h:form>
 				
+		<h:form >
 				<p:dialog header="Create User Account" widgetVar="dlgCreateAccount" modal="true" minHeight="600">
 					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 						<p:outputLabel for="name" value="Name:" />
@@ -37,12 +42,13 @@
 						<p:commandButton value="Cancel" id="cancelEditing" />
 					</h:panelGrid>									
 				</p:dialog>
+			</h:form>	
 				
 				<p:spacer height="10" />
 				
 				
-				
-				<p:dataTable var="user" value="#{userListBean.users}">
+			<h:form id="userList" >
+				<p:dataTable id="userListTable" var="user" value="#{userListBean.users}">
     						
     				<p:column headerText="Login">
     					<h:outputText value="#{user.login}" />
@@ -53,21 +59,30 @@
     				</p:column>
     				
     				<p:column headerText="">
-        				<p:commandLink value="Edit" style="margin:  5px"/>
-        				<p:commandLink value="Delete" style="margin:  5px"/>
+        				<p:commandLink value="Edit" style="margin:  5px" />
+        				<p:commandLink   value="Delete" style="margin:  5px" actionListener="#{usersBean.deleteUser(user.login)}" >
+        							
+        					<p:confirm header="Confirmation" message="Do you really want to remove user?"
+									icon="ui-icon-alert" />
+        				</p:commandLink>
+        				
+        				<p:confirmDialog global="true" >
+        					<div align="center">
+								<p:commandButton value="Yes" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+							</div>		
+						</p:confirmDialog>
+    				
+    				
     				</p:column>
- 
-    				<!--  <p:column headerText="Role">
-    					<h:outputText value="admin" />
-    				</p:column>
- 
-    				<p:column headerText="">
-        				<p:commandButton value="Edit" />
-        				<p:commandButton value="Delete" />
-    				</p:column>	-->
+    					
+    				
 				</p:dataTable>
-				
-			</div>
-		</h:form>
+			</h:form>
+						
+	 </div>
+						
 	</ui:define>
 </ui:composition>    
