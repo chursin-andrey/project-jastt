@@ -30,10 +30,11 @@ public class AssigneeDataProviderImpl extends BaseDataProviderImpl<AssigneeEntit
 	@Transactional
 	@Override
 	public List<Assignee> getAssigneesByProject(Project project) {
+		Session session = sessionFactory.getCurrentSession();
 		List<Assignee> resultList = new ArrayList<>();
 		List<AssigneeEntity> entityList = new ArrayList<>();
 		try{
-			Session session = sessionFactory.getCurrentSession();
+			
 			Criteria asgnCriteria = session.createCriteria(Assignee.class).add(
 					Restrictions.eq("projectEntity.id", project.getId()));
 			entityList = asgnCriteria.list();

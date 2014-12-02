@@ -20,7 +20,6 @@ import com.jastt.business.domain.entities.Project;
 import com.jastt.business.enums.IssueStatusEnum;
 import com.jastt.business.enums.IssueTypeEnum;
 import com.jastt.dal.entities.IssueEntity;
-import com.jastt.dal.entities.ProjectEntity;
 import com.jastt.dal.exceptions.DaoException;
 import com.jastt.dal.providers.IssueDataProvider;
 import com.jastt.utils.annotations.DefaultProfile;
@@ -96,7 +95,41 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 
 		return iss;
 	}
+	
 
+	
+	//!!!
+	@Transactional
+	@Override
+	public Issue getLatestIssue(List<Project> projects) {
+		Session session = sessionFactory.getCurrentSession();
+		List<Issue> issList = new ArrayList<>();
+		Issue issue = null;
+		List<IssueEntity> entityList = new ArrayList<>();
+		
+		try{
+			Criteria cr = session.createCriteria(IssueEntity.class);
+			cr.add(Restrictions.eq("project", projects));						
+			entityList = cr.list();			
+			for (IssueEntity ie : entityList) {
+				Issue is = mappingService.map(ie, Issue.class);
+				issList.add(is);
+			}
+			issue = issList.get(issList.size()-1);
+			
+		} catch (HibernateException ex) {
+        	LOG.error("Hibernate error occured while getting latest Issue", ex.getMessage());	
+        	throw new DaoException(ex);
+		} catch (Exception ex) {
+			LOG.error("Hibernate error occured while getting latest Issue", ex.getMessage());
+			throw new DaoException(ex);
+		}
+		return issue;
+	}
+	
+
+	//remove
+	@Transactional
 	@Override
 	public Issue getLatestIssue() {
 		Issue issue = null;
@@ -122,7 +155,9 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 	
 	
 	
-
+	
+	
+	@Transactional
 	@Override
 	public void saveIssues(List<Issue> issues) {
 		Session session = sessionFactory.getCurrentSession();
@@ -140,7 +175,7 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 		
 	}
 
-	//!!!
+	@Transactional
 	@Override
 	public List<Issue> getIssues(Project project, IssueStatusEnum status,
 			List<Assignee> assignees, IssueTypeEnum issueType, Date fromDate,
@@ -175,11 +210,6 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 	}
 
 	
-	// to remove
-	@Override
-	public Issue getLatestIssue(List<Project> projects) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }
