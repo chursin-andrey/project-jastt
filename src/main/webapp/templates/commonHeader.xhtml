@@ -14,20 +14,18 @@
 				<p:graphicImage value="/resources/img/jastt_logo.png" />
 			</h:panelGroup>
 			<h:panelGroup>
-				<h1>JIRA Activity Simple Time Tracker</h1>
-				<p>
-					<p:commandLink value="Admin Panel" class=""
-						actionListener="#{menuBean.click('admin')}"
-						action="/protected/admin.xhtml">
-						<span>AdminPanel</span>
-					</p:commandLink>
-					&nbsp;
-					<p:commandLink value="Report" class=""
-						actionListener="#{menuBean.click('report')}"
-						action="/protected/main.xhtml">
-						<span>Report</span>
-					</p:commandLink>
-				</p>
+				<h1>JIRA Activity Simple Time Tracker</h1> 
+				<p:commandLink value="Admin Panel"
+					actionListener="#{menuBean.click('admin')}"
+					action="/protected/admin.xhtml">
+					<span>AdminPanel</span>
+				</p:commandLink>
+				&#160;
+				<p:commandLink value="Report"
+					actionListener="#{menuBean.click('report')}"
+					action="/protected/main.xhtml">
+					<span>Report</span>
+				</p:commandLink>
 			</h:panelGroup>
 		</h:panelGrid>
 	</h:form>

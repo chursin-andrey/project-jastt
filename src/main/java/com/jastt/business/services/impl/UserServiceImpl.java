@@ -7,9 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.services.UserService;
 import com.jastt.dal.entities.UserEntity;
+import com.jastt.dal.providers.ServerDataProvider;
 import com.jastt.dal.providers.UserDataProvider;
 import com.jastt.dal.providers.base.GenericDataProvider;
 
@@ -20,6 +22,8 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserDataProvider userDataProvider;
 	
+	@Autowired
+	private ServerDataProvider serverDataProvider;
 	
 	@Override
 	public User getUserByLogin(String login) {
@@ -35,7 +39,17 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void addUser(User user) {
-		userDataProvider.addUser(user);
+//		User userEntity = userDataProvider.getUserByLogin(user.getLogin());
+//		if (userEntity == null) {
+//			user.setLastName("lastname");
+//			Server server = serverDataProvider.getServerByName("Attlassian JIRA");
+//			user.setServer(server);
+//			user.setEmail("email");
+//			user.setPassword("password");
+//			userDataProvider.save(user, UserEntity.class);
+//		}
+		userDataProvider.save(user, UserEntity.class);
+		
 	}
 
 	@Override
@@ -48,6 +62,7 @@ public class UserServiceImpl implements UserService{
 		User user =userDataProvider.getUserByLogin(login);	
 		userDataProvider.delete(user, UserEntity.class);
 	}
+	
 	
 }
 	

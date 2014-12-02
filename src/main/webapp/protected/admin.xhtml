@@ -17,42 +17,32 @@
 		 </h:form>
 				
 		<h:form >
-				<p:dialog header="Create User Account" widgetVar="dlgCreateAccount" modal="true" minHeight="600">
-					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-						<p:outputLabel for="name" value="Name:" />
-						<p:inputText id="name" required="true" />
-						<p:outputLabel for="login" value="Login:"/>
-						<p:inputText id="login" required="true" />
-						
-						<p:outputLabel for="pwd1" value="Password:" />
-						<p:password id="pwd1" match="pwd2" required="true" />
-						<p:outputLabel for="pwd2" value="Retype Password:" />
-						<p:password id="pwd2" match="pwd1" required="true" />
-										
-						<p:outputLabel for="url" value="URL:" />
-						<p:inputMask id="url" mask="https://" required="true" />
-						<p:outputLabel for="userRole" value="User Role:" />
+			<p:dialog header="Create User Account" widgetVar="dlgCreateAccount" modal="true" minHeight="600">
+				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+					<p:outputLabel for="name" value="Name:" />
+					<p:inputText id="name" required="true" value="#{usersBean.name}" />
+					<p:outputLabel for="login" value="Login:"/>
+					<p:inputText id="login" required="true" value="#{usersBean.login}" />
 									
-						<p:selectOneMenu id="userRole" value="User Role:" style="width:125px" required="true" >
-   							<f:selectItem id="userIndex" itemLabel="User" itemValue="User" />
-   							<f:selectItem id="adminIndex" itemValue="Admin" itemLabel="Admin" />
-						</p:selectOneMenu>
-						
-						<p:commandButton value="Save" id="saveUser" icon="ui-icon-disk" />
-						<p:commandButton value="Cancel" id="cancelEditing" />
-					</h:panelGrid>									
-				</p:dialog>
-			</h:form>	
+					<p:outputLabel for="url" value="URL:" />
+					<p:inputText id="url" required="true" value="#{usersBean.url}" />
+					
+					<p:commandButton value="Save" id="saveUser"
+						icon="ui-icon-disk" action="#{usersBean.createUser()}" />
+					<p:commandButton value="Cancel" id="cancelEditing" icon="ui-icon-close" />
+				</h:panelGrid>									
+			</p:dialog>
+		</h:form>	
 				
-				<p:spacer height="10" />
+		<p:spacer height="10" />
 				
 				
-			<h:form id="userList" >
-				<p:dataTable id="userListTable" var="user" value="#{userListBean.users}">
-    						
-    				<p:column headerText="Login">
-    					<h:outputText value="#{user.login}" />
-    				</p:column>
+		<h:form id="userList" >
+			<p:dataTable id="userListTable" var="user" value="#{userListBean.users}">
+    					
+    			<p:column headerText="Login">
+    				<h:outputText value="#{user.login}" />
+    			</p:column>
     				
     				<p:column headerText="Name">
     					<h:outputText value="#{user.firstName}" />
@@ -74,8 +64,7 @@
 									styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 							</div>		
 						</p:confirmDialog>
-    				
-    				
+
     				</p:column>
     					
     				
