@@ -124,7 +124,7 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 	}
 
 	
-	
+	@Transactional
 	@Override
 	public void merge(K entity, Class<T> dalEntityClass) {
 		// TODO Auto-generated method stub
