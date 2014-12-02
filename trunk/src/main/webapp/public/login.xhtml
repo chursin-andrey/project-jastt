@@ -14,13 +14,13 @@
 				<p:inputText id="username" required="true" />
 			    <h:message for="username" />
 				    
-				<p:outputLabel for="password" value="Password" />
+				<p:outputLabel for="password" value="Password:" />
 				<p:password id="password"  required="true" />
 				<h:message for="password" />
 						
 				<p:outputLabel for="rememberMe" value="Remember Me" />
 				<p:selectBooleanCheckbox id="rememberMe" />
-				<br />
+				<p:spacer height="10" />
 				<p:commandButton value="Login" action="#{authBean.doLogin}"/>
 				</h:panelGrid>
 		</h:form>
