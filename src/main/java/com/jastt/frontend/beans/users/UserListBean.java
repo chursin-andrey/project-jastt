@@ -35,17 +35,6 @@ public class UserListBean implements Serializable{
 	public void init(){
 		users = userService.getAllUsers();
 		
-		//users = new ArrayList<User>();
-		
-		/*//temporary block, for test
-		for(int i=0; i<=10; i++){
-			User u = new User();
-			u.setId(i);
-			u.setLogin("TestUser"+i);
-			u.setFirstName("TestUserName"+i);
-			users.add(u );
-		}
-		//--------		*/	
 	}
 	
 	public List<User> getUsers() {

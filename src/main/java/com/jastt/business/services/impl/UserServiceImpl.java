@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserDataProvider userDataProvider;
-		
+	
 	
 	@Override
 	public User getUserByLogin(String login) {
@@ -45,7 +45,8 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void deleteUser(String login) {
-		userDataProvider.deleteUserByLogin(login);	
+		User user =userDataProvider.getUserByLogin(login);	
+		userDataProvider.delete(user, UserEntity.class);
 	}
 	
 }
