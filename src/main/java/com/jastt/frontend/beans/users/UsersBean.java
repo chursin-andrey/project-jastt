@@ -75,14 +75,15 @@ private static final long serialVersionUID = 2819227216048472445L;
 	}
 	
 	public String createUser() {
-		Server server = serverDataProvider.getServerByName("Atlassian JIRA");
+		Server server = serverDataProvider.getServerByUrl(url);
 		User newUser = new User();
-		newUser.setEmail("email");
+		newUser.setEmail("e-mail");
 		newUser.setFirstName(name);
 		newUser.setLastName("lastname");
 		newUser.setLogin(login);
-		newUser.setPassword("password");
+		newUser.setPassword("pswd");
 		newUser.setServer(server);
+		
 		userService.addUser(newUser);
 		return "protected/admin.xhtml";
 	}
