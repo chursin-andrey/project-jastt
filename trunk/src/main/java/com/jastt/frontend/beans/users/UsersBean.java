@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 
 
+
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.slf4j.Logger;
@@ -15,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 
 
 
@@ -72,6 +75,15 @@ private static final long serialVersionUID = 2819227216048472445L;
 
 	public void deleteUser(String login){
 		userService.deleteUser(login);
+		
+		//---temporary block---!
+		try{
+			FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
+		}catch(Exception e){
+			LOG.error(e.getMessage());
+		}
+		//----------------------------
+		
 	}
 	
 	public String createUser() {

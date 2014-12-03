@@ -19,6 +19,8 @@ import com.jastt.frontend.beans.LoginBean;
 
 @Component
 @Scope("request")
+//@Scope("session")
+
 
 public class UserListBean implements Serializable{
 	
