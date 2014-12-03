@@ -28,7 +28,8 @@
 					<p:inputText id="url" required="true" value="#{usersBean.url}" />
 					
 					<p:commandButton value="Save" id="saveUser"
-						icon="ui-icon-disk" action="#{usersBean.createUser()}" />
+						icon="ui-icon-disk" onclick="PF('dlgCreateAccount').hide();"
+						action="#{usersBean.createUser()}" />
 					<p:commandButton value="Cancel" id="cancelEditing" onclick="PF('dlgCreateAccount').hide();"
 						icon="ui-icon-close" />
 				</h:panelGrid>									
