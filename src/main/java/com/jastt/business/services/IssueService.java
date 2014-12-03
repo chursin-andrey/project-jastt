@@ -12,9 +12,10 @@ import com.jastt.business.services.jira.JiraClientException;
 import java.util.*;
 
 public interface IssueService {
-	
+	public List<Issue> getAllIssues();
 	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees, IssueTypeEnum issueType, Date fromDate, Date toDate);
 	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees, IssueTypeEnum issueType, PredefinedDateEnum period);
 	public void update(User user);
+	
 	
 }

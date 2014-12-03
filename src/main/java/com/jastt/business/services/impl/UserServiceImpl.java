@@ -2,6 +2,8 @@ package com.jastt.business.services.impl;
 
 import java.util.List;
 
+import javax.faces.bean.ManagedBean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import com.jastt.dal.providers.UserDataProvider;
 import com.jastt.dal.providers.base.GenericDataProvider;
 
 @Service(value="userService")
+@ManagedBean
 public class UserServiceImpl implements UserService{
 	private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);	
 	

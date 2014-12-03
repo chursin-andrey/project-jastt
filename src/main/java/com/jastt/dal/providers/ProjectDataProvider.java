@@ -2,13 +2,15 @@ package com.jastt.dal.providers;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.jastt.dal.entities.ProjectEntity;
 import com.jastt.dal.providers.base.PageableDataProvider;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
 
 
-
+@Repository
 public interface ProjectDataProvider extends PageableDataProvider<ProjectEntity, Project, Integer> {
 
 	Project getProjectByName(String name);

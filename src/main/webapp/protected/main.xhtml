@@ -1,40 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"      
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
-      
- 
-    <h:head>
-        <title>JIRA Activity Simple Time Tracker</title>
-    </h:head>
-    <h:body>
-		<ui:include src="/templates/commonHeader.xhtml" />
-		
-	<h:form>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"      
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/commonLayout.xhtml">
+	
+	<ui:define name="content">
+	<h:form id="form">
 
 	<h:panelGrid columns="4" width="1040"  cellspacing="20">
 		<h:outputLabel value="Project:" ><br /><br />
-			<h:selectOneMenu value="" style="width:200px;">
-   				<f:selectItem itemValue="jastt" itemLabel="JASTT" />
-   				<f:selectItem itemValue="jira" itemLabel="JIRA" />
+			<h:selectOneMenu value="#{reportBean.project}" style="width:200px;">
+   				<f:selectItems var="project" value="#{reportBean.projects}" itemValue="#{project.name} " itemLabel="#{project.name} " />
+   				
 			</h:selectOneMenu>
 		</h:outputLabel>
 
 		<h:outputLabel value="Task:" ><br /><br />
-			<h:selectOneMenu value="" style="width:200px;">
-   				<f:selectItem itemValue="all" itemLabel="All" />
-   				<f:selectItem itemValue="last" itemLabel="Last" />
+			<h:selectOneMenu value="#{reportBean.issue}" style="width:200px;">
+   				<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="#{issue.id} " itemLabel="#{issue.key} " />
 			</h:selectOneMenu>
 		</h:outputLabel>
 
 		<h:outputLabel value="Member:" ><br /><br />
-			<h:selectOneMenu value="" style="width:200px;">
-   				<f:selectItem itemValue="1" itemLabel="Evgene Morozov" />
-   				<f:selectItem itemValue="2" itemLabel="Ivan Prohorov" />
+			<h:selectOneMenu value="#{reportBean.assignee}" style="width:200px;">
+   				<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.name} " itemLabel="#{assignee.name} " />
 			</h:selectOneMenu>
 		</h:outputLabel>
 
@@ -43,7 +33,7 @@
 	
 		<h:panelGrid columns="5" width="1040"  cellspacing="20">
 		<h:selectOneRadio value="" layout="pageDirection" >
-            <f:selectItem itemValue="1" itemLabel="#{userBean.login}" />
+            <f:selectItem itemValue="1" itemLabel="" />
             <f:selectItem itemValue="2" itemLabel="" />
         </h:selectOneRadio>	
 		
@@ -56,8 +46,7 @@
 
 		<h:outputLabel value="Status:" ><br /><br />
 			<h:selectOneMenu value="" style="width:200px;">
-   				<f:selectItem itemValue="all" itemLabel="All" />
-   				<f:selectItem itemValue="last" itemLabel="Last" />
+   				<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="#{issue.status} " itemLabel="#{issue.status} " />
 			</h:selectOneMenu>
 		</h:outputLabel>
 
@@ -74,7 +63,9 @@
 	<h:commandButton value="Show" action="show" style="width:100px;"/>
 	<h:commandButton value="Cancel" action="cancel" style="width:100px;"/>
 	<h:commandButton value="Update" action="update" style="width:100px;"/>
-	</h:panelGrid>		
+	</h:panelGrid>
+	
+	
 		<p:tabView activeIndex="0">
 			<p:tab title="Details">
        			 <p:panel id="panel1" header="Details" value="Heder">
@@ -121,6 +112,5 @@
         	</p:tab>
     	</p:tabView>	
 </h:form>
-
-    </h:body>
-</html>
+	</ui:define>
+</ui:composition>    
