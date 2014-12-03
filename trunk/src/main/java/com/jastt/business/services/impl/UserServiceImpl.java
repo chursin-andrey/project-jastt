@@ -39,17 +39,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void addUser(User user) {
-//		User userEntity = userDataProvider.getUserByLogin(user.getLogin());
-//		if (userEntity == null) {
-//			user.setLastName("lastname");
-//			Server server = serverDataProvider.getServerByName("Attlassian JIRA");
-//			user.setServer(server);
-//			user.setEmail("email");
-//			user.setPassword("password");
-//			userDataProvider.save(user, UserEntity.class);
-//		}
 		userDataProvider.save(user, UserEntity.class);
-		
 	}
 
 	@Override
