@@ -25,6 +25,7 @@ import com.jastt.business.services.IssueService;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraIssueService;
 import com.jastt.business.services.jira.JiraProjectService;
+import com.jastt.dal.entities.IssueEntity;
 import com.jastt.dal.providers.IssueDataProvider;
 import com.sun.xml.bind.v2.TODO;
 
@@ -41,7 +42,11 @@ public class IssueServiceImpl implements IssueService {
 	@Autowired
 	private JiraIssueService jiraIssueService;
 	
-	
+	@Override
+	public List<Issue> getAllIssues() {
+		List<Issue> issues = issueDataProvider.findAll(IssueEntity.class, Issue.class);	
+		return issues;		
+	}
 	
 	@Override
 	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees,
