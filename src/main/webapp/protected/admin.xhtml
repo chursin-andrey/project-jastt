@@ -37,7 +37,7 @@
 				
 		<p:spacer height="10" />
 				
-				
+		
 		<h:form id="userList" >
 			<p:dataTable id="userListTable" var="user" value="#{userListBean.users}">
     					
@@ -51,10 +51,11 @@
     				
     				<p:column headerText="">
         				<p:commandLink value="Edit" style="margin:  5px" />
-        				<p:commandLink   value="Delete" style="margin:  5px" actionListener="#{usersBean.deleteUser(user.login)}" >
-        							
-        					<p:confirm header="Confirmation" message="Do you really want to remove user?"
-									icon="ui-icon-alert" />
+        				
+        				<p:commandLink   value="Delete" style="margin:  5px" actionListener="#{usersBean.deleteUser(user.login)}"
+        						update=":userList:userListTable" >	 
+        						
+        					<p:confirm header="Confirmation" message="Do you really want to remove user?" icon="ui-icon-alert" />			
         				</p:commandLink>
         				
         				<p:confirmDialog global="true" >
@@ -71,7 +72,7 @@
     				
 				</p:dataTable>
 			</h:form>
-						
+							
 	 </div>
 						
 	</ui:define>
