@@ -88,7 +88,6 @@
 		</changeSet>	
 		
 		<changeSet id="issue_table" author="jaast" context="initial">
-		<changeSet id="issue_table" author="jaast" context="initial">
 			<createTable tableName="issue">
 				<column name="id" autoIncrement="true" type="int">
 					<constraints primaryKey="true" primaryKeyName="PK_issue"/>
