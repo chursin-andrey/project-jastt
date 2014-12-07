@@ -19,6 +19,13 @@
 		context="v1.0,test">
 		<insert tableName="user_">
 			<column name="id">1</column>
+			<column name="login">admin</column>
+			<column name="name">Админ Админыч</column>
+			<column name="password">admin</column>
+			<column name="email">admin@email.test</column>
+		</insert>
+		<insert tableName="user_">
+			<column name="id">2</column>
 			<column name="login">user</column>
 			<column name="name">В.В. Медведев</column>
 			<column name="password">psw</column>
@@ -26,7 +33,7 @@
 			<column name="server_id">1</column>
 		</insert>
 		<insert tableName="user_">
-			<column name="id">2</column>
+			<column name="id">3</column>
 			<column name="login">user1</column>
 			<column name="name">Д.А. Путилин</column>
 			<column name="password">psw1</column>

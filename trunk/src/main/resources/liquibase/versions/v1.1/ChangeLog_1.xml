@@ -35,7 +35,7 @@
 					<constraints unique="false" uniqueConstraintName="UQ_user_user_role" nullable="false"/> 
 				</column>
 				<column name="server_id" type="integer(100)"> 
-					<constraints nullable="false" foreignKeyName="FK_user_server"
+					<constraints nullable="true" foreignKeyName="FK_user_server"
 						referencedTableName="server" referencedColumnNames="id"/> 
 				</column>
 			</createTable>
