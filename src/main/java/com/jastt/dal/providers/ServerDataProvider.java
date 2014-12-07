@@ -8,7 +8,7 @@ import com.jastt.business.domain.entities.Server;
 
 public interface ServerDataProvider extends PageableDataProvider<ServerEntity, Server, Integer> {
 	public Server getServerByUrl(String url);
-	public Server getServerByName(String name);
+
 	
 	
 	

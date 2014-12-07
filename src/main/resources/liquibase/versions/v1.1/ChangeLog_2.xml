@@ -7,12 +7,10 @@
 		context="v1.0,test">
 		<insert tableName="server">
 			<column name="id">1</column>
-			<column name="name">Atlassian JIRA</column>
 			<column name="url">https://jira.atlassian.com</column>
 		</insert>
 		<insert tableName="server">
 			<column name="id">2</column>
-			<column name="name">Test Name</column>
 			<column name="url">https://test.url</column>
 		</insert>
 	</changeSet>
@@ -22,6 +20,7 @@
 		<insert tableName="user_">
 			<column name="id">1</column>
 			<column name="login">user</column>
+			<column name="name">В.В. Медведев</column>
 			<column name="password">psw</column>
 			<column name="email">user@email.test</column>
 			<column name="server_id">1</column>
@@ -29,6 +28,7 @@
 		<insert tableName="user_">
 			<column name="id">2</column>
 			<column name="login">user1</column>
+			<column name="name">Д.А. Путилин</column>
 			<column name="password">psw1</column>
 			<column name="email">user1@email.test</column>
 			<column name="server_id">1</column>
