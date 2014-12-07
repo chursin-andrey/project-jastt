@@ -7,8 +7,8 @@ public class User extends PersistentEntity<Integer>{
 	private static final long serialVersionUID = 468724781884407064L;
 	private Server server;
 	private String login;
-	private String firstName;
-	private String lastName;
+	private String name;
+	private String _userRole;
 	private String password;
 	private String email;
 	
@@ -17,13 +17,13 @@ public class User extends PersistentEntity<Integer>{
 		
 	}
 	
-	public User(Server server, String login, String firstName, String lastName,
+	public User(Server server, String login, String firstName, String _userRole,
 			String password, String email) {	
 		super();
 		this.server = server;
 		this.login = login;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.name = firstName;
+		this._userRole = _userRole;
 		this.password = password;
 		this.email = email;
 
@@ -46,20 +46,20 @@ public class User extends PersistentEntity<Integer>{
 		this.login = login;
 	}
 	
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 	
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	public String getLastName() {
-		return lastName;
+	public String getUserRole() {
+		return _userRole;
 	}
 	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setUserRole(String _userRole) {
+		this._userRole = _userRole;
 	}
 	
 	public String getPassword() {

@@ -45,17 +45,21 @@ public class UsersDataProviderTest {
 	public void saveUser_NewUser_UserIsCreated() {
 
 		String login = "Mark";
+		String name = "MarkName";
 		String email = "mark.green@foo.com";
 		String password = "qwerty";
+		String _userRole = "user";
 		
 		Server server = new Server();
 		server.setId(1);
-		server.setName("Name");
+
 		server.setUrl("url");
 		
 		User user = new User();
 		user.setLogin(login);
 		user.setEmail(email);
+		user.setName(name);
+		user.setUserRole(_userRole);
 		user.setPassword(password);
 		user.setServer(server);
 		dataProvider.save(user, UserEntity.class);
@@ -83,5 +87,6 @@ public class UsersDataProviderTest {
 		else resultReport = "There aren't any rows in table";
 		System.out.println(resultReport);
 	}
+
 
 }

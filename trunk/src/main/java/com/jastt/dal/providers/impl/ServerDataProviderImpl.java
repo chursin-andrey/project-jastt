@@ -42,26 +42,6 @@ public class ServerDataProviderImpl extends BaseDataProviderImpl<ServerEntity, S
 		return server;
 	}
 
-	@Transactional
-	@Override
-	public Server getServerByName(String name) {
-		Session session = sessionFactory.getCurrentSession();
-
-		Server server = null;
-
-		try {
-			Criteria criteria = session.createCriteria(ServerEntity.class);
-			criteria.add(Restrictions.eq("name", name));
-
-			ServerEntity dataEntity = (ServerEntity) criteria.uniqueResult();
-			if (dataEntity != null) {
-				server = mappingService.map(dataEntity, Server.class);
-			}
-		} catch (Exception ex) {
-			LOG.error(String.format("Error loading server by name=%s", name), ex);
-		}
-
-		return server;
-	}
+	
 
 }

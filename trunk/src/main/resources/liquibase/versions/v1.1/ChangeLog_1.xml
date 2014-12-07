@@ -8,9 +8,6 @@
 				<column name="id" autoIncrement="true" type="int"> 
 					<constraints primaryKey="true" primaryKeyName="PK_server"/> 
 				</column>
-				<column name="name" type="varchar(20)"> 
-					<constraints unique="true" uniqueConstraintName="UQ_server_name" nullable="false"/> 
-				</column>
 				<column name="url" type="varchar(100)"> 
 					<constraints unique="true" uniqueConstraintName="UQ_server_url" nullable="false"/> 
 				</column>
@@ -25,11 +22,17 @@
 				<column name="login" type="varchar(20)"> 
 					<constraints unique="true" uniqueConstraintName="UQ_user_login" nullable="false"/> 
 				</column>
+				<column name="name" type="varchar(50)">
+					<constraints unique="false" uniqueConstraintName="UQ_user_login" nullable="true"/> 
+				</column>
 				<column name="password" type="varchar(20)"> 
-					<constraints unique="true" uniqueConstraintName="UQ_user_password" nullable="false"/> 
+					<constraints unique="false" uniqueConstraintName="UQ_user_password" nullable="true"/> 
 				</column>
 				<column name="email" type="varchar(30)"> 
-					<constraints unique="true" uniqueConstraintName="UQ_user_email" nullable="false"/> 
+					<constraints unique="false" uniqueConstraintName="UQ_user_email" nullable="true"/> 
+				</column>
+				<column name="user_role" defaultValue="user" type="varchar(20)"> 
+					<constraints unique="false" uniqueConstraintName="UQ_user_ user_role" nullable="false"/> 
 				</column>
 				<column name="server_id" type="integer(100)"> 
 					<constraints nullable="false" foreignKeyName="FK_user_server"

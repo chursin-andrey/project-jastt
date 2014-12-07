@@ -109,7 +109,17 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 	@Override
 	public void addUser(User user)
 	{
-	
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			
+			
+		} catch (HibernateException ex) {
+        	LOG.error("Hibernate error occured while add user", ex.getMessage());	
+        	throw new DaoException(ex);
+		} catch (Exception ex) {
+			LOG.error("Unknown error occured while add user", ex.getMessage());
+			throw new DaoException(ex);
+		}
 	}
 	
 	//add others item
@@ -126,10 +136,10 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 			session.delete(login);
 			
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while creating or updating data entity", ex.getMessage());	
+        	LOG.error("Hibernate error occured while edit user", ex.getMessage());	
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while creating or updating data entity", ex.getMessage());
+			LOG.error("Unknown error occured while edit user", ex.getMessage());
 			throw new DaoException(ex);
 		}
 		
