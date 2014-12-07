@@ -8,7 +8,7 @@ public class User extends PersistentEntity<Integer>{
 	private Server server;
 	private String login;
 	private String name;
-	private String _userRole;
+	private String userRole;
 	private String password;
 	private String email;
 	
@@ -17,13 +17,13 @@ public class User extends PersistentEntity<Integer>{
 		
 	}
 	
-	public User(Server server, String login, String firstName, String _userRole,
+	public User(Server server, String login, String firstName, String userRole,
 			String password, String email) {	
 		super();
 		this.server = server;
 		this.login = login;
 		this.name = firstName;
-		this._userRole = _userRole;
+		this.userRole = userRole;
 		this.password = password;
 		this.email = email;
 
@@ -55,11 +55,11 @@ public class User extends PersistentEntity<Integer>{
 	}
 	
 	public String getUserRole() {
-		return _userRole;
+		return userRole;
 	}
 	
-	public void setUserRole(String _userRole) {
-		this._userRole = _userRole;
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
 	}
 	
 	public String getPassword() {

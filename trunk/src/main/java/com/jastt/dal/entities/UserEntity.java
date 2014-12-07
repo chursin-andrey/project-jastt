@@ -28,28 +28,28 @@ public class UserEntity extends GenericDalEntity<Integer> implements java.io.Ser
 	private String name;
 	private String password;
 	private String email;
-	private String _userRole;
+	private String userRole;
 	private Set<PermissionEntity> permissionEntities = new HashSet<PermissionEntity>(
 			0);
 
 	public UserEntity() {
 	}
 
-	public UserEntity(ServerEntity serverEntity, String login, String _userRole) {
+	public UserEntity(ServerEntity serverEntity, String login, String userRole) {
 		this.serverEntity = serverEntity;
 		this.login = login;
-		this._userRole = _userRole;
+		this.userRole = userRole;
 	}
 
 	public UserEntity(ServerEntity serverEntity, String login, String name,
-			String password, String email, String _userRole,
+			String password, String email, String userRole,
 			Set<PermissionEntity> permissionEntities) {
 		this.serverEntity = serverEntity;
 		this.login = login;
 		this.name = name;
 		this.password = password;
 		this.email = email;
-		this._userRole = _userRole;
+		this.userRole = userRole;
 		this.permissionEntities = permissionEntities;
 	}
 
@@ -102,11 +102,11 @@ public class UserEntity extends GenericDalEntity<Integer> implements java.io.Ser
 
 	@Column(name = "USER_ROLE", nullable = false, length = 20)
 	public String getUserRole() {
-		return this._userRole;
+		return this.userRole;
 	}
 
-	public void setUserRole(String _userRole) {
-		this._userRole = _userRole;
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userEntity")
