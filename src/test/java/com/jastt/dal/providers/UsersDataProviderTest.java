@@ -48,7 +48,7 @@ public class UsersDataProviderTest {
 		String name = "MarkName";
 		String email = "mark.green@foo.com";
 		String password = "qwerty";
-		String _userRole = "user";
+		String userRole = "user";
 		
 		Server server = new Server();
 		server.setId(1);
@@ -59,7 +59,7 @@ public class UsersDataProviderTest {
 		user.setLogin(login);
 		user.setEmail(email);
 		user.setName(name);
-		user.setUserRole(_userRole);
+		user.setUserRole(userRole);
 		user.setPassword(password);
 		user.setServer(server);
 		dataProvider.save(user, UserEntity.class);
