@@ -6,39 +6,54 @@
     template="/templates/commonLayout.xhtml">
 	
 	<ui:define name="content">
-			
-		
 		<div align="left">
-		
 		<h:form >	
-				<h:panelGrid>
-					<p:commandButton value="Add User" type="button" onclick="PF('dlgCreateAccount').show();"  />
-				</h:panelGrid>
+			<h:panelGrid>
+				<p:commandButton value="Add User" type="button" onclick="PF('dlgUserInfo').show();"  />
+			</h:panelGrid>
 		 </h:form>
 				
-		<h:form >
-			<p:dialog header="Create User Account" widgetVar="dlgCreateAccount" modal="true" minHeight="600">
-				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-					<p:outputLabel for="name" value="Name:" />
-					<p:inputText id="name" required="true" value="#{usersBean.name}" />
-					<p:outputLabel for="login" value="Login:"/>
-					<p:inputText id="login" required="true" value="#{usersBean.login}" />
-									
-					<p:outputLabel for="url" value="URL:" />
-					<p:inputText id="url" required="true" value="#{usersBean.url}" />
+		<h:form id="userInfoForm">
+			<p:dialog header="Create User Account" widgetVar="dlgUserInfo" modal="true">
+				<p:messages id="messages" showDetail="true" autoUpdate="true" />
+        		
+        		<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+        			<p:outputLabel for="name" value="Name:" />
+					<p:inputText id="name" value="#{usersBean.name}" required="true" 
+						disabled="#{usersBean.currentUserIsAdmin}" />
 					
-					<p:commandButton value="Save" id="saveUser"
-						icon="ui-icon-disk" onclick="PF('dlgCreateAccount').hide();"
-						action="#{usersBean.createUser()}" />
-					<p:commandButton value="Cancel" id="cancelEditing" onclick="PF('dlgCreateAccount').hide();"
-						icon="ui-icon-close" />
-				</h:panelGrid>									
+					<p:outputLabel for="login" value="Login:"/>
+					<p:inputText id="login" value="#{usersBean.login}" required="true"
+						disabled="#{usersBean.currentUserIsAdmin}" />
+					
+					<p:outputLabel for="isAdmin" value="Admin:" />
+        			<p:selectBooleanCheckbox id="isAdmin" value="#{usersBean.admin}" >
+        				<p:ajax update="url, pwd1, pwd2" />
+        			</p:selectBooleanCheckbox>	
+        			
+        			<p:outputLabel for="url" value="URL:"/>
+					<p:inputText id="url" value="#{usersBean.url}" disabled="#{usersBean.admin}"
+						 required="#{!usersBean.admin}"  />
+					
+					<p:outputLabel for="pwd1" value="Password:" />
+        			<p:password id="pwd1" match="pwd2" value="#{usersBean.password}" disabled="#{!usersBean.admin}"
+        				required="#{usersBean.admin}" />
+ 
+        			<p:outputLabel for="pwd2" value="Password confirmation:" />
+        			<p:password id="pwd2" value="#{usersBean.password}" required="#{usersBean.admin}"
+        				 disabled="#{!usersBean.admin}" />									
+					
+					<p:commandButton value="Save" update="userInfoForm" id="saveUser"
+						icon="ui-icon-check" action="#{usersBean.changeUserInfo}" />
+					<p:commandButton value="Cancel" id="cancel" onclick="PF('dlgUserInfo').hide();"
+						icon="ui-icon-close" />   			
+				</h:panelGrid>
+					
 			</p:dialog>
 		</h:form>	
 				
 		<p:spacer height="10" />
 				
-		
 		<h:form id="userList" >
 			<p:dataTable id="userListTable" var="user" value="#{userListBean.users}">
     					
@@ -46,16 +61,22 @@
     				<h:outputText value="#{user.login}" />
     			</p:column>
     				
-    				<p:column headerText="Name">
-    					<h:outputText value="#{user.firstName}" />
-    				</p:column>
+    			<p:column headerText="Name">
+    				<h:outputText value="#{user.name}" />
+    			</p:column>
+    				
+    			<p:column headerText="Role">
+    				<h:outputText value="#{user.userRole}"/>
+    			</p:column>	
     				
     				<p:column headerText="">
-        				<p:commandLink value="Edit" style="margin:  5px" />
+        				<p:commandLink value="Edit" style="margin:5px" oncomplete="PF('dlgUserInfo').show();"
+        				 	actionListener="#{usersBean.loadFields(user.login)}" update=":userInfoForm">
+        				 	<p:ajax />
+        				 </p:commandLink>
         				
-        				<p:commandLink   value="Delete" style="margin:  5px" actionListener="#{usersBean.deleteUser(user.login)}"
+        				<p:commandLink value="Delete" style="margin:5px" actionListener="#{usersBean.deleteUser(user.login)}"
         						update=":userList:userListTable" >	 
-        						
         					<p:confirm header="Confirmation" message="Do you really want to remove user?" icon="ui-icon-alert" />			
         				</p:commandLink>
         				

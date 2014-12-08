@@ -1,16 +1,20 @@
 package com.jastt.business.services.impl;
 
 import java.util.List;
+
 import javax.faces.bean.ManagedBean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.services.UserService;
 import com.jastt.dal.entities.UserEntity;
 import com.jastt.dal.providers.ServerDataProvider;
 import com.jastt.dal.providers.UserDataProvider;
+import com.jastt.dal.providers.base.GenericDataProvider;
 
 @Service(value="userService")
 @ManagedBean
@@ -42,7 +46,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void updateUser(User user) {
-		userDataProvider.editUser(user);		
+		userDataProvider.merge(user, UserEntity.class);		
 	}
 
 	@Override
