@@ -1,25 +1,46 @@
 package com.jastt.frontend.beans.templates;
 
-import org.apache.commons.lang3.StringUtils;
+import javax.annotation.PostConstruct;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.jastt.utils.annotations.SessionScope;
 
-@Component(value="menuBean")
-@SessionScope
+
+@Component
+@Scope("request")
 public class MenuBean {
+	
+	private boolean visibleForAuthenticated;
+	private boolean visibleForAdmin;
+	
 
-	private String menuItem = "report";
-
-	public void click(String menuItem) {
-		this.menuItem = menuItem;
+	@PostConstruct
+	public void init(){
+		Subject subject = SecurityUtils.getSubject();
+		if(subject.isAuthenticated()){
+			visibleForAuthenticated = true;
+		}
+		if(subject.hasRole("admin")){
+			visibleForAdmin = true;
+		}
 	}
 
-	public String cssClass(String menuItem) {
-		if (this.menuItem.equals(menuItem)) {
-			return "active";
-		}
 
-		return StringUtils.EMPTY;
+	public boolean isVisibleForAuthenticated() {
+		return visibleForAuthenticated;
+	}
+
+	public void setVisibleForAuthenticated(boolean visible) {
+		this.visibleForAuthenticated = visible;
+	}
+	
+	public boolean isVisibleForAdmin() {
+		return visibleForAdmin;
+	}
+
+	public void setVisibleForAdmin(boolean visibleForAdmin) {
+		this.visibleForAdmin = visibleForAdmin;
 	}
 }
