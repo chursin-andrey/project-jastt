@@ -10,7 +10,7 @@ public class Server extends PersistentEntity<Integer>{
 		
 	}
 		
-	public Server(String name, String url) {
+	public Server(String url) {
 		super();
 		this.url = url;
 	}

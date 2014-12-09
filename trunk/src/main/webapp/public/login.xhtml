@@ -5,24 +5,78 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	template="/templates/commonLayout.xhtml">
+
 	
 	<ui:define name="content">
-    	<h3>Login to JASTT</h3>
-		<h:form id="login" class="login" >
-			<h:panelGrid columns="3">
-				<p:outputLabel for="username" value="Username:" />
-				<p:inputText id="username" required="true" />
-			    <h:message for="username" />
+    		<style type="text/css">
+			
+		.form {
+			position : relative;
+			top: 10px;
+			left: 20px;
+				
+			margin-bottom: 50px;
+			padding: 30px;
+			
+			background-color: #F8F8F8 ;
+				
+			border-radius: 5px;			
+			border: solid 1px;
+			border-color: #A8A8A8 ;
+				
+			box-shadow: 10px -4px 4px rgba(150, 150, 150, 0.21);	
+			font: 10pt sans-serif;		
+		}
+		
+		.input{
+			position : relative;
+			left: 45px;
+		}
+		
+		.label{	
+			position : relative;
+			left: 15px;
+		}
+		
+		.button{
+			position : relative;
+			right: 30px;
+			bottom: 5px;
+		}
+		
+	</style>
+   
+		<h:form id="loginForm" class="login" style="margin : 10px">
+			<h:panelGrid id="grid" columns="3" styleClass="form">
+			
+				<p:outputLabel for="username" value="Username:" styleClass="label"/>
+				<p:inputText id="username" value="#{loginBean.login}" required="true" styleClass="input"/>
+			    <!-- <p:message for="username" /> -->
 				    
-				<p:outputLabel for="password" value="Password:" />
-				<p:password id="password"  required="true" />
-				<h:message for="password" />
+				<p:outputLabel for="password" value="Password:" styleClass="label"/>
+				<p:password id="password" value="#{loginBean.password}"  required="true" styleClass="input"/>
+				<!-- <p:message for="password" /> -->
+				
+				<p:outputLabel for="url" value="Jira URL:" styleClass="label"/>
+				<p:inputText id="url"  value="#{loginBean.url}" required="true" disabled="#{loginBean.adminSwitch}" styleClass="input"/>
+				<!-- <p:message for="url" /> -->
 						
-				<p:outputLabel for="rememberMe" value="Remember Me" />
-				<p:selectBooleanCheckbox id="rememberMe" />
-				<p:spacer height="10" />
-				<p:commandButton value="Login" action="#{authBean.doLogin}"/>
+				<p:outputLabel for="isAdmin" value="Is Admin" styleClass="label"/>
+				<p:selectBooleanCheckbox id="isAdmin" value="#{loginBean.adminSwitch}" styleClass="input"  >
+					<p:ajax  listener="#{loginBean.isAdminValueListener}" update="url"/>
+				</p:selectBooleanCheckbox>
+				
+				<br/>
+				<p:outputLabel for="rememberMe" value="Remember Me" styleClass="label"/>
+				<p:selectBooleanCheckbox id="rememberMe" styleClass="input"/>
+				
+				<p:commandButton id="submit" value="Login"   actionListener="#{loginBean.doLogin}" update="grid, isAdmin" styleClass="button"/>
+					
 				</h:panelGrid>
+				
+				
+				<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+				
 		</h:form>
     </ui:define>
     

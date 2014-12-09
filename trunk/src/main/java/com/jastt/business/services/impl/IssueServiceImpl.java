@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
+import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.enums.IssueStatusEnum;
 import com.jastt.business.enums.IssueTypeEnum;
@@ -132,9 +133,7 @@ public class IssueServiceImpl implements IssueService {
 		try{	
 			Set<Project> projects_set = jiraProjectService.getAllProjects(user);
 			List<Project> projects = new ArrayList<Project>(projects_set);
-			/*for(Project project: projects_set){
-				projects.add(project);
-			}*/
+			
 			
 			if(projects.isEmpty()){
 				logger.info("User "+user.getLogin()+" has none of projects.");
@@ -172,12 +171,18 @@ public class IssueServiceImpl implements IssueService {
 			}
 			
 		}catch(JiraClientException jiraClientException){
-			logger.error("JiraClientException happened during execution of update method. ",jiraClientException.getMessage());
+			logger.error("JiraClientException happened during execution of update method. ",jiraClientException.getStatusCode());
 		}catch(Exception unknownException){
 			logger.error("Unknown exception happened during execution of update method. ",unknownException.getMessage());
 		}
 				
 	}
 	
+	
+	/*@Override
+	public void update(User user) throws JiraClientException{
+			Set<Project> projects_set = jiraProjectService.getAllProjects(user);		
+	}	*/
+		
 	
 }

@@ -10,7 +10,7 @@
 	http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
 	<import resource="spring-orm.xml" />
-	<!-- <import resource="spring-shiro-security.xml" /> -->
+	<import resource="spring-shiro-security.xml" /> 
 
 	<context:property-placeholder location="classpath:*.properties" />
 

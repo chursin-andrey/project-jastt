@@ -12,7 +12,7 @@ public interface UserService {
 	void addUser(User user);
 	void updateUser(User user);
 	void deleteUser(String login);
-	
+//	void chackUSer(User user);
 }
 
 
