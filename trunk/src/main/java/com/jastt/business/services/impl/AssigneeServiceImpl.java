@@ -23,6 +23,11 @@ public class AssigneeServiceImpl implements AssigneeService {
 	private AssigneeDataProvider assigneeDataProvider;
 	
 	@Override
+	public Assignee getAssigneeById(Integer id){
+		return assigneeDataProvider.findById(AssigneeEntity.class, Assignee.class, id);
+	}
+	
+	@Override
 	public List<Assignee> getAllAssignees() {
 		List<Assignee>  assignees = assigneeDataProvider.findAll(AssigneeEntity.class, Assignee.class);	
 		return  assignees;		
