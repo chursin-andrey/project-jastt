@@ -16,18 +16,19 @@ import javax.faces.event.ActionEvent;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import my.tests.jasper.model.Person;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+//import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import my.tests.jasper.model.Person;
 
 @ManagedBean
 @RequestScoped
@@ -62,31 +63,7 @@ public class PersonBean {
 		this.personList = personList;
 	}
 	
-	public void exportToExcel(ActionEvent actionEvent) throws JRException, IOException {
-		LOG.info("in exportToExcel method");
-		Map<String,Object> params= new HashMap<String,Object>();
-		params.put("currDate", new Date());
-		
-		File jasperFile = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/testReport.jasper"));
-		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(getPersonList());
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile.getPath(), params, beanCollectionDataSource);
-		
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-		response.addHeader("Content-disposition","attachment; filename=report.xlsx");
-		ServletOutputStream stream = response.getOutputStream();
-		
-		JRXlsxExporter exporter = new JRXlsxExporter();
-		exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-		exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, stream);
-		exporter.exportReport();
-		
-		stream.flush();
-		stream.close();
-		FacesContext.getCurrentInstance().responseComplete();
-	}
-	
 	public void exportToPDF(ActionEvent actionEvent) throws JRException, IOException {
-		LOG.info("in exportToPDF method");
 		Map<String,Object> params= new HashMap<String,Object>();
 		params.put("currDate", new Date());
 		
@@ -99,6 +76,50 @@ public class PersonBean {
 		ServletOutputStream stream = response.getOutputStream();
 		
 		JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+		
+		stream.flush();
+		stream.close();
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+	
+	public void exportToXls(ActionEvent actionEvent) throws JRException, IOException {
+		Map<String,Object> params= new HashMap<String,Object>();
+		params.put("currDate", new Date());
+		
+		File jasperFile = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/testReport.jasper"));
+		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(getPersonList());
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile.getPath(), params, beanCollectionDataSource);
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		response.addHeader("Content-disposition","attachment; filename=report.xls");
+		ServletOutputStream stream = response.getOutputStream();
+		JRXlsExporter exporter = new JRXlsExporter();
+		exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+		exporter.setParameter(JRXlsExporterParameter.IS_IGNORE_CELL_BORDER, Boolean.FALSE);
+		exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, stream);
+		exporter.exportReport();
+		
+		stream.flush();
+		stream.close();
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+	
+	public void exportToXlsx(ActionEvent actionEvent) throws JRException, IOException {
+		Map<String,Object> params= new HashMap<String,Object>();
+		params.put("currDate", new Date());
+		
+		File jasperFile = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/testReport.jasper"));
+		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(getPersonList());
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile.getPath(), params, beanCollectionDataSource);
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		response.addHeader("Content-disposition","attachment; filename=report.xlsx");
+		ServletOutputStream stream = response.getOutputStream();
+		JRXlsxExporter exporter = new JRXlsxExporter();
+		exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+//		exporter.setParameter(JRXlsExporterParameter.IS_IGNORE_CELL_BORDER, Boolean.TRUE);
+		exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, stream);
+		exporter.exportReport();
 		
 		stream.flush();
 		stream.close();
