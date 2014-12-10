@@ -25,6 +25,16 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectDataProvider projectDataProvider;
 	
 	@Override
+	public Project getProjectById(Integer id) {
+		return projectDataProvider.findById(ProjectEntity.class, Project.class, id);
+	}
+	
+	@Override
+	public Project getProjectByName(String name) {
+		return projectDataProvider.getProjectByName(name);
+	}
+	
+	@Override
 	public List<Project> getAllProjects() {
 		List<Project> projects = projectDataProvider.findAll(ProjectEntity.class, Project.class);	
 		return projects;		

@@ -10,20 +10,22 @@
 
 	<h:panelGrid columns="4" width="1040"  cellspacing="20">
 		<h:outputLabel value="Project:" ><br /><br />
-			<h:selectOneMenu value="#{reportBean.project}" style="width:200px;">
+			<h:selectOneMenu value="#{reportBean.project_name}" style="width:200px;">
    				<f:selectItems var="project" value="#{reportBean.projects}" itemValue="#{project.name} " itemLabel="#{project.name} " />
-   				
+   				<f:ajax listener="#{reportBean.changeProject}" render="issue" />
 			</h:selectOneMenu>
 		</h:outputLabel>
 
 		<h:outputLabel value="Task:" ><br /><br />
-			<h:selectOneMenu value="#{reportBean.issue}" style="width:200px;">
+			<h:selectOneMenu id="issue" converter="javax.faces.Integer" value="#{reportBean.issue_id}" style="width:200px;">
+				<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="" itemLabel="" />
    				<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="#{issue.id} " itemLabel="#{issue.key} " />
+			<f:ajax listener="#{reportBean.changeIssue}" render="assignee" />
 			</h:selectOneMenu>
 		</h:outputLabel>
 
 		<h:outputLabel value="Member:" ><br /><br />
-			<h:selectOneMenu value="#{reportBean.assignee}" style="width:200px;">
+			<h:selectOneMenu id="assignee"  value="#{reportBean.assignee}" style="width:200px;">
    				<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.name} " itemLabel="#{assignee.name} " />
 			</h:selectOneMenu>
 		</h:outputLabel>
@@ -91,8 +93,8 @@
 				</p:panel>
 			</p:tab>
         	<p:tab title="Report">        
-        		<p:panel id="panel2" header="Report" value="Heder">
-					<p:dataTable var="report" id="Report" lazy="true">
+        		<p:panel id="panel2" header="Report" value="Heder" autoUpdate="true">
+					<p:dataTable var="report" value="#{reportBean.projects}" id="Report" lazy="true">
 						<f:facet name="header">Total Elapsed Time              
                 			<p:commandButton id="toggler" type="button" value="Column" style="float:right" icon="ui-icon-calculator"/>
                 			<p:column datasource="Report" trigger="toggler"/>
@@ -103,8 +105,15 @@
                     			<p:inputText id="globalFilter2" onkeyup="PF('Report').filter()" style="width:250px" placeholder="minuts"/>
                 			</p:outputPanel>
                 		</f:facet>
-						<p:column headerText="Member"/>
-						<p:column headerText="Project"/>
+						<p:column headerText="Member">
+					
+							
+
+               			 </p:column>
+						<p:column headerText="Project">
+						<h:outputText  value="#{report.name}"  />
+
+               			 </p:column>
 						<p:column headerText="Task"/>
 						<p:column headerText="Hours"/>
 					</p:dataTable>

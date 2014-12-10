@@ -35,7 +35,7 @@ public class AssigneeDataProviderImpl extends BaseDataProviderImpl<AssigneeEntit
 		List<AssigneeEntity> entityList = new ArrayList<>();
 		try{
 			
-			Criteria asgnCriteria = session.createCriteria(Assignee.class).add(
+			Criteria asgnCriteria = session.createCriteria(AssigneeEntity.class).add(
 					Restrictions.eq("projectEntity.id", project.getId()));
 			entityList = asgnCriteria.list();
 			for (AssigneeEntity aet : entityList) {

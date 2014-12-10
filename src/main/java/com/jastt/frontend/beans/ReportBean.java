@@ -25,9 +25,13 @@ public class ReportBean implements Serializable{
 	private List<Issue> issues;
 	private List<Project> projects;
 	private List<Assignee> assignees;
-	private String project;
-	private String issue;
-	private String assignee;
+	private Integer project_id;
+	private String project_name;
+	private Integer assignee_name;
+	private Integer issue_id;
+	private Project project;
+	private Issue issue;
+	private Assignee assignee;
 
 
 	@Autowired
@@ -39,11 +43,43 @@ public class ReportBean implements Serializable{
 	
 	@PostConstruct
 	public void init(){
-		issues = issueService.getAllIssues();
 		projects = projectService.getAllProjects();
+		//project = projectService.getProjectByName(project_name);
+		//issues = issueService.getIssues(project, null, null, null, null, null);
+		
 		assignees = assigneeService.getAllAssignees();
 	}
 	
+	public void changeProject() {
+		project = projectService.getProjectByName(project_name);
+		issues = issueService.getIssues(project, null, null, null, null, null);
+		assignees = assigneeService.getAllAssignees();
+		//assignees.add(assigneeService.getAssigneeById(1));
+		//assignees = assigneeService.getAssigneeById(issues.);
+	}
+	
+	public void changeIssue() {
+		issue = issueService.getIssueById(issue_id);
+		//assignees = assigneeService.getAllAssignees();
+		//assignees.add(assigneeService.getAssigneeById(issue.getAssignee().getId()));
+	}
+	
+	public Integer getIssue_id() {
+		return issue_id;
+	}
+
+	public void setIssue_id(Integer issue_id) {
+		this.issue_id = issue_id;
+	}
+
+	public String getProject_name() {
+		return project_name;
+	}
+
+	public void setProject_name(String project_name) {
+		this.project_name = project_name;
+	}
+
 	public List<Issue> getIssues() {
 		return issues;
 	}
@@ -68,29 +104,40 @@ public class ReportBean implements Serializable{
 		this.assignees = assignees;
 	}
 
-	public String getProject() {
+
+	public Integer getProject_id() {
+		return project_id;
+	}
+
+	public void setProject_id(Integer project_id) {
+		this.project_id = project_id;
+	}
+
+	public Project getProject() {
 		return project;
 	}
 
-	public void setProject(String project) {
+	public void setProject(Project project) {
 		this.project = project;
-	}
-
-	public String getIssue() {
-		return issue;
-	}
-
-	public void setIssue(String issue) {
-		this.issue = issue;
 	}
 	
 
-	public String getAssignee() {
+	public Issue getIssue() {
+		return issue;
+	}
+
+	public void setIssue(Issue issue) {
+		this.issue = issue;
+	}
+
+	public Assignee getAssignee() {
 		return assignee;
 	}
 
-	public void setAssignee(String assignee) {
+	public void setAssignee(Assignee assignee) {
 		this.assignee = assignee;
 	}
+
+
 
 }

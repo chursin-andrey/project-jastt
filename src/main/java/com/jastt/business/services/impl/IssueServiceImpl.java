@@ -30,7 +30,7 @@ import com.jastt.dal.entities.IssueEntity;
 import com.jastt.dal.providers.IssueDataProvider;
 import com.sun.xml.bind.v2.TODO;
 
-@Service(value="issueService")
+@Service
 public class IssueServiceImpl implements IssueService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
@@ -42,6 +42,11 @@ public class IssueServiceImpl implements IssueService {
 	private JiraProjectService jiraProjectService;
 	@Autowired
 	private JiraIssueService jiraIssueService;
+	
+	@Override
+	public Issue getIssueById(Integer id){
+		return issueDataProvider.findById(IssueEntity.class, Issue.class, id);
+	}
 	
 	@Override
 	public List<Issue> getAllIssues() {

@@ -23,6 +23,7 @@
 			<column name="name">Админ Админыч</column>
 			<column name="password">admin</column>
 			<column name="email">admin@email.test</column>
+			<column name="user_role">admin</column>
 		</insert>
 		<insert tableName="user_">
 			<column name="id">2</column>

@@ -186,13 +186,13 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 		List<IssueEntity> entityList = new ArrayList<>();
 		try{
 			Session session = sessionFactory.getCurrentSession();
-			Criteria isuCriteria = session.createCriteria(Issue.class)
+			Criteria isuCriteria = session.createCriteria(IssueEntity.class)
 					.add(Restrictions.eq("projectEntity.id", project.getId() ) )
-					.add(Restrictions.eq("IssueStatusEnum.status", status))
+					/*.add(Restrictions.eq("IssueStatusEnum.status", status))
 					.add(Restrictions.eq("AssigneeEntity.name", assignees))
 					.add(Restrictions.eq("IssueTypeEnum.issueType", issueType))
 					.add(Restrictions.eq("IssueEntity.created", fromDate))
-					.add(Restrictions.eq("IssueEntity.updated", toDate))
+					.add(Restrictions.eq("IssueEntity.updated", toDate))*/
 					;
 			entityList = isuCriteria.list();
 			for (IssueEntity is : entityList) {
