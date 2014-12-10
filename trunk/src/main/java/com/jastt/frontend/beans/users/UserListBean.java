@@ -19,9 +19,6 @@ import com.jastt.frontend.beans.LoginBean;
 
 @Component
 @Scope("request")
-//@Scope("session")
-
-
 public class UserListBean implements Serializable{
 	
 	private static final long serialVersionUID = 2092800049856823809L;
