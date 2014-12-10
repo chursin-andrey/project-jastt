@@ -1,7 +1,9 @@
 package com.jastt.frontend.beans.users;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -17,7 +19,6 @@ import com.jastt.business.domain.entities.User;
 import com.jastt.business.services.UserService;
 import com.jastt.dal.providers.ServerDataProvider;
 import com.jastt.frontend.beans.LoginBean;
-import com.jastt.frontend.beans.users.UsersBean;
 import com.jastt.business.enums.UserRole;
 import com.jastt.dal.exceptions.DaoException;
 
@@ -47,6 +48,23 @@ private static final long serialVersionUID = 2819227216048472445L;
 
 	private boolean admin = false;
 	private boolean currentUserIsAdmin = false;
+	
+	
+	private List<User> users;
+	private User user;
+	
+	@PostConstruct
+	public void init(){
+		users = userService.getAllUsers();
+	}
+	
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
 	
 	public boolean isCurrentUserIsAdmin() {
 		return currentUserIsAdmin;
@@ -106,20 +124,11 @@ private static final long serialVersionUID = 2819227216048472445L;
 
 	public void deleteUser(String login){
 		userService.deleteUser(login);
-		
-		//---temporary block---!
-		try{
-			FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
-		}catch(Exception e){
-			LOG.error(e.getMessage());
-		}
-		//----------------------------
-		
 	}
-		
+	
 	public void loadFields(String login) {
 		currentUserIsAdmin = true;
-		User user = userService.getUserByLogin(login);
+		user = userService.getUserByLogin(login);
 		if (user != null) {
 			this.name = user.getName();
 			this.login = user.getLogin();
@@ -130,50 +139,54 @@ private static final long serialVersionUID = 2819227216048472445L;
 			else {
 				this.userRole = UserRole.USER.toString();
 				this.url = user.getServer().getUrl();
+				this.admin = false;
 			}
 		}
+		
 	}
 	
+	public void resetFields() {
+		name = null;
+		login = null;
+		url = null;
+		password = null;
+		currentUserIsAdmin = false;
+		admin = false;
+	}	
+	
 	public void changeUserInfo() {
-		User userEntity = null;
+		user = new User();
 		Server serverEntity = null;
 		try {
-			userEntity = userService.getUserByLogin(login);
-			if (userEntity == null) {
+			user = userService.getUserByLogin(login);
+			if (user == null) {
 				serverEntity = serverDataProvider.getServerByUrl(url);
 				
-				userEntity = new User();
-				userEntity.setName(name);
-				userEntity.setLogin(login);
+				user = new User();
+				user.setName(name);
+				user.setLogin(login);
 				
 				if (isAdmin()) {
-					userEntity.setUserRole(UserRole.ADMIN.toString());
-					userEntity.setPassword(password);
-					serverEntity = serverDataProvider.getServerByUrl("https://jira.atlassian.com");
+					user.setUserRole(UserRole.ADMIN.toString());
+					user.setPassword(password);
 				}
 				else {
-					userEntity.setUserRole(UserRole.USER.toString());
+					user.setUserRole(UserRole.USER.toString());
 				}
 				
-				userEntity.setServer(serverEntity);
-				userService.addUser(userEntity);
+				user.setServer(serverEntity);
+				userService.addUser(user);
 			}
 			else {
-				/*
-				userEntity.setName(name);
-				userEntity.setLogin(login);
-				*/
-				
+				user.setName(name);				
 				if (isAdmin()) {
-					userEntity.setUserRole(UserRole.ADMIN.toString());
-					userEntity.setPassword(password);
-					serverEntity = serverDataProvider.getServerByUrl("https://jira.atlassian.com");
+					user.setUserRole(UserRole.ADMIN.toString());
+					user.setPassword(password);
 				}
 				else {
-					userEntity.setUserRole(UserRole.USER.toString());
+					user.setUserRole(UserRole.USER.toString());
 				}
-				
-				userService.updateUser(userEntity);;
+				userService.updateUser(user);
 			}
 		} catch (Exception ex) {
 			
