@@ -17,18 +17,20 @@ import com.jastt.business.services.IssueService;
 import com.jastt.business.services.ProjectService;
 
 @Component
-@Scope("request")
+@Scope("session")
 public class ReportBean implements Serializable{
 
 	private static final long serialVersionUID = 7688215600325304973L;
 	
 	private List<Issue> issues;
 	private List<Project> projects;
+	private List<Project> projects_t;
 	private List<Assignee> assignees;
 	private Integer project_id;
 	private String project_name;
-	private Integer assignee_name;
+	private String assignee_name;
 	private Integer issue_id;
+	private String issue_key;
 	private Project project;
 	private Issue issue;
 	private Assignee assignee;
@@ -43,6 +45,7 @@ public class ReportBean implements Serializable{
 	
 	@PostConstruct
 	public void init(){
+		
 		projects = projectService.getAllProjects();
 		//project = projectService.getProjectByName(project_name);
 		//issues = issueService.getIssues(project, null, null, null, null, null);
@@ -57,11 +60,27 @@ public class ReportBean implements Serializable{
 		//assignees.add(assigneeService.getAssigneeById(1));
 		//assignees = assigneeService.getAssigneeById(issues.);
 	}
-	
+
+
 	public void changeIssue() {
-		issue = issueService.getIssueById(issue_id);
+		
 		//assignees = assigneeService.getAllAssignees();
 		//assignees.add(assigneeService.getAssigneeById(issue.getAssignee().getId()));
+	}
+	
+
+	public void updateReport() {
+		projects_t = projects;
+		//assignees = assigneeService.getAllAssignees();
+		//assignees.add(assigneeService.getAssigneeById(issue.getAssignee().getId()));
+	}
+	
+	public String getIssue_key() {
+		return issue_key;
+	}
+
+	public void setIssue_key(String issue_key) {
+		this.issue_key = issue_key;
 	}
 	
 	public Integer getIssue_id() {
@@ -136,6 +155,22 @@ public class ReportBean implements Serializable{
 
 	public void setAssignee(Assignee assignee) {
 		this.assignee = assignee;
+	}
+
+	public String getAssignee_name() {
+		return assignee_name;
+	}
+
+	public void setAssignee_name(String assignee_name) {
+		this.assignee_name = assignee_name;
+	}
+
+	public List<Project> getProjects_t() {
+		return projects_t;
+	}
+
+	public void setProjects_t(List<Project> projects_t) {
+		this.projects_t = projects_t;
 	}
 
 
