@@ -30,7 +30,7 @@ import com.jastt.dal.entities.IssueEntity;
 import com.jastt.dal.providers.IssueDataProvider;
 import com.sun.xml.bind.v2.TODO;
 
-@Service
+@Service(value="issueService")
 public class IssueServiceImpl implements IssueService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
