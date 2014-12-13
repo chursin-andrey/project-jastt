@@ -1,6 +1,7 @@
 package com.jastt.frontend.beans;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +35,8 @@ public class ReportBean implements Serializable{
 	private Project project;
 	private Issue issue;
 	private Assignee assignee;
+	private Date dateFrom;
+	private Date dateTo;
 
 
 	@Autowired
@@ -75,6 +78,22 @@ public class ReportBean implements Serializable{
 		//assignees.add(assigneeService.getAssigneeById(issue.getAssignee().getId()));
 	}
 	
+	public Date getDateFrom() {
+		return dateFrom;
+	}
+
+	public void setDateFrom(Date dateFrom) {
+		this.dateFrom = dateFrom;
+	}
+
+	public Date getDateTo() {
+		return dateTo;
+	}
+
+	public void setDateTo(Date dateTo) {
+		this.dateTo = dateTo;
+	}
+
 	public String getIssue_key() {
 		return issue_key;
 	}
