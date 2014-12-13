@@ -4,11 +4,22 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
     template="/templates/commonLayout.xhtml">
-	
+    
+    <h:outputStylesheet library="css" name="main.css"  />
+	<style type="text/css">
+	.dateFrom  input {
+	left: 210px;
+	height: 50px;
+	margin-left: 111px;
+}
+	</style>
+	 
 	<ui:define name="content">
 	<h:form id="form">
 
-	<h:panelGrid columns="4" width="1040"  cellspacing="20">
+	<h:panelGrid columns="4" width="1040"  cellspacing="20" >
+		<h:column>
+	
 		<h:outputLabel value="Project:" ><br /><br />
 			<h:selectOneMenu value="#{reportBean.project_name}" style="width:200px;">
 			    
@@ -16,29 +27,73 @@
    				<f:ajax listener="#{reportBean.changeProject}" render="issue" />
 			</h:selectOneMenu>
 		</h:outputLabel>
-
-		<h:outputLabel value="Task:" ><br /><br />
+		<br /><br />
+		<h:outputLabel value="Time:" /><br /><br />
+		<h:panelGrid columns="2" width="250" cellspacing="0">
+			<h:column style="height:200;">
+				<h:selectOneRadio value="" style="height:200;" layout="pageDirection">
+   					<f:selectItem itemValue="Red" style="margin-bottom:10px;" itemLabel="" /> 
+   					<f:selectItem itemValue="Green" itemLabel="" />
+				</h:selectOneRadio>
+				
+			</h:column>
+			<h:column>
+				<h:selectOneMenu value="" style="width:200px;">
+   					<f:selectItems var="project" value="#{reportBean.projects}" itemLabel="AllTime"  />
+				</h:selectOneMenu>
+				<br /><br />
+				 <p:outputLabel value="from: " />
+       			 <p:calendar id="dateFrom" size="5" style="font-size:11px;" value="#{reportBean.dateFrom}"  />
+ 				  <p:outputLabel value=" to: " />
+       			 <p:calendar id="dateTo" size="5" style="font-size:11px;" value="#{reportBean.dateTo}"  />
+			</h:column>
+		</h:panelGrid>
+		
+			
+		
+		</h:column>
+		<h:column>
+			<h:outputLabel value="Task:" ><br /><br />
 			<h:selectOneMenu id="issue"  value="#{reportBean.issue_key}" onchange="submit" immediate="true"  style="width:200px;">
 				<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="0" itemLabel="" />
    				<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="#{issue.key}" itemLabel="#{issue.key}" />
 			<f:ajax listener="#{reportBean.changeIssue}" render="assignee" />
 			</h:selectOneMenu>
-		</h:outputLabel>
-
+			</h:outputLabel>
+			<br /><br />
+			<h:outputLabel value="Status:" ><br /><br />
+				<h:selectOneMenu id="status"  value="" onchange="submit" immediate="true"  style="width:200px;">
+					<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="0" itemLabel="" />
+				</h:selectOneMenu>
+			</h:outputLabel> <br /><br /><br />
+		</h:column>
+		<h:column>
 		<h:outputLabel value="Member:" ><br /><br />
 			<h:selectOneMenu id="assignee"  value="#{reportBean.assignee_name}" style="width:200px;">
    				<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.name} " itemLabel="#{assignee.name} " />
 			</h:selectOneMenu>
 		</h:outputLabel>
-
-		<h:commandButton value="Add" action="result" style="width:150px;"/>
-		</h:panelGrid>
-	
-		<h:panelGrid columns="5" width="1040"  cellspacing="20">
-
-
-		<h:commandButton value="Clear" action="result" style="width:150px;"/>
+		<br /><br />
+		<h:outputLabel value="Members:" ><br /><br />
+			<h:selectOneMenu value="" style="width:200px;">
+   				<f:selectItems itemValue="2" itemLabel=" " />
+			</h:selectOneMenu>
+		</h:outputLabel> <br /><br /><br />
+		</h:column>
+		<h:column>
+		<br />
+			<h:commandButton value="Add" action="result" style="width:150px;"/>
+			<br /><br /><br /><br />
+			<h:commandButton value="Clear" action="result" style="width:150px;"/>
+			<br /><br />
+		</h:column>
 	</h:panelGrid>
+	
+
+
+
+		
+
 	<h:panelGrid columns="3" width="400"  cellspacing="20">
 	<h:commandButton value="Show" update="Report" action="#{reportBean.updateReport()}" style="width:100px;"/>
 	<h:commandButton value="Cancel" action="cancel" style="width:100px;"/>
@@ -48,10 +103,8 @@
 	
 		<p:tabView activeIndex="0">
 			<p:tab title="Details">
-       			 <p:panel id="panel1" header="Details" value="Heder">
 					<p:dataTable var="details" id="Details" lazy="true">
 						<f:facet name="header">Total Elapsed Time              
-           					<p:commandButton id="toggler" type="button" value="Column" style="float:right" icon="ui-icon-calculator"/>
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
                 				<h:outputText value="hours:"/> 
@@ -68,13 +121,10 @@
 						<p:column headerText="Summary"/>
 						<p:column headerText="Hours"/>
 					</p:dataTable>
-				</p:panel>
 			</p:tab>
-        	<p:tab title="Report">        
-        		<p:panel id="panel2" header="Report" value="Heder" autoUpdate="true">
+        	<p:tab title="Report">   
 					<p:dataTable var="report" value="#{reportBean.projects_t}" id="Report" lazy="true">
 						<f:facet name="header">Total Elapsed Time              
-                			<p:commandButton id="toggler" type="button" value="Column" style="float:right" icon="ui-icon-calculator"/>
                 			<p:column datasource="Report" trigger="toggler"/>
                				<p:outputPanel>
                     			<h:outputText value="hours:"/> 
@@ -95,7 +145,6 @@
 						<p:column headerText="Task"/>
 						<p:column headerText="Hours"/>
 					</p:dataTable>
-				</p:panel>
         	</p:tab>
     	</p:tabView>	
 </h:form>
