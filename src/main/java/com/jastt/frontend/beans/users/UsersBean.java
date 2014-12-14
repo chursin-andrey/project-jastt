@@ -42,17 +42,26 @@ private static final long serialVersionUID = 2819227216048472445L;
 	
 	private String name;
 	private String login;
+	private String email;
 	private String url;
-	private String password;
+	private String oldPassword;
+	private String newPassword;
 	private String userRole;
-
 	private boolean admin = false;
-	private boolean currentUserIsAdmin = false;
 	
-	
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
 	private List<User> users;
 	private User user;
-	
+	private Server server;
+
+	/*
 	@PostConstruct
 	public void init(){
 		users = userService.getAllUsers();
@@ -65,29 +74,16 @@ private static final long serialVersionUID = 2819227216048472445L;
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+
+	*/
 	
-	public boolean isCurrentUserIsAdmin() {
-		return currentUserIsAdmin;
-	}
-
-	public void setCurrentUserIsAdmin(boolean currentUserIsAdmin) {
-		this.currentUserIsAdmin = currentUserIsAdmin;
-	}
-
+	
 	public String getUserRole() {
 		return userRole;
 	}
 
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
-	}
-	
-	public boolean isAdmin() {
-		return admin;
-	}
-	
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
 	}
 	
 	public String getName() {
@@ -105,6 +101,14 @@ private static final long serialVersionUID = 2819227216048472445L;
 	public void setLogin(String login) {
 		this.login = login;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public String getUrl() {
 		return url;
@@ -114,84 +118,68 @@ private static final long serialVersionUID = 2819227216048472445L;
 		this.url = url;
 	}
 	
-	public String getPassword() {
-		return password;
+	public String getOldPassword() {
+		return oldPassword;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setOldPassword(String password) {
+		this.oldPassword = password;
+	}
+	
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
 	}
 
 	public void deleteUser(String login){
 		userService.deleteUser(login);
+		try{
+			FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
+		}catch(Exception e){
+			LOG.error(e.getMessage());
+		}
 	}
 	
 	public void loadFields(String login) {
-		currentUserIsAdmin = true;
 		user = userService.getUserByLogin(login);
-		if (user != null) {
-			this.name = user.getName();
-			this.login = user.getLogin();
-			if (user.getUserRole().equalsIgnoreCase("admin")) {
-				this.userRole = UserRole.ADMIN.toString();
-				this.admin = true;
-			}
-			else {
-				this.userRole = UserRole.USER.toString();
-				this.url = user.getServer().getUrl();
-				this.admin = false;
-			}
+		name = user.getName();
+		this.login = user.getLogin();
+		email = user.getEmail();
+		if (user.getUserRole().equalsIgnoreCase("admin")) {
+			userRole = UserRole.ADMIN.toString();
+			admin = true;
 		}
-		
+		else {
+			userRole = UserRole.USER.toString();
+			admin = false;
+			url = user.getServer().getUrl();
+		}
 	}
 	
 	public void resetFields() {
 		name = null;
 		login = null;
+		email = null;
 		url = null;
-		password = null;
-		currentUserIsAdmin = false;
-		admin = false;
+		oldPassword = null;
 	}	
 	
-	public void changeUserInfo() {
+	public void saveUser() {
 		user = new User();
-		Server serverEntity = null;
-		try {
-			user = userService.getUserByLogin(login);
-			if (user == null) {
-				serverEntity = serverDataProvider.getServerByUrl(url);
-				
-				user = new User();
-				user.setName(name);
-				user.setLogin(login);
-				
-				if (isAdmin()) {
-					user.setUserRole(UserRole.ADMIN.toString());
-					user.setPassword(password);
-				}
-				else {
-					user.setUserRole(UserRole.USER.toString());
-				}
-				
-				user.setServer(serverEntity);
-				userService.addUser(user);
-			}
-			else {
-				user.setName(name);				
-				if (isAdmin()) {
-					user.setUserRole(UserRole.ADMIN.toString());
-					user.setPassword(password);
-				}
-				else {
-					user.setUserRole(UserRole.USER.toString());
-				}
-				userService.updateUser(user);
-			}
-		} catch (Exception ex) {
-			
-		}
-		
+		user.setLogin(login);
+		user.setName(name);
+		user.setEmail(email);
+		if (isAdmin()) {
+			user.setUserRole(UserRole.ADMIN.toString());
+			user.setPassword(newPassword);
+		} else {
+			user.setUserRole(UserRole.USER.toString());
+			user.setServer(server);
+		}		
+		userService.addUser(user);
 	}
 
 }

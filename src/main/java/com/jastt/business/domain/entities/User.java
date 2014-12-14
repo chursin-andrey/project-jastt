@@ -12,7 +12,6 @@ public class User extends PersistentEntity<Integer>{
 	private String password;
 	private String email;
 	
-
 	public User() {
 		
 	}
