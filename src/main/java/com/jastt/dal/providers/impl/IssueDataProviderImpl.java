@@ -110,7 +110,7 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 		
 		try{
 			Criteria cr = session.createCriteria(IssueEntity.class);
-			cr.add(Restrictions.eq("project", project))
+			cr.add(Restrictions.eq("projectEntity.id", project.getId()))
 			.addOrder(Order.desc("created"));						
 			entityList = cr.list();			
 			for (IssueEntity ie : entityList) {
