@@ -29,14 +29,18 @@ public class ReportBean implements Serializable{
 	private List<Assignee> assignees;
 	private Integer project_id;
 	private String project_name;
-	private String assignee_name;
-	private Integer issue_id;
-	private String issue_key;
+	private String assignee_id;
+	private String issue_id;
 	private Project project;
 	private Issue issue;
 	private Assignee assignee;
 	private Date dateFrom;
 	private Date dateTo;
+	private boolean disableMenu;
+	private boolean disableSelectTime;
+	private boolean disableSelectDate;
+	private String timespent;
+	private String status;
 
 
 	@Autowired
@@ -48,7 +52,7 @@ public class ReportBean implements Serializable{
 	
 	@PostConstruct
 	public void init(){
-		
+		disableMenu = true; disableSelectTime = true; disableSelectDate = true;
 		projects = projectService.getAllProjects();
 		//project = projectService.getProjectByName(project_name);
 		//issues = issueService.getIssues(project, null, null, null, null, null);
@@ -58,8 +62,12 @@ public class ReportBean implements Serializable{
 	
 	public void changeProject() {
 		project = projectService.getProjectByName(project_name);
-		issues = issueService.getIssues(project, null, null, null, null, null);
-		assignees = assigneeService.getAllAssignees();
+		if(project != null) {
+			disableMenu = false; 
+			issues = issueService.getIssues(project, null, null, null, null, null);
+			assignees = assigneeService.getAllAssignees();
+		} else disableMenu = true;
+		
 		//assignees.add(assigneeService.getAssigneeById(1));
 		//assignees = assigneeService.getAssigneeById(issues.);
 	}
@@ -68,16 +76,82 @@ public class ReportBean implements Serializable{
 	public void changeIssue() {
 		
 		//assignees = assigneeService.getAllAssignees();
-		//assignees.add(assigneeService.getAssigneeById(issue.getAssignee().getId()));
+		assignees.clear();
+		if(issue_id.length() != 0){
+			issue = issueService.getIssueById(Integer.parseInt(issue_id));
+			assignees.add(assigneeService.getAssigneeById(issue.getAssignee().getId()));
+		} else {
+			assignees = assigneeService.getAllAssignees();
+		}
+		
 	}
 	
+	public void changeAssignee() {
+		
+			issues.clear();
+			assignee = assigneeService.getAssigneeById(project_id);
+			issues = issueService.getIssues(null, null, assignee, null, null, null);
+			
 
-	public void updateReport() {
-		projects_t = projects;
+	}
+	
+	public void changeTime() {
+		if(timespent.equals("allTime")) { 
+			disableSelectTime = false; 
+			disableSelectDate = true;
+		}
+		else {
+			disableSelectTime = true; 
+			disableSelectDate = false;
+		}
+	}
+	
+	public void showReport() {
+		//projects_t = projects;
 		//assignees = assigneeService.getAllAssignees();
 		//assignees.add(assigneeService.getAssigneeById(issue.getAssignee().getId()));
 	}
-	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public boolean isDisableSelectTime() {
+		return disableSelectTime;
+	}
+
+	public void setDisableSelectTime(boolean disableSelectTime) {
+		this.disableSelectTime = disableSelectTime;
+	}
+
+	public boolean isDisableSelectDate() {
+		return disableSelectDate;
+	}
+
+	public void setDisableSelectDate(boolean disableSelectDate) {
+		this.disableSelectDate = disableSelectDate;
+	}
+
+	public String getTimespent() {
+		return timespent;
+	}
+
+	public void setTimespent(String timespent) {
+		this.timespent = timespent;
+	}
+
+	public boolean isDisableMenu() {
+		return disableMenu;
+	}
+
+	public void setDisableMenu(boolean disableMenu) {
+		this.disableMenu = disableMenu;
+	}
+
 	public Date getDateFrom() {
 		return dateFrom;
 	}
@@ -94,19 +168,11 @@ public class ReportBean implements Serializable{
 		this.dateTo = dateTo;
 	}
 
-	public String getIssue_key() {
-		return issue_key;
-	}
-
-	public void setIssue_key(String issue_key) {
-		this.issue_key = issue_key;
-	}
-	
-	public Integer getIssue_id() {
+	public String getIssue_id() {
 		return issue_id;
 	}
 
-	public void setIssue_id(Integer issue_id) {
+	public void setIssue_id(String issue_id) {
 		this.issue_id = issue_id;
 	}
 
@@ -176,12 +242,12 @@ public class ReportBean implements Serializable{
 		this.assignee = assignee;
 	}
 
-	public String getAssignee_name() {
-		return assignee_name;
+	public String getAssignee_id() {
+		return assignee_id;
 	}
 
-	public void setAssignee_name(String assignee_name) {
-		this.assignee_name = assignee_name;
+	public void setAssignee_id(String assignee_id) {
+		this.assignee_id = assignee_id;
 	}
 
 	public List<Project> getProjects_t() {

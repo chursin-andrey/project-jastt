@@ -22,30 +22,31 @@
 	
 		<h:outputLabel value="Project:" ><br /><br />
 			<h:selectOneMenu value="#{reportBean.project_name}" style="width:200px;">
-			    
-   				<f:selectItems var="project" value="#{reportBean.projects}" itemValue="#{project.name} " itemLabel="#{project.name} " />
-   				<f:ajax listener="#{reportBean.changeProject}" render="issue" />
+			    <f:selectItem itemLabel="Please select a project... " noSelectionOption="true" />
+   				<f:selectItems var="project" value="#{reportBean.projects}" itemValue="#{project.name}" itemLabel="#{project.name} " />
+   				<f:ajax listener="#{reportBean.changeProject}" render="issue status assignee" />
 			</h:selectOneMenu>
 		</h:outputLabel>
 		<br /><br />
 		<h:outputLabel value="Time:" /><br /><br />
 		<h:panelGrid columns="2" width="250" cellspacing="0">
 			<h:column style="height:200;">
-				<h:selectOneRadio value="" style="height:200;" layout="pageDirection">
-   					<f:selectItem itemValue="Red" style="margin-bottom:10px;" itemLabel="" /> 
-   					<f:selectItem itemValue="Green" itemLabel="" />
+				<h:selectOneRadio value="#{reportBean.timespent}" style="height:200;" layout="pageDirection">
+   					<f:selectItem itemValue="allTime" style="margin-bottom:10px;" itemLabel="" /> 
+   					<f:selectItem itemValue="date" itemLabel="" />
+   					<f:ajax listener="#{reportBean.changeTime}" render="issue allTime dateFrom dateTo" />
 				</h:selectOneRadio>
 				
 			</h:column>
 			<h:column>
-				<h:selectOneMenu value="" style="width:200px;">
-   					<f:selectItems var="project" value="#{reportBean.projects}" itemLabel="AllTime"  />
+				<h:selectOneMenu id="allTime" value="#{reportBean.timespent}" disabled="#{reportBean.disableSelectTime}" style="width:200px;" >
+   					<f:selectItem itemLabel="AllTime" noSelectionOption="true" />
 				</h:selectOneMenu>
 				<br /><br />
 				 <p:outputLabel value="from: " />
-       			 <p:calendar id="dateFrom" size="5" style="font-size:11px;" value="#{reportBean.dateFrom}"  />
+       			 <p:calendar id="dateFrom" size="5" style="font-size:11px;" value="#{reportBean.dateFrom}" disabled="#{reportBean.disableSelectDate}"/>
  				  <p:outputLabel value=" to: " />
-       			 <p:calendar id="dateTo" size="5" style="font-size:11px;" value="#{reportBean.dateTo}"  />
+       			 <p:calendar id="dateTo" size="5" style="font-size:11px;" value="#{reportBean.dateTo}" disabled="#{reportBean.disableSelectDate}" />
 			</h:column>
 		</h:panelGrid>
 		
@@ -54,28 +55,32 @@
 		</h:column>
 		<h:column>
 			<h:outputLabel value="Task:" ><br /><br />
-			<h:selectOneMenu id="issue"  value="#{reportBean.issue_key}" onchange="submit" immediate="true"  style="width:200px;">
-				<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="0" itemLabel="" />
-   				<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="#{issue.key}" itemLabel="#{issue.key}" />
+			<h:selectOneMenu id="issue"  value="#{reportBean.issue_id}" disabled="#{reportBean.disableMenu}" style="width:200px;">
+				<f:selectItem itemLabel="Please select a task... " noSelectionOption="true" />
+   				<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="#{issue.id}" itemLabel="#{issue.key}" />
 			<f:ajax listener="#{reportBean.changeIssue}" render="assignee" />
 			</h:selectOneMenu>
 			</h:outputLabel>
 			<br /><br />
 			<h:outputLabel value="Status:" ><br /><br />
-				<h:selectOneMenu id="status"  value="" onchange="submit" immediate="true"  style="width:200px;">
-					<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="0" itemLabel="" />
+				<h:selectOneMenu id="status"  value="#{reportBean.status}" onchange="submit" immediate="true" disabled="#{reportBean.disableMenu}" style="width:200px;">
+					<f:selectItem itemLabel="Please select a status... " noSelectionOption="true" />
+					<f:selectItem itemValue="0" itemLabel="Open" />
+					<f:selectItem itemValue="1" itemLabel="Resolved" />
 				</h:selectOneMenu>
 			</h:outputLabel> <br /><br /><br />
 		</h:column>
 		<h:column>
 		<h:outputLabel value="Member:" ><br /><br />
-			<h:selectOneMenu id="assignee"  value="#{reportBean.assignee_name}" style="width:200px;">
-   				<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.name} " itemLabel="#{assignee.name} " />
+			<h:selectOneMenu id="assignee"  value="#{reportBean.project_id}" disabled="#{reportBean.disableMenu}" converter="javax.faces.Integer" style="width:200px;">
+				<f:selectItem itemLabel="Please select a member... " noSelectionOption="true" />
+   				<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.id} " itemLabel="#{assignee.name} " />
+   				<f:ajax listener="#{reportBean.changeAssignee}" render="issue" />
 			</h:selectOneMenu>
 		</h:outputLabel>
 		<br /><br />
 		<h:outputLabel value="Members:" ><br /><br />
-			<h:selectOneMenu value="" style="width:200px;">
+			<h:selectOneMenu id="assignees"  value="#{reportBean.project_id}" disabled="#{reportBean.disableMenu}" style="width:200px;">
    				<f:selectItems itemValue="2" itemLabel=" " />
 			</h:selectOneMenu>
 		</h:outputLabel> <br /><br /><br />
@@ -95,7 +100,7 @@
 		
 
 	<h:panelGrid columns="3" width="400"  cellspacing="20">
-	<h:commandButton value="Show" update="Report" action="#{reportBean.updateReport()}" style="width:100px;"/>
+	<h:commandButton value="Show" update="Report" action="#{reportBean.showReport()}" style="width:100px;"/>
 	<h:commandButton value="Cancel" action="cancel" style="width:100px;"/>
 	<h:commandButton value="Update" action="update" style="width:100px;"/>
 	</h:panelGrid>
@@ -123,7 +128,7 @@
 					</p:dataTable>
 			</p:tab>
         	<p:tab title="Report">   
-					<p:dataTable var="report" value="#{reportBean.projects_t}" id="Report" lazy="true">
+					<p:dataTable var="report" value="#{reportBean.issues}" id="Report" lazy="true">
 						<f:facet name="header">Total Elapsed Time              
                 			<p:column datasource="Report" trigger="toggler"/>
                				<p:outputPanel>
@@ -134,16 +139,17 @@
                 			</p:outputPanel>
                 		</f:facet>
 						<p:column headerText="Member">
-					
-							
-
+							<h:outputText  value="#{report.assignee.name}"  />
                			 </p:column>
 						<p:column headerText="Project">
-						<h:outputText  value="#{report.name}"  />
-
+							<h:outputText  value="#{report.project.name}"  />
                			 </p:column>
-						<p:column headerText="Task"/>
-						<p:column headerText="Hours"/>
+						<p:column headerText="Task">
+							<h:outputText  value="#{report.key}"  />
+						</p:column>
+						<p:column headerText="Hours">
+							<h:outputText  value="#{report.timeSpent}"  />
+						</p:column>
 					</p:dataTable>
         	</p:tab>
     	</p:tabView>	

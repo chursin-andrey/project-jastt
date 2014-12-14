@@ -55,13 +55,13 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	@Override
-	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees,
+	public List<Issue> getIssues(Project project, IssueStatusEnum status, Assignee assignee,
 			IssueTypeEnum issueType, Date fromDate, Date toDate) {
 		
 		List<Issue> issues = new ArrayList<Issue>();
 		
 		try{	
-			issues = issueDataProvider.getIssues(project, status, assignees, issueType, fromDate, toDate);
+			issues = issueDataProvider.getIssues(project, status, assignee, issueType, fromDate, toDate);
 			return issues;	
 		
 		}catch(Exception unknownException){
@@ -126,7 +126,7 @@ public class IssueServiceImpl implements IssueService {
 			}
 		}
 			
-		issues = getIssues(project, status, assignees, issueType, fromDate, toDate);
+		//issues = getIssues(project, status, assignees, issueType, fromDate, toDate);
 		
 		return issues;
 	}
