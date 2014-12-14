@@ -10,7 +10,8 @@
 	</context-param>
 	
 	<welcome-file-list>
-		<welcome-file>public/login.xhtml</welcome-file>
+		<!-- <welcome-file>public/login.xhtml</welcome-file> -->
+		<welcome-file>protected/main.xhtml</welcome-file>
 	</welcome-file-list>
  
 	<error-page>

@@ -1,8 +1,10 @@
 package com.jastt.frontend.beans;
 
 import java.util.Set;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -13,9 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
+import com.jastt.business.services.IssueService;
 import com.jastt.business.services.ServerService;
 import com.jastt.business.services.UserService;
 import com.jastt.business.services.jira.JiraClientException;
@@ -23,17 +27,19 @@ import com.jastt.business.services.jira.JiraProjectService;
 
 
 @Component()
-@Scope("request")
+@Scope("session")
 public class LoginBean {
 	
 	@Autowired
 	private JiraProjectService jiraProjectService;
-	//private IssueService issueService;
+	
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private ServerService serverService;	
 	
+	@Autowired
+	private IssueService issueService;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(LoginBean.class);
 	private String login;
@@ -55,12 +61,31 @@ public class LoginBean {
 		return new String("/public/login.xhtml?faces-redirect=true");
 	}
 	
+	public void checkState(){
+		Subject subject = SecurityUtils.getSubject();
+		if(subject.isAuthenticated()){
+			FacesContext fc = FacesContext.getCurrentInstance();
+			try{
+				fc.getExternalContext().redirect("/project-jastt/protected/main.xhtml");
+			}catch(Exception e){
+				LOG.error("Exception happened during execution of checkState() method. ", e.getMessage());
+			}
+			
+		}
+	}
+	
 	private void loginAsAdmin(){
+			
 		FacesContext fc = FacesContext.getCurrentInstance();	
 		Subject subject = SecurityUtils.getSubject();	
 		UsernamePasswordToken token = new UsernamePasswordToken(getLogin()  ,getPassword(), isRememberMe());
 
 		try {	
+			User user = userService.getUserByLogin(getLogin());
+			if(user.getUserRole().equals("user")){
+				throw new IncorrectCredentialsException();
+			}
+			
 			subject.login(token);
 			fc.getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
 			
@@ -92,8 +117,8 @@ public class LoginBean {
 		User user = new User(server, login, null, null, password, null);
 		
 		try{
-			//issueService.update(user);
-			Set<Project> projects_set = jiraProjectService.getAllProjects(user);   //TODO	!!!
+			issueService.update(user);
+			//Set<Project> projects_set = jiraProjectService.getAllProjects(user);   //TODO	!!!
 			
 			server = serverService.getServerByUrl(getUrl());
 			if(server == null){
@@ -132,7 +157,6 @@ public class LoginBean {
 						"Communication error!", "Wrong  Jira URL or Jira server is not available!");
 				fc.addMessage(null, fm);			
 		}
-		
 		
 		
 	}
