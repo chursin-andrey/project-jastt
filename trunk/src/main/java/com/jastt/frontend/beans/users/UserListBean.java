@@ -26,6 +26,7 @@ public class UserListBean implements Serializable{
 	private static final Logger LOG = LoggerFactory.getLogger(UserListBean.class);
 	
 	private List<User> users;
+	private User user;
 	
 	@Autowired
 	private UserService userService;

@@ -6,21 +6,26 @@
     template="/templates/commonLayout.xhtml">
 	
 	<ui:define name="content">
-		<h:form id="form">	
+	<div align="left">
+		<h:form id="usersForm">
 			<h:panelGrid>
-				<p:commandButton value="Add User" oncomplete="dlgUserInfo.show()"
-					update=":userInfoForm" />
+				<p:commandButton value="Add user" oncomplete="w_dialog.show()"
+					update=":userInfo" />
 			</h:panelGrid>
-		
-			<p:spacer height="10" />
 				
-			<p:dataTable id="table" var="user" value="#{usersBean.users}">
-    			<p:column headerText="Login">
-    				<h:outputText value="#{user.login}" />
+			<p:spacer height="10" />
+			
+			<p:dataTable id="usersTable" var="user" value="#{userListBean.users}" >    				
+    			<p:column headerText="No">
+    				<h:outputText value="" />
     			</p:column>
-    				
+    			
     			<p:column headerText="Name">
     				<h:outputText value="#{user.name}" />
+    			</p:column>
+    			
+    			<p:column headerText="Login">
+    				<h:outputText value="#{user.login}" />
     			</p:column>
     			
     			<p:column headerText="E-mail">
@@ -31,64 +36,72 @@
     				<h:outputText value="#{user.userRole}"/>
     			</p:column>	
     				
-    			<p:column headerText="">
-        			<p:commandLink value="Edit" style="margin:5px" oncomplete="dlgUserInfo.show()"
-        		 		action="#{usersBean.loadFields(user.login)}" update=":userInfoForm">
-        			 </p:commandLink>
+    			<p:column headerText="Action">
+        			<p:commandButton value="Edit" style="margin:5px"
+        				actionListener="#{usersBean.loadFields(user.login)}"
+        				update=":userInfo" oncomplete="w_dialog.show()">
+        			 </p:commandButton>
         				
-        			<p:commandLink value="Delete" style="margin:5px" action="#{usersBean.deleteUser(user.login)}"
-        				update=":form:table" >	 
-        				<p:confirm header="Confirmation" message="Do you really want to remove user?" icon="ui-icon-alert" />			
-        			</p:commandLink>
+        			<p:commandButton value="Delete" style="margin:5px"
+        				actionListener="#{usersBean.deleteUser(user.login)}"
+        				update=":usersForm:usersTable" >
+        				<p:confirm header="Confirmation" message="Are you sure want to remove user?"
+        					icon="ui-icon-alert" />			
+        			</p:commandButton>
         				
-        			<p:confirmDialog global="true" >
-        				<div align="center">
+        			<p:confirmDialog global="true">
+						<div align="center">
 							<p:commandButton value="Yes" type="button"
 								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
 							<p:commandButton value="No" type="button"
 								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 						</div>		
 					</p:confirmDialog>
-
     			</p:column>
 			</p:dataTable>
 		</h:form>
+		</div>
 		
-		<p:dialog header="User Account" widgetVar="dlgUserInfo" modal="true"
+		<p:dialog id="dialog" header="User account" widgetVar="w_dialog" modal="true"
 			resizable="false" maximizable="false" closeOnEscape="true">
-    		<h:form id="userInfoForm">
+			<h:form id="userInfo">
         		<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
         			<p:outputLabel for="name" value="Name:" />
-					<p:inputText id="name" value="#{usersBean.name}" required="false"
-						disabled="false" />
+					<p:inputText id="name" value="#{usersBean.name}" />
 					
-					<p:outputLabel for="login" value="Login:"/>
-					<p:inputText id="login" value="#{usersBean.login}" required="true"
-						disabled="#{usersBean.currentUserIsAdmin}" />
+					<p:outputLabel id="lblID" for="login" value="Login:"/>
+					<p:inputText id="login" value="#{usersBean.login}" required="true">
+						<f:validateLength minimum="4" />
+					</p:inputText>
+						
+					<p:outputLabel for="email" value="E-mail:" />
+					<p:inputText id="email" value="#{usersBean.email}">
+					</p:inputText>
 					
 					<p:outputLabel for="isAdmin" value="Admin:" />
         			<p:selectBooleanCheckbox id="isAdmin" value="#{usersBean.admin}" >
-        				<p:ajax update="url, pwd1, pwd2" />
+        				<p:ajax update="lblUrl, url, lblPwd1, pwd1, lblPwd2, pwd2" />
         			</p:selectBooleanCheckbox>	
         			
-        			<p:outputLabel for="url" value="URL:"/>
-					<p:inputText id="url" value="#{usersBean.url}" disabled="#{usersBean.admin}"
-						 required="#{!usersBean.admin}"  />
+        			<p:outputLabel id="lblUrl" for="url" value="URL:"/>
+					<p:inputText id="url" value="#{usersBean.url}" required="#{!usersBean.admin}"
+						disabled="#{usersBean.admin}" />
 					
-					<p:outputLabel for="pwd1" value="Password:" />
-        			<p:password id="pwd1" match="pwd2" value="#{usersBean.password}" disabled="#{!usersBean.admin}"
-        				required="#{usersBean.admin}" />
+					<p:outputLabel id="lblPwd1" for="pwd1" value="Password:" />
+        			<p:password id="pwd1" match="pwd2" value="#{usersBean.oldPassword}" 
+        				required="#{usersBean.admin}" disabled="#{!usersBean.admin}" />
  
-        			<p:outputLabel for="pwd2" value="Password confirmation:" />
-        			<p:password id="pwd2" value="#{usersBean.password}" required="#{usersBean.admin}"
-        				 disabled="#{!usersBean.admin}" />									
+        			<p:outputLabel id="lblPwd2" for="pwd2" value="Password confirmation:" />
+        			<p:password id="pwd2" value="#{usersBean.newPassword}" required="#{usersBean.admin}"
+        				disabled="#{!usersBean.admin}" />									
 					
-					<p:commandButton value="Save" update="userInfoForm" id="saveUser"
-						icon="ui-icon-check" action="#{usersBean.changeUserInfo}" />
-					<p:commandButton value="Cancel" id="cancel" onclick="dlgUserInfo.hide()"
+					<p:commandButton value="Save" action="#{usersBean.saveUser}"
+						update=":usersForm:usersTable" oncomplete="w_dialog.hide()" icon="ui-icon-check">
+					</p:commandButton>
+					<p:commandButton value="Cancel" onclick="w_dialog.hide()"
 						icon="ui-icon-close" />   			
 				</h:panelGrid>
-			</h:form>		
+			</h:form>
 		</p:dialog>			
 	</ui:define>
 </ui:composition>    
