@@ -9,6 +9,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,11 +83,17 @@ public class LoginBean {
 
 		try {	
 			User user = userService.getUserByLogin(getLogin());
+			if(user == null){
+				throw new AuthenticationException();
+			}		
 			if(user.getUserRole().equals("user")){
 				throw new IncorrectCredentialsException();
-			}
+			}			
+			subject.login(token);	
+			subject.getSession().setAttribute("login", getLogin());
+			subject.getSession().setAttribute("password", getPassword());
+			subject.getSession().setAttribute("user", user);
 			
-			subject.login(token);
 			fc.getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
 			
 		} catch (IncorrectCredentialsException ice) {
@@ -113,8 +120,8 @@ public class LoginBean {
 	
 	private void loginAsUser(){
 		FacesContext fc = FacesContext.getCurrentInstance();
-		Server server = new Server(url);
-		User user = new User(server, login, null, null, password, null);
+		Server server = new Server(getUrl());
+		User user = new User(server, getLogin(), null, null, getPassword(), null);
 		
 		try{
 			issueService.update(user);
@@ -124,6 +131,7 @@ public class LoginBean {
 			if(server == null){
 				serverService.addServer(getUrl());
 			}
+			
 			user = userService.getUserByLogin(getLogin());
 			if(user == null){
 				user  = new User();
@@ -131,11 +139,20 @@ public class LoginBean {
 				user .setServer(serverService.getServerByUrl(getUrl()));
 				user .setUserRole("user");
 				userService.addUser(user );
+				user.setPassword(getPassword());
+			}else{
+				user.setPassword(getPassword());
 			}
 					
 			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(getLogin()  ,getPassword(), isRememberMe());
+			
 			subject.login(token);
+			subject.getSession().setAttribute("login", getLogin());
+			subject.getSession().setAttribute("password", getPassword());
+			subject.getSession().setAttribute("url", getUrl());
+			subject.getSession().setAttribute("user", user);
+			
 			fc.getExternalContext().redirect("/project-jastt/protected/main.xhtml");
 			
 		}catch(JiraClientException jce){
