@@ -180,7 +180,7 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 	@Transactional
 	@Override
 	public List<Issue> getIssues(Project project, IssueStatusEnum status,
-			List<Assignee> assignees, IssueTypeEnum issueType, Date fromDate,
+			Assignee assignee, IssueTypeEnum issueType, Date fromDate,
 			Date toDate) {
 				
 		
@@ -188,14 +188,14 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 		List<IssueEntity> entityList = new ArrayList<>();
 		try{
 			Session session = sessionFactory.getCurrentSession();
-			Criteria isuCriteria = session.createCriteria(IssueEntity.class)
-					.add(Restrictions.eq("projectEntity.id", project.getId() ) )
-					/*.add(Restrictions.eq("IssueStatusEnum.status", status))
-					.add(Restrictions.eq("AssigneeEntity.name", assignees))
-					.add(Restrictions.eq("IssueTypeEnum.issueType", issueType))
-					.add(Restrictions.eq("IssueEntity.created", fromDate))
-					.add(Restrictions.eq("IssueEntity.updated", toDate))*/
-					;
+			Criteria isuCriteria = session.createCriteria(IssueEntity.class);
+				if(project != null) isuCriteria.add(Restrictions.eq("projectEntity.id", project.getId() ) );
+				if(status != null) isuCriteria.add(Restrictions.eq("IssueStatusEnum.status", status ) );
+				if(assignee != null) isuCriteria.add(Restrictions.eq("assigneeEntity.id", assignee.getId() ) );
+				if(issueType != null) isuCriteria.add(Restrictions.eq("IssueTypeEnum.issueType", issueType ) );
+				if(fromDate != null) isuCriteria.add(Restrictions.eq("IssueEntity.created", fromDate ) );
+				if(toDate != null) isuCriteria.add(Restrictions.eq("IssueEntity.updated", toDate ) );
+					
 			entityList = isuCriteria.list();
 			for (IssueEntity is : entityList) {
 				Issue isue = mappingService.map(is, Issue.class);
