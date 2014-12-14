@@ -131,19 +131,82 @@ public class IssueServiceImpl implements IssueService {
 		return issues;
 	}
 
-	
 	@Override
-	public void update(User user){
-		
-		try{	
+	public void update(User user) throws JiraClientException {
+		try{
 			Set<Project> projects_set = jiraProjectService.getAllProjects(user);
 			List<Project> projects = new ArrayList<Project>(projects_set);
+			/*Project proj;*/
+			
 			
 			
 			if(projects.isEmpty()){
 				logger.info("User "+user.getLogin()+" has none of projects.");
 				return;	
 			}
+			
+			List<Issue> issues = new ArrayList<Issue>();
+			for(Project proj : projects) {
+				Issue latestIssue = issueDataProvider.getLatestIssue(proj);
+				issues.add(latestIssue);
+			} 
+			
+			
+			if (issues.isEmpty()){
+				for(Project project : projects){		
+					
+					Set<Issue> newIssues = jiraIssueService.getAllIssuesForProject(user, project);	
+					Iterator<Issue> iter = newIssues.iterator();
+					while(iter.hasNext()){
+						issues.add(iter.next());
+					}
+				}	
+			}else{
+				for(Project project : projects){
+					
+					for(Issue latestIssue : issues){
+						DateTime fromDate = new DateTime(latestIssue.getCreated());					
+						Set<Issue> newIssues = jiraIssueService.getAllIssuesForProject(user, project, fromDate);					
+						Iterator<Issue> iter = newIssues.iterator();					
+						while(iter.hasNext()){
+							issues.add(iter.next());
+						}
+					
+					}
+					
+				}
+			}
+			
+			if(!issues.isEmpty()){
+				issueDataProvider.saveIssues(issues);
+			}
+			
+		} catch(JiraClientException jiraClientException){
+			logger.error("JiraClientException happened during execution of update method. ",jiraClientException.getStatusCode());
+		}catch(Exception unknownException){
+			logger.error("Unknown exception happened during execution of update method. ",unknownException.getMessage());
+		}
+		
+	}
+
+	
+	/*@Override
+	public void update(User user){
+		
+		try{	
+			Set<Project> projects_set = jiraProjectService.getAllProjects(user);
+			List<Project> projects = new ArrayList<Project>(projects_set);
+			Project projects;
+			
+			if(projects.isEmpty()){
+				logger.info("User "+user.getLogin()+" has none of projects.");
+				return;	
+			}
+			
+			
+			
+			
+			
 			
 			List<Issue> issues = new ArrayList<Issue>();
 			Issue latestIssue = issueDataProvider.getLatestIssue(projects);
@@ -181,7 +244,7 @@ public class IssueServiceImpl implements IssueService {
 			logger.error("Unknown exception happened during execution of update method. ",unknownException.getMessage());
 		}
 				
-	}
+	}*/
 	
 	
 	/*@Override

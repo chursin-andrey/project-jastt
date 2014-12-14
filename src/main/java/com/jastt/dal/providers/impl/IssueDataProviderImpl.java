@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Projections;
 import org.slf4j.Logger;
@@ -101,7 +102,7 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 	//!!!
 	@Transactional
 	@Override
-	public Issue getLatestIssue(List<Project> projects) {
+	public Issue getLatestIssue(Project project) {
 		Session session = sessionFactory.getCurrentSession();
 		List<Issue> issList = new ArrayList<>();
 		Issue issue = null;
@@ -109,7 +110,8 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 		
 		try{
 			Criteria cr = session.createCriteria(IssueEntity.class);
-			cr.add(Restrictions.eq("project", projects));						
+			cr.add(Restrictions.eq("project", project))
+			.addOrder(Order.desc("created"));						
 			entityList = cr.list();			
 			for (IssueEntity ie : entityList) {
 				Issue is = mappingService.map(ie, Issue.class);
@@ -121,7 +123,7 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
         	LOG.error("Hibernate error occured while getting latest Issue", ex.getMessage());	
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Hibernate error occured while getting latest Issue", ex.getMessage());
+			LOG.error("Exception error occured while getting latest Issue", ex.getMessage());
 			throw new DaoException(ex);
 		}
 		return issue;

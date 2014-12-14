@@ -24,7 +24,7 @@ public interface IssueDataProvider extends PageableDataProvider<IssueEntity, Iss
 	
 	public void saveIssues(List<Issue> issues);
 	
-	public Issue getLatestIssue(List<Project>  projects);
+	public Issue getLatestIssue(Project  projects);
 	
 	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees, IssueTypeEnum issueType, Date fromDate, Date toDate);
 }
