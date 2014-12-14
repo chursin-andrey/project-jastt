@@ -100,7 +100,7 @@
 		
 
 	<h:panelGrid columns="3" width="400"  cellspacing="20">
-	<h:commandButton value="Show" update="Report" action="#{reportBean.showReport()}" style="width:100px;"/>
+	<h:commandButton value="Show" update="Report Details" action="#{reportBean.showReport()}" style="width:100px;"/>
 	<h:commandButton value="Cancel" action="cancel" style="width:100px;"/>
 	<h:commandButton value="Update" action="update" style="width:100px;"/>
 	</h:panelGrid>
@@ -108,7 +108,7 @@
 	
 		<p:tabView activeIndex="0">
 			<p:tab title="Details">
-					<p:dataTable var="details" id="Details" lazy="true">
+					<p:dataTable var="details" value="#{reportBean.issues}" id="Details" lazy="true">
 						<f:facet name="header">Total Elapsed Time              
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
@@ -118,13 +118,27 @@
                     			<p:inputText id="globalFilter2" onkeyup="PF('Detailse').filter()" style="width:250px" placeholder="minuts"/>
                 			</p:outputPanel>            
             			</f:facet>
-            			<p:column headerText="Date"/>
-						<p:column headerText="Member"/>
-						<p:column headerText="Project"/>
-						<p:column headerText="Task"/>
-						<p:column headerText="Status"/>
-						<p:column headerText="Summary"/>
-						<p:column headerText="Hours"/>
+            			<p:column headerText="Date">
+            				<h:outputText  value="#{details.created}"  />
+            			</p:column>
+						<p:column headerText="Member">
+							<h:outputText  value="#{details.assignee.name}"  />
+               			</p:column>
+						<p:column headerText="Project">
+							<h:outputText  value="#{details.project.name}"  />
+						</p:column>
+						<p:column headerText="Task">
+							<h:outputText  value="#{details.key}"  />
+						</p:column>
+						<p:column headerText="Status">
+						 <h:outputText  value="#{details.status}"  />
+						</p:column>
+						<p:column headerText="Summary">
+							<h:outputText  value="#{details.summary}"  />
+						</p:column>
+						<p:column headerText="Hours">
+							<h:outputText  value="#{details.timeSpent}"  />
+						</p:column>
 					</p:dataTable>
 			</p:tab>
         	<p:tab title="Report">   
