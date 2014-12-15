@@ -12,7 +12,6 @@ import com.jastt.business.domain.entities.Project;
 
 public interface AssigneeDataProvider extends PageableDataProvider<AssigneeEntity, Assignee, Integer> {
 
-	
-	
 	public List<Assignee> getAssigneesByProject(Project project);
+	public Assignee getAssigneeByName(String name);
 }
