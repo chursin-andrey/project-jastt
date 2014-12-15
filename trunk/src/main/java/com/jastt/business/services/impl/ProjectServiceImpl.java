@@ -45,4 +45,9 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectDataProvider.getAvailableProjectsForUser(currentUser);
 	}
 
+	@Override
+	public void addProject(Project project) {
+		projectDataProvider.save(project, ProjectEntity.class);
+	}
+
 }

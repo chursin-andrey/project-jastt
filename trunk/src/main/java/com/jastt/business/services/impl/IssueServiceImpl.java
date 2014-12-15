@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.jws.soap.SOAPBinding.Use;
+import javax.persistence.criteria.From;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +25,18 @@ import com.jastt.business.domain.entities.User;
 import com.jastt.business.enums.IssueStatusEnum;
 import com.jastt.business.enums.IssueTypeEnum;
 import com.jastt.business.enums.PredefinedDateEnum;
+import com.jastt.business.services.AssigneeService;
 import com.jastt.business.services.IssueService;
+import com.jastt.business.services.ProjectService;
+import com.jastt.business.services.ServerService;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraIssueService;
 import com.jastt.business.services.jira.JiraProjectService;
 import com.jastt.dal.entities.IssueEntity;
+import com.jastt.dal.entities.ProjectEntity;
 import com.jastt.dal.providers.IssueDataProvider;
+import com.jastt.dal.providers.ProjectDataProvider;
+import com.jastt.dal.providers.ServerDataProvider;
 import com.sun.xml.bind.v2.TODO;
 
 @Service
@@ -42,6 +51,15 @@ public class IssueServiceImpl implements IssueService {
 	private JiraProjectService jiraProjectService;
 	@Autowired
 	private JiraIssueService jiraIssueService;
+	
+	@Autowired
+	private ProjectService projectService;
+	
+	@Autowired
+	private ServerService serverService;
+	
+	@Autowired
+	private AssigneeService assigneeService; 
 	
 	@Override
 	public Issue getIssueById(Integer id){
@@ -126,7 +144,6 @@ public class IssueServiceImpl implements IssueService {
 			}
 		}
 			
-		//issues = getIssues(project, status, assignees, issueType, fromDate, toDate);
 		
 		return issues;
 	}
@@ -136,50 +153,57 @@ public class IssueServiceImpl implements IssueService {
 		try{
 			Set<Project> projects_set = jiraProjectService.getAllProjects(user);
 			List<Project> projects = new ArrayList<Project>(projects_set);
-			/*Project proj;*/
-			
-			
-			
+						
 			if(projects.isEmpty()){
 				logger.info("User "+user.getLogin()+" has none of projects.");
 				return;	
 			}
-			
-			List<Issue> issues = new ArrayList<Issue>();
-			for(Project proj : projects) {
-				Issue latestIssue = issueDataProvider.getLatestIssue(proj);
-				issues.add(latestIssue);
-			} 
-			
-			
-			if (issues.isEmpty()){
-				for(Project project : projects){		
 					
-					Set<Issue> newIssues = jiraIssueService.getAllIssuesForProject(user, project);	
-					Iterator<Issue> iter = newIssues.iterator();
-					while(iter.hasNext()){
-						issues.add(iter.next());
+			for(Project project : projects){
+					
+				Project p = projectService.getProjectByName(project.getName());	
+				
+				if(p == null){					
+					//if project  does not exist in the database
+					
+					String url = user.getServer().getUrl();
+					Server server = serverService.getServerByUrl(url);
+					project.setServer(server);
+					 projectService.addProject(project);
+					
+					 Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, project);
+					 List<Issue> issues = new ArrayList<Issue>(issuesSet);
+																	
+					for(Issue issue : issues){
+						saveIssue(issue);
 					}
-				}	
-			}else{
-				for(Project project : projects){
 					
-					for(Issue latestIssue : issues){
-						DateTime fromDate = new DateTime(latestIssue.getCreated());					
-						Set<Issue> newIssues = jiraIssueService.getAllIssuesForProject(user, project, fromDate);					
-						Iterator<Issue> iter = newIssues.iterator();					
-						while(iter.hasNext()){
-							issues.add(iter.next());
+				}else{			
+					//if project already exist in the database	
+					
+					Issue latestIssue = issueDataProvider.getLatestIssue(p);
+					
+					if(latestIssue==null){
+						//TODO
+					}else{
+						
+						DateTime fromDate = new DateTime(latestIssue.getCreated());				
+						Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, project, fromDate);
+						List<Issue> issues = new ArrayList<Issue>(issuesSet);
+						
+						for(Issue issue : issues){
+							if(issueDataProvider.getIssueByKey(issue.getKey()) == null){
+								saveIssue(issue);				
+							}	
 						}
-					
+						
+						
 					}
-					
 				}
+					
+			
 			}
 			
-			if(!issues.isEmpty()){
-				issueDataProvider.saveIssues(issues);
-			}
 			
 		} catch(JiraClientException jiraClientException){
 			logger.error("JiraClientException happened during execution of update method. ",jiraClientException.getStatusCode());
@@ -188,69 +212,20 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 	}
-
 	
-	/*@Override
-	public void update(User user){
-		
-		try{	
-			Set<Project> projects_set = jiraProjectService.getAllProjects(user);
-			List<Project> projects = new ArrayList<Project>(projects_set);
-			Project projects;
-			
-			if(projects.isEmpty()){
-				logger.info("User "+user.getLogin()+" has none of projects.");
-				return;	
-			}
-			
-			
-			
-			
-			
-			
-			List<Issue> issues = new ArrayList<Issue>();
-			Issue latestIssue = issueDataProvider.getLatestIssue(projects);
-			
-			if(latestIssue == null){
-				for(Project project : projects){		
-					
-					Set<Issue> newIssues = jiraIssueService.getAllIssuesForProject(user, project);	
-					Iterator<Issue> iter = newIssues.iterator();
-					while(iter.hasNext()){
-						issues.add(iter.next());
-					}
-					
-				}
-			}else{
-				for(Project project : projects){
-					
-					DateTime fromDate = new DateTime(latestIssue.getCreated());
-					Set<Issue> newIssues = jiraIssueService.getAllIssuesForProject(user, project, fromDate);		
-					Iterator<Issue> iter = newIssues.iterator();
-					while(iter.hasNext()){
-						issues.add(iter.next());
-					}	
-					
-				}
-			}
-			
-			if(!issues.isEmpty()){
-				issueDataProvider.saveIssues(issues);
-			}
-			
-		}catch(JiraClientException jiraClientException){
-			logger.error("JiraClientException happened during execution of update method. ",jiraClientException.getStatusCode());
-		}catch(Exception unknownException){
-			logger.error("Unknown exception happened during execution of update method. ",unknownException.getMessage());
+	private void saveIssue(Issue issue){
+		String assigneeName =  issue.getAssignee().getName();
+		Assignee assignee = assigneeService.getAssigneeByName(assigneeName);
+		if(assignee == null){
+			assigneeService.addAssignee(issue.getAssignee());
 		}
-				
-	}*/
-	
-	
-	/*@Override
-	public void update(User user) throws JiraClientException{
-			Set<Project> projects_set = jiraProjectService.getAllProjects(user);		
-	}	*/
 		
+		String projectName = issue.getProject().getName();
+		Project project = projectService.getProjectByName(projectName);	
+		issue.setAssignee(assigneeService.getAssigneeByName(assigneeName));
+		issue.setProject(projectService.getProjectByName(project.getName()));
+		issueDataProvider.save(issue, IssueEntity.class);		
+	}
 	
+		
 }
