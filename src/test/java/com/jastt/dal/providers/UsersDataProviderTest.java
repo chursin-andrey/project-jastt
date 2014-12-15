@@ -15,6 +15,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.jastt.business.domain.entities.Assignee;
+import com.jastt.business.domain.entities.Issue;
+import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
 import com.jastt.dal.entities.UserEntity;
@@ -32,6 +35,12 @@ public class UsersDataProviderTest {
 
 	@Autowired
 	private UserDataProvider dataProvider;
+	@Autowired
+	private IssueDataProvider issueDataProvider;
+	@Autowired
+	private ProjectDataProvider projectDataProvider;
+	@Autowired
+	private AssigneeDataProvider assigneeDataProvider;
 
 	
 
@@ -74,8 +83,9 @@ public class UsersDataProviderTest {
 
 	@Test
 	public void getUsers_TwoUsersInDatabase_AllLoadedSuccessfully() {
-		List<User> users = dataProvider.getObjects(new LoadOptions(), UserEntity.class, User.class);
-		System.out.println("Print Login " + users.get(1).getLogin());
+		Project project = projectDataProvider.getProjectByName("project_name");
+		Issue issue = issueDataProvider.getLatestIssue(project);
+		System.out.println("Latest Issue key " + issue.getKey());
 	}
 	
 	@Test
