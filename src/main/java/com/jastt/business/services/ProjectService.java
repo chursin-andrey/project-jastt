@@ -11,4 +11,5 @@ public interface ProjectService {
 	public Project getProjectByName(String name);
 	public List<Project> getAllProjects();
 	public List<Project> getAvailableProjectsForUser(User currentUser);
+	public void addProject(Project project);
 }

@@ -37,5 +37,15 @@ public class AssigneeServiceImpl implements AssigneeService {
 	public List<Assignee> getAssigneesByProject(Project project) {
 		return assigneeDataProvider.getAssigneesByProject(project);
 	}
+
+	@Override
+	public Assignee getAssigneeByName(String name) {
+		return assigneeDataProvider.getAssigneeByName(name);
+	}
+
+	@Override
+	public void addAssignee(Assignee assignee) {
+		assigneeDataProvider.save(assignee, AssigneeEntity.class);	
+	}
 	
 }
