@@ -14,8 +14,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jastt.business.domain.entities.Assignee;
+import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.dal.entities.AssigneeEntity;
+import com.jastt.dal.entities.IssueEntity;
 import com.jastt.dal.exceptions.DaoException;
 import com.jastt.dal.providers.AssigneeDataProvider;
 import com.jastt.utils.annotations.DefaultProfile;
@@ -50,6 +52,28 @@ public class AssigneeDataProviderImpl extends BaseDataProviderImpl<AssigneeEntit
 			throw new DaoException(ex);
 		}
 		return resultList;
+	}
+	
+	@Transactional
+	@Override
+	public Assignee getAssigneeByName(String name) {
+		Session session = sessionFactory.getCurrentSession();
+
+		Assignee assignee = null;
+
+		try {
+			Criteria criteria = session.createCriteria(AssigneeEntity.class);
+			criteria.add(Restrictions.eq("name", name));
+
+			AssigneeEntity dataEntity = (AssigneeEntity) criteria.uniqueResult();
+			if (dataEntity != null) {
+				assignee = mappingService.map(dataEntity, Assignee.class);
+			}
+		} catch (Exception ex) {
+			LOG.error(String.format("Error loading Assignee by name=%s", name), ex);
+		}
+
+		return assignee;
 	}
 
 }
