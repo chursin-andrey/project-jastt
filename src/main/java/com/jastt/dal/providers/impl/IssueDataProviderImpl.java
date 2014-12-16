@@ -111,7 +111,7 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 		try{
 			Criteria cr = session.createCriteria(IssueEntity.class);
 			cr.add(Restrictions.eq("projectEntity.id", project.getId()))
-			.addOrder(Order.desc("created"));						
+			.addOrder(Order.asc("created"));						
 			entityList = cr.list();			
 			for (IssueEntity ie : entityList) {
 				Issue is = mappingService.map(ie, Issue.class);
