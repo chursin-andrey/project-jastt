@@ -1,5 +1,6 @@
 package com.jastt.business.services.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,8 +41,10 @@ import com.jastt.dal.providers.ServerDataProvider;
 import com.sun.xml.bind.v2.TODO;
 
 @Service
-public class IssueServiceImpl implements IssueService {
+public class IssueServiceImpl implements IssueService, Serializable {
 	
+	
+	private static final long serialVersionUID = 2430454333364991862L;
 	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
 	
 	
@@ -50,14 +53,11 @@ public class IssueServiceImpl implements IssueService {
 	@Autowired
 	private JiraProjectService jiraProjectService;
 	@Autowired
-	private JiraIssueService jiraIssueService;
-	
+	private JiraIssueService jiraIssueService;	
 	@Autowired
-	private ProjectService projectService;
-	
+	private ProjectService projectService;	
 	@Autowired
 	private ServerService serverService;
-	
 	@Autowired
 	private AssigneeService assigneeService; 
 	
@@ -164,41 +164,31 @@ public class IssueServiceImpl implements IssueService {
 				Project p = projectService.getProjectByName(project.getName());	
 				
 				if(p == null){					
-					//if project  does not exist in the database
-					
+					//if project  does not exist in the database		
 					String url = user.getServer().getUrl();
 					Server server = serverService.getServerByUrl(url);
 					project.setServer(server);
 					 projectService.addProject(project);
 					
 					 Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, project);
-					 List<Issue> issues = new ArrayList<Issue>(issuesSet);
-																	
-					for(Issue issue : issues){
-						saveIssue(issue);
-					}
+					 saveIssues(issuesSet);
 					
 				}else{			
-					//if project already exist in the database	
-					
+					//if project already exist in the database				
 					Issue latestIssue = issueDataProvider.getLatestIssue(p);
-					
+													
 					if(latestIssue==null){
-						//TODO
-					}else{
-						
-						DateTime fromDate = new DateTime(latestIssue.getCreated());				
+			
+						Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, project);
+						saveIssues(issuesSet);
+												
+					}else{	
+									
+						DateTime fromDate = new DateTime(latestIssue.getCreated());	
 						Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, project, fromDate);
-						List<Issue> issues = new ArrayList<Issue>(issuesSet);
-						
-						for(Issue issue : issues){
-							if(issueDataProvider.getIssueByKey(issue.getKey()) == null){
-								saveIssue(issue);				
-							}	
-						}
-						
-						
+						saveIssues(issuesSet);									
 					}
+					
 				}
 					
 			
@@ -213,18 +203,28 @@ public class IssueServiceImpl implements IssueService {
 		
 	}
 	
-	private void saveIssue(Issue issue){
-		String assigneeName =  issue.getAssignee().getName();
-		Assignee assignee = assigneeService.getAssigneeByName(assigneeName);
-		if(assignee == null){
-			assigneeService.addAssignee(issue.getAssignee());
-		}
+
+	
+	private void saveIssues(Set<Issue> issuesSet){
+		List<Issue> issues = new ArrayList<Issue>(issuesSet);
 		
-		String projectName = issue.getProject().getName();
-		Project project = projectService.getProjectByName(projectName);	
-		issue.setAssignee(assigneeService.getAssigneeByName(assigneeName));
-		issue.setProject(projectService.getProjectByName(project.getName()));
-		issueDataProvider.save(issue, IssueEntity.class);		
+		for(Issue issue : issues){
+			if(issueDataProvider.getIssueByKey(issue.getKey()) == null){
+				String assigneeName =  issue.getAssignee().getName();
+				Assignee assignee = assigneeService.getAssigneeByName(assigneeName);
+				
+				if(assignee == null){
+					assigneeService.addAssignee(issue.getAssignee());
+				}
+				
+				String projectName = issue.getProject().getName();
+				Project project = projectService.getProjectByName(projectName);	
+				issue.setAssignee(assigneeService.getAssigneeByName(assigneeName));
+				issue.setProject(projectService.getProjectByName(project.getName()));
+				issueDataProvider.save(issue, IssueEntity.class);							
+			}	
+		}
+			
 	}
 	
 		

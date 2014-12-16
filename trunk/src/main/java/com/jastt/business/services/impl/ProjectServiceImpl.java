@@ -14,11 +14,15 @@ import com.jastt.business.domain.entities.Project;
 
 import com.jastt.business.domain.entities.User;
 
+import java.io.Serializable;
 import java.util.List;
 
 
 @Service
-public class ProjectServiceImpl implements ProjectService {
+public class ProjectServiceImpl implements ProjectService, Serializable {
+
+	private static final long serialVersionUID = 3954434930493958668L;
+
 	private static final Logger LOG = LoggerFactory.getLogger(ProjectServiceImpl.class);
 	
 	@Autowired

@@ -1,5 +1,6 @@
 package com.jastt.frontend.beans;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.faces.application.FacesMessage;
@@ -29,8 +30,13 @@ import com.jastt.business.services.jira.JiraProjectService;
 
 @Component()
 @Scope("session")
-public class LoginBean {
+public class LoginBean implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3464721997249898518L;
+
 	@Autowired
 	private JiraProjectService jiraProjectService;
 	
@@ -124,8 +130,8 @@ public class LoginBean {
 		User user = new User(server, getLogin(), null, null, getPassword(), null);
 		
 		try{
-			issueService.update(user);
-			//Set<Project> projects_set = jiraProjectService.getAllProjects(user);   //TODO	!!!
+			
+			Set<Project> projects_set = jiraProjectService.getAllProjects(user);   //TODO	!!!
 			
 			server = serverService.getServerByUrl(getUrl());
 			if(server == null){
@@ -152,6 +158,8 @@ public class LoginBean {
 			subject.getSession().setAttribute("password", getPassword());
 			subject.getSession().setAttribute("url", getUrl());
 			subject.getSession().setAttribute("user", user);
+			
+			issueService.update(user);
 			
 			fc.getExternalContext().redirect("/project-jastt/protected/main.xhtml");
 			
