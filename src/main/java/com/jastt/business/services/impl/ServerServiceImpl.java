@@ -1,5 +1,7 @@
 package com.jastt.business.services.impl;
 
+import java.io.Serializable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +11,10 @@ import com.jastt.dal.entities.ServerEntity;
 import com.jastt.dal.providers.ServerDataProvider;
 
 @Service(value="serverService")
-public class ServerServiceImpl implements ServerService{
+public class ServerServiceImpl implements ServerService, Serializable{
+	
+	
+	private static final long serialVersionUID = 5243693760828134247L;
 	
 	@Autowired
 	ServerDataProvider serverDataProvider;

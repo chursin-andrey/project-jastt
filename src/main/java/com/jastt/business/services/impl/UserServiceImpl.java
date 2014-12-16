@@ -1,5 +1,6 @@
 package com.jastt.business.services.impl;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -17,7 +18,10 @@ import com.jastt.dal.providers.UserDataProvider;
 import com.jastt.dal.providers.base.GenericDataProvider;
 
 @Service(value="userService")
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService, Serializable{
+
+	private static final long serialVersionUID = -8435278915682891057L;
+
 	private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);	
 	
 	@Autowired

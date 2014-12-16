@@ -13,10 +13,13 @@ import com.jastt.dal.entities.AssigneeEntity;
 import com.jastt.dal.entities.IssueEntity;
 import com.jastt.dal.providers.AssigneeDataProvider;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Service
-public class AssigneeServiceImpl implements AssigneeService {
+public class AssigneeServiceImpl implements AssigneeService, Serializable {
+
+	private static final long serialVersionUID = -7926148960262045014L;
 	private static final Logger LOG = LoggerFactory.getLogger(AssigneeServiceImpl.class);
 	
 	@Autowired
