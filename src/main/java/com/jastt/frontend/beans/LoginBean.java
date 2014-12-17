@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
+import com.jastt.business.enums.UserRoleEnum;
 import com.jastt.business.services.IssueService;
 import com.jastt.business.services.ServerService;
 import com.jastt.business.services.UserService;
@@ -130,11 +131,9 @@ public class LoginBean implements Serializable {
 		try{
 			/*	 This operator below only need for authentication checking.
 			 *	 If it throws an exception, it means that user is not valid or connection is not successful.
-			 *	 It is absolutely does not matter which projects will be return.
-			 */
+			 *	 It is absolutely does not matter which projects will be return. */		
 			Set<Project> projects_set = jiraProjectService.getAllProjects(user);  
-			
-			
+				
 			server = serverService.getServerByUrl(getUrl());
 			if(server == null){
 				serverService.addServer(getUrl());
@@ -145,14 +144,13 @@ public class LoginBean implements Serializable {
 				user  = new User();
 				user .setLogin(getLogin());
 				user .setServer(serverService.getServerByUrl(getUrl()));
-				user .setUserRole("user");
+				user .setUserRole(UserRoleEnum.USER.getMark());																							
 				userService.addUser(user );
 				user.setPassword(getPassword());
 			}else{
 				user.setPassword(getPassword());
 			}
 			
-			issueService.update(user);
 			
 			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(getLogin()  ,getPassword(), isRememberMe());
@@ -164,6 +162,7 @@ public class LoginBean implements Serializable {
 			subject.getSession().setAttribute("user", user);
 			
 			fc.getExternalContext().redirect("/project-jastt/protected/main.xhtml");
+			issueService.update(user);
 			
 		}catch(JiraClientException jce){
 			if(jce.getStatusCode() == 401 | jce.getStatusCode() == 403){

@@ -17,6 +17,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jastt.business.domain.entities.User;
+import com.jastt.business.enums.UserRoleEnum;
 import com.jastt.dal.providers.UserDataProvider;
 
 /**
@@ -52,8 +53,8 @@ public class HibernateRealm extends AuthorizingRealm {
 			throw new UnknownAccountException(String.format("Can't find account info for =%s", login));
 		} else {
 			String password = new String(utoken.getPassword());
-			
-			if(user.getUserRole().equals("user")){
+			String userRole = UserRoleEnum.USER.getMark();																														
+			if(user.getUserRole().equals(userRole)){																																		
 				SimpleAccount account = new SimpleAccount(login, password, getName());	
 				return account;
 			}
