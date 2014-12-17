@@ -130,6 +130,7 @@ public class ReportBean implements Serializable{
 	
 	public void clearReport(){
 		if(projects != null) projects.clear();
+		projects = projectService.getAllProjects();
 		if(issues != null) issues.clear();
 		if(assignees != null) assignees.clear();
 		project_name = null;
