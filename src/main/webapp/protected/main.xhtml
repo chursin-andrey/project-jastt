@@ -165,8 +165,10 @@
 							<h:outputText  value="#{report.timeSpent}"  />
 						</p:column>
 					</p:dataTable>
+					<br/>
+					<h:commandButton value="Export to PDF" actionListener="#{reportBean.exportToPDF}" />
         	</p:tab>
-    	</p:tabView>	
+    	</p:tabView>    		
 </h:form>
 	</ui:define>
 </ui:composition>    
