@@ -117,6 +117,9 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 				Issue is = mappingService.map(ie, Issue.class);
 				issList.add(is);
 			}
+			
+			if(issList.size() == 0) 
+				return null;
 			issue = issList.get(issList.size()-1);
 			
 		} catch (HibernateException ex) {
