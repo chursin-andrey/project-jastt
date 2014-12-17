@@ -24,8 +24,8 @@ import com.jastt.dal.entities.UserEntity;
 import com.jastt.dal.exceptions.DaoException;
 import com.jastt.dal.providers.pagination.LoadOptions;
 import com.jastt.utils.CollectionUtils;
-import com.sample.utils.HsqlDatabase;
-import com.sample.utils.TestConstants;
+import com.jastt.utils.HsqlDatabase;
+import com.jastt.utils.TestConstants;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

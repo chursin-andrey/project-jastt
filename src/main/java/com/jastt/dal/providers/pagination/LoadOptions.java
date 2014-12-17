@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sample.dal.providers.base.PageableDataProvider;
+import com.jastt.dal.providers.base.PageableDataProvider;
 
 /**
  * Used by {@link PageableDataProvider} to support server side pagination.

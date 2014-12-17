@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.sample.business.domain.entities.PersistentEntity;
+import com.jastt.business.domain.entities.PersistentEntity;
 
 /**
  * @author Ilya N. Ternovikh

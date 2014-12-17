@@ -2,7 +2,7 @@ package com.jastt.dal.providers.pagination;
 
 import java.util.ArrayList;
 
-import com.sample.dal.providers.base.PageableDataProvider;
+import com.jastt.dal.providers.base.PageableDataProvider;
 
 /**
  * Used by {@link PageableDataProvider} contract for loading entries. Actual
