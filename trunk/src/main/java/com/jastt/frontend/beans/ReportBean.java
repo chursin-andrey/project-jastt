@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -17,10 +22,15 @@ import org.springframework.stereotype.Component;
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
+import com.jastt.business.domain.entities.Server;
+import com.jastt.business.domain.entities.User;
+import com.jastt.business.enums.IssueStatusEnum;
+import com.jastt.business.enums.IssueTypeEnum;
 import com.jastt.business.services.AssigneeService;
 import com.jastt.business.services.IssueService;
 import com.jastt.business.services.ProjectService;
 import com.jastt.business.services.ReportingService;
+import com.jastt.business.services.jira.JiraClientException;
 
 @Component
 @Scope("session")
@@ -30,8 +40,8 @@ public class ReportBean implements Serializable{
 	
 	private List<Issue> issues;
 	private List<Project> projects;
-	private List<Project> projects_t;
 	private List<Assignee> assignees;
+	private String issueType;
 	private Integer project_id;
 	private String project_name;
 	private String assignee_id;
@@ -46,6 +56,10 @@ public class ReportBean implements Serializable{
 	private boolean disableSelectDate;
 	private String timespent;
 	private String status;
+	
+	private List<Issue> reportIssues;
+	private List<Project> reportProjects;
+	private List<Assignee> reportAssignees;
 
 
 	@Autowired
@@ -58,12 +72,11 @@ public class ReportBean implements Serializable{
 	private ReportingService reportingService;  
 	
 	@PostConstruct
-	public void init(){
+	public void init() {
 		disableMenu = true; disableSelectTime = true; disableSelectDate = true;
+		//Server serv = new Server("http://localhost:8083");
 		projects = projectService.getAllProjects();
-		//project = projectService.getProjectByName(project_name);
-		//issues = issueService.getIssues(project, null, null, null, null, null);
-		
+
 		assignees = assigneeService.getAllAssignees();
 	}
 	
@@ -71,34 +84,18 @@ public class ReportBean implements Serializable{
 		project = projectService.getProjectByName(project_name);
 		if(project != null) {
 			disableMenu = false; 
-			issues = issueService.getIssues(project, null, null, null, null, null);
+			//issues = issueService.getIssues(project, null, null, null, null, null);
 			assignees = assigneeService.getAllAssignees();
 		} else disableMenu = true;
 		
-		//assignees.add(assigneeService.getAssigneeById(1));
-		//assignees = assigneeService.getAssigneeById(issues.);
 	}
 
 
 	public void changeIssue() {
 		
-		//assignees = assigneeService.getAllAssignees();
-		assignees.clear();
-		if(issue_id.length() != 0){
-			issue = issueService.getIssueById(Integer.parseInt(issue_id));
-			assignees.add(assigneeService.getAssigneeById(issue.getAssignee().getId()));
-		} else {
-			assignees = assigneeService.getAllAssignees();
-		}
-		
 	}
 	
 	public void changeAssignee() {
-		
-			issues.clear();
-			assignee = assigneeService.getAssigneeById(project_id);
-			issues = issueService.getIssues(null, null, assignee, null, null, null);
-			
 
 	}
 	
@@ -114,11 +111,36 @@ public class ReportBean implements Serializable{
 	}
 	
 	public void showReport() {
-		//projects_t = projects;
-		//assignees = assigneeService.getAllAssignees();
-		//assignees.add(assigneeService.getAssigneeById(issue.getAssignee().getId()));
+		IssueTypeEnum type = null;
+		IssueStatusEnum issueStatus = null;
+		if(reportIssues != null) reportIssues.clear();
+
+		if(project_id != null) assignee = assigneeService.getAssigneeById(project_id); else assignee = null;
+		if(issueType != null) type = IssueTypeEnum.getType(issueType); 
+		if(status != null) issueStatus = IssueStatusEnum.getType(status); 
+		reportIssues = issueService.getIssues(project, issueStatus, assignee, type, null, null);
+		
 	}
 	
+	public void updateData() throws JiraClientException{
+		Subject subject = SecurityUtils.getSubject();	
+		User user = (User)subject.getSession().getAttribute("user");
+		issueService.update(user);
+	}
+	
+	public void clearReport(){
+		if(projects != null) projects.clear();
+		if(issues != null) issues.clear();
+		if(assignees != null) assignees.clear();
+		project_name = null;
+		issueType = null;
+		status = null;
+		project_id = null;
+		
+	}
+	public void cancelAction(){
+		reportIssues.clear();
+	}
 	public void exportToPDF(ActionEvent actionEvent) throws JRException, IOException {
 			reportingService.exportToPdf(issues);
 	}
@@ -261,14 +283,37 @@ public class ReportBean implements Serializable{
 		this.assignee_id = assignee_id;
 	}
 
-	public List<Project> getProjects_t() {
-		return projects_t;
+	public List<Issue> getReportIssues() {
+		return reportIssues;
 	}
 
-	public void setProjects_t(List<Project> projects_t) {
-		this.projects_t = projects_t;
+	public void setReportIssues(List<Issue> reportIssues) {
+		this.reportIssues = reportIssues;
 	}
 
+	public List<Project> getReportProjects() {
+		return reportProjects;
+	}
+
+	public void setReportProjects(List<Project> reportProjects) {
+		this.reportProjects = reportProjects;
+	}
+
+	public List<Assignee> getReportAssignees() {
+		return reportAssignees;
+	}
+
+	public void setReportAssignees(List<Assignee> reportAssignees) {
+		this.reportAssignees = reportAssignees;
+	}
+
+	public String getIssueType() {
+		return issueType;
+	}
+
+	public void setIssueType(String issueType) {
+		this.issueType = issueType;
+	}
 
 
 }
