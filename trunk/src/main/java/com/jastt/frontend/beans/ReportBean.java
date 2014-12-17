@@ -1,10 +1,14 @@
 package com.jastt.frontend.beans;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.event.ActionEvent;
+
+import net.sf.jasperreports.engine.JRException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,6 +20,7 @@ import com.jastt.business.domain.entities.Project;
 import com.jastt.business.services.AssigneeService;
 import com.jastt.business.services.IssueService;
 import com.jastt.business.services.ProjectService;
+import com.jastt.business.services.ReportingService;
 
 @Component
 @Scope("session")
@@ -49,6 +54,8 @@ public class ReportBean implements Serializable{
 	private ProjectService projectService;
 	@Autowired
 	private AssigneeService assigneeService;
+	@Autowired
+	private ReportingService reportingService;  
 	
 	@PostConstruct
 	public void init(){
@@ -110,6 +117,10 @@ public class ReportBean implements Serializable{
 		//projects_t = projects;
 		//assignees = assigneeService.getAllAssignees();
 		//assignees.add(assigneeService.getAssigneeById(issue.getAssignee().getId()));
+	}
+	
+	public void exportToPDF(ActionEvent actionEvent) throws JRException, IOException {
+			reportingService.exportToPdf(issues);
 	}
 
 	public String getStatus() {
