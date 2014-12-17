@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.Set;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,21 +30,18 @@ import com.jastt.business.services.jira.JiraProjectService;
 
 @Component()
 @Scope("session")
+
 public class LoginBean implements Serializable {
 	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 3464721997249898518L;
 
 	@Autowired
 	private JiraProjectService jiraProjectService;
-	
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private ServerService serverService;	
-	
 	@Autowired
 	private IssueService issueService;
 	
@@ -81,8 +78,9 @@ public class LoginBean implements Serializable {
 		}
 	}
 	
+	
 	private void loginAsAdmin(){
-			
+		
 		FacesContext fc = FacesContext.getCurrentInstance();	
 		Subject subject = SecurityUtils.getSubject();	
 		UsernamePasswordToken token = new UsernamePasswordToken(getLogin()  ,getPassword(), isRememberMe());
@@ -130,8 +128,12 @@ public class LoginBean implements Serializable {
 		User user = new User(server, getLogin(), null, null, getPassword(), null);
 		
 		try{
+			/*	 This operator below only need for authentication checking.
+			 *	 If it throws an exception, it means that user is not valid or connection is not successful.
+			 *	 It is absolutely does not matter which projects will be return.
+			 */
+			Set<Project> projects_set = jiraProjectService.getAllProjects(user);  
 			
-			Set<Project> projects_set = jiraProjectService.getAllProjects(user);   //TODO	!!!
 			
 			server = serverService.getServerByUrl(getUrl());
 			if(server == null){
@@ -149,7 +151,9 @@ public class LoginBean implements Serializable {
 			}else{
 				user.setPassword(getPassword());
 			}
-					
+			
+			issueService.update(user);
+			
 			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(getLogin()  ,getPassword(), isRememberMe());
 			
@@ -158,8 +162,6 @@ public class LoginBean implements Serializable {
 			subject.getSession().setAttribute("password", getPassword());
 			subject.getSession().setAttribute("url", getUrl());
 			subject.getSession().setAttribute("user", user);
-			
-			issueService.update(user);
 			
 			fc.getExternalContext().redirect("/project-jastt/protected/main.xhtml");
 			
@@ -182,11 +184,9 @@ public class LoginBean implements Serializable {
 						"Communication error!", "Wrong  Jira URL or Jira server is not available!");
 				fc.addMessage(null, fm);			
 		}
-		
-		
+			
 	}
 	
-
 
 	public void isAdminValueListener(){		
 	}

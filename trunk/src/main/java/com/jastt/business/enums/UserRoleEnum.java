@@ -4,23 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public enum UserRole {
+public enum UserRoleEnum {
 	ADMIN ("admin","Admin"), 
 	USER ("user","User");
 	
 	private String mark;
 	private String description;
-	private static  Map<String, UserRole> typesMapping;
+	private static  Map<String, UserRoleEnum> typesMapping;
 	
 		
 	public static void initMap(){
-		typesMapping = new HashMap<String, UserRole>();
-		for(UserRole userRole : UserRole.values()){
+		typesMapping = new HashMap<String, UserRoleEnum>();
+		for(UserRoleEnum userRole : UserRoleEnum.values()){
 			typesMapping.put(userRole.mark, userRole);
 		}
 	}
 	
-	public static UserRole getType(String mark){
+	public static UserRoleEnum getType(String mark){
 		if(typesMapping == null){
 			initMap();
 		}
@@ -40,7 +40,7 @@ public enum UserRole {
 	}
 	
 	
-	private UserRole(String type, String description) {
+	private UserRoleEnum(String type, String description) {
 		this.mark = type;
 		this.description = description;
 	}

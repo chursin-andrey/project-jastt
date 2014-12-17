@@ -19,7 +19,7 @@ import com.jastt.business.domain.entities.User;
 import com.jastt.business.services.UserService;
 import com.jastt.dal.providers.ServerDataProvider;
 import com.jastt.frontend.beans.LoginBean;
-import com.jastt.business.enums.UserRole;
+import com.jastt.business.enums.UserRoleEnum;
 import com.jastt.dal.exceptions.DaoException;
 
 
@@ -149,11 +149,11 @@ private static final long serialVersionUID = 2819227216048472445L;
 		this.login = user.getLogin();
 		email = user.getEmail();
 		if (user.getUserRole().equalsIgnoreCase("admin")) {
-			userRole = UserRole.ADMIN.toString();
+			userRole = UserRoleEnum.ADMIN.toString();
 			admin = true;
 		}
 		else {
-			userRole = UserRole.USER.toString();
+			userRole = UserRoleEnum.USER.toString();
 			admin = false;
 			url = user.getServer().getUrl();
 		}
@@ -173,10 +173,10 @@ private static final long serialVersionUID = 2819227216048472445L;
 		user.setName(name);
 		user.setEmail(email);
 		if (isAdmin()) {
-			user.setUserRole(UserRole.ADMIN.toString());
+			user.setUserRole(UserRoleEnum.ADMIN.toString());
 			user.setPassword(newPassword);
 		} else {
-			user.setUserRole(UserRole.USER.toString());
+			user.setUserRole(UserRoleEnum.USER.toString());
 			user.setServer(server);
 		}		
 		userService.addUser(user);
