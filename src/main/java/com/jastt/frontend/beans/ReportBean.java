@@ -137,6 +137,7 @@ public class ReportBean implements Serializable{
 		issueType = null;
 		status = null;
 		project_id = null;
+		disableMenu = true;
 		
 	}
 	public void cancelAction(){
