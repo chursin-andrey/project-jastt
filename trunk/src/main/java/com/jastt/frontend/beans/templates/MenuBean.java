@@ -1,10 +1,13 @@
 package com.jastt.frontend.beans.templates;
 
 import javax.annotation.PostConstruct;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import com.jastt.business.enums.UserRoleEnum;
 
 
 
@@ -22,7 +25,8 @@ public class MenuBean {
 		if(subject.isAuthenticated()){
 			visibleForAuthenticated = true;
 		}
-		if(subject.hasRole("admin")){
+		String userRole = UserRoleEnum.ADMIN.getMark();
+		if(subject.hasRole(userRole)){
 			visibleForAdmin = true;
 		}
 	}

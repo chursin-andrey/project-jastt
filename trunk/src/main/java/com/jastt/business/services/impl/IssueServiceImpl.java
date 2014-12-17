@@ -30,6 +30,7 @@ import com.jastt.business.services.AssigneeService;
 import com.jastt.business.services.IssueService;
 import com.jastt.business.services.ProjectService;
 import com.jastt.business.services.ServerService;
+import com.jastt.business.services.UserService;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraIssueService;
 import com.jastt.business.services.jira.JiraProjectService;
@@ -149,7 +150,7 @@ public class IssueServiceImpl implements IssueService, Serializable {
 	}
 
 	@Override
-	public void update(User user) throws JiraClientException {
+	public void update(User user) throws JiraClientException {	
 		try{
 			Set<Project> projects_set = jiraProjectService.getAllProjects(user);
 			List<Project> projects = new ArrayList<Project>(projects_set);
@@ -164,7 +165,7 @@ public class IssueServiceImpl implements IssueService, Serializable {
 				Project p = projectService.getProjectByName(project.getName());	
 				
 				if(p == null){					
-					//if project  does not exist in the database		
+					//if project  does not exist in a database		
 					String url = user.getServer().getUrl();
 					Server server = serverService.getServerByUrl(url);
 					project.setServer(server);
@@ -174,7 +175,7 @@ public class IssueServiceImpl implements IssueService, Serializable {
 					 saveIssues(issuesSet);
 					
 				}else{			
-					//if project already exist in the database				
+					//if project already exist in a database				
 					Issue latestIssue = issueDataProvider.getLatestIssue(p);
 													
 					if(latestIssue==null){
