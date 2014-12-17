@@ -21,7 +21,7 @@
 		<h:column>
 	
 		<h:outputLabel value="Project:" ><br /><br />
-			<h:selectOneMenu value="#{reportBean.project_name}" style="width:200px;">
+			<h:selectOneMenu id="project" value="#{reportBean.project_name}" style="width:200px;">
 			    <f:selectItem itemLabel="Please select a project... " noSelectionOption="true" />
    				<f:selectItems var="project" value="#{reportBean.projects}" itemValue="#{project.name}" itemLabel="#{project.name} " />
    				<f:ajax listener="#{reportBean.changeProject}" render="issue status assignee" />
@@ -55,9 +55,12 @@
 		</h:column>
 		<h:column>
 			<h:outputLabel value="Task:" ><br /><br />
-			<h:selectOneMenu id="issue"  value="#{reportBean.issue_id}" disabled="#{reportBean.disableMenu}" style="width:200px;">
+			<h:selectOneMenu id="issue"  value="#{reportBean.issueType}" disabled="#{reportBean.disableMenu}" style="width:200px;">
 				<f:selectItem itemLabel="Please select a task... " noSelectionOption="true" />
-   				<f:selectItems var="issue" value="#{reportBean.issues}" itemValue="#{issue.id}" itemLabel="#{issue.key}" />
+   				<f:selectItem itemValue="Bug" itemLabel="Bug" />
+   				<f:selectItem itemValue="Bug" itemLabel="Improvement" />
+   				<f:selectItem itemValue="Bug" itemLabel="New feature" />
+   				<f:selectItem itemValue="Bug" itemLabel="Task" />
 			<f:ajax listener="#{reportBean.changeIssue}" render="assignee" />
 			</h:selectOneMenu>
 			</h:outputLabel>
@@ -65,8 +68,11 @@
 			<h:outputLabel value="Status:" ><br /><br />
 				<h:selectOneMenu id="status"  value="#{reportBean.status}" onchange="submit" immediate="true" disabled="#{reportBean.disableMenu}" style="width:200px;">
 					<f:selectItem itemLabel="Please select a status... " noSelectionOption="true" />
-					<f:selectItem itemValue="0" itemLabel="Open" />
-					<f:selectItem itemValue="1" itemLabel="Resolved" />
+					<f:selectItem itemValue="Open" itemLabel="Open" />
+					<f:selectItem itemValue="In progress" itemLabel="In progress" />
+					<f:selectItem itemValue="Resolved" itemLabel="Resolved" />
+					<f:selectItem itemValue="Reopened" itemLabel="Reopened" />
+					<f:selectItem itemValue="Closed" itemLabel="Closed" />
 				</h:selectOneMenu>
 			</h:outputLabel> <br /><br /><br />
 		</h:column>
@@ -80,16 +86,14 @@
 		</h:outputLabel>
 		<br /><br />
 		<h:outputLabel value="Members:" ><br /><br />
-			<h:selectOneMenu id="assignees"  value="#{reportBean.project_id}" disabled="#{reportBean.disableMenu}" style="width:200px;">
-   				<f:selectItems itemValue="2" itemLabel=" " />
-			</h:selectOneMenu>
+
 		</h:outputLabel> <br /><br /><br />
 		</h:column>
 		<h:column>
 		<br />
 			<h:commandButton value="Add" action="result" style="width:150px;"/>
 			<br /><br /><br /><br />
-			<h:commandButton value="Clear" action="result" style="width:150px;"/>
+			<h:commandButton value="Clear" update="project issue status assignee" action="#{reportBean.clearReport()}" style="width:150px;"/>
 			<br /><br />
 		</h:column>
 	</h:panelGrid>
@@ -101,14 +105,14 @@
 
 	<h:panelGrid columns="3" width="400"  cellspacing="20">
 	<h:commandButton value="Show" update="Report Details" action="#{reportBean.showReport()}" style="width:100px;"/>
-	<h:commandButton value="Cancel" action="cancel" style="width:100px;"/>
-	<h:commandButton value="Update" action="update" style="width:100px;"/>
+	<h:commandButton value="Cancel" action="#{reportBean.cancelAction()}" style="width:100px;"/>
+	<h:commandButton value="Update" action="#{reportBean.updateData()}" style="width:100px;"/>
 	</h:panelGrid>
 	
 	
 		<p:tabView activeIndex="0">
 			<p:tab title="Details">
-					<p:dataTable var="details" value="#{reportBean.issues}" id="Details" lazy="true">
+					<p:dataTable var="details" value="#{reportBean.reportIssues}" id="Details" lazy="true">
 						<f:facet name="header">Total Elapsed Time              
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
@@ -128,7 +132,7 @@
 							<h:outputText  value="#{details.project.name}"  />
 						</p:column>
 						<p:column headerText="Task">
-							<h:outputText  value="#{details.key}"  />
+							<h:outputText  value="#{details.issueType}"  />
 						</p:column>
 						<p:column headerText="Status">
 						 <h:outputText  value="#{details.status}"  />
@@ -142,7 +146,7 @@
 					</p:dataTable>
 			</p:tab>
         	<p:tab title="Report">   
-					<p:dataTable var="report" value="#{reportBean.issues}" id="Report" lazy="true">
+					<p:dataTable var="report" value="#{reportBean.reportIssues}" id="Report" lazy="true">
 						<f:facet name="header">Total Elapsed Time              
                 			<p:column datasource="Report" trigger="toggler"/>
                				<p:outputPanel>
@@ -159,7 +163,7 @@
 							<h:outputText  value="#{report.project.name}"  />
                			 </p:column>
 						<p:column headerText="Task">
-							<h:outputText  value="#{report.key}"  />
+							<h:outputText  value="#{report.issueType}"  />
 						</p:column>
 						<p:column headerText="Hours">
 							<h:outputText  value="#{report.timeSpent}"  />

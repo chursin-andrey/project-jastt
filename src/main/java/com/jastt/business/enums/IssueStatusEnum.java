@@ -34,4 +34,13 @@ public enum IssueStatusEnum {
 	private IssueStatusEnum(String description) {
 		this.description = description;
 	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 }
