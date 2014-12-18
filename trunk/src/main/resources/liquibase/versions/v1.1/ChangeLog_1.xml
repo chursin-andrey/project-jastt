@@ -117,8 +117,8 @@
 				<column name="priority" type="varchar(50)"> 
 					<constraints nullable="true"/> 
 				</column>
-				<column name="summary" type="varchar(50)"> 
-					<constraints nullable="false"/> 
+				<column name="summary" type="varchar(1024)"> 
+					<constraints nullable="true"/> 
 				</column>				
 				<column name="time_spent" type="integer(100)"> 
 					<constraints nullable="false"/> 

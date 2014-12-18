@@ -157,7 +157,7 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 		this.priority = priority;
 	}
 
-	@Column(name = "SUMMARY", nullable = false, length = 50)
+	@Column(name = "SUMMARY",  length = 1024)
 	public String getSummary() {
 		return this.summary;
 	}
