@@ -56,18 +56,18 @@
 		<h:column>
 			<h:outputLabel value="Task:" ><br /><br />
 			<h:selectOneMenu id="issue"  value="#{reportBean.issueType}" disabled="#{reportBean.disableMenu}" style="width:200px;">
-				<f:selectItem itemLabel="Please select a task... " noSelectionOption="true" />
+				<f:selectItem itemLabel="All " noSelectionOption="true" />
    				<f:selectItem itemValue="Bug" itemLabel="Bug" />
-   				<f:selectItem itemValue="Bug" itemLabel="Improvement" />
-   				<f:selectItem itemValue="Bug" itemLabel="New feature" />
-   				<f:selectItem itemValue="Bug" itemLabel="Task" />
+   				<f:selectItem itemValue="Improvement" itemLabel="Improvement" />
+   				<f:selectItem itemValue="New feature" itemLabel="New feature" />
+   				<f:selectItem itemValue="Task" itemLabel="Task" />
 			<f:ajax listener="#{reportBean.changeIssue}" render="assignee" />
 			</h:selectOneMenu>
 			</h:outputLabel>
 			<br /><br />
 			<h:outputLabel value="Status:" ><br /><br />
 				<h:selectOneMenu id="status"  value="#{reportBean.status}" onchange="submit" immediate="true" disabled="#{reportBean.disableMenu}" style="width:200px;">
-					<f:selectItem itemLabel="Please select a status... " noSelectionOption="true" />
+					<f:selectItem itemLabel="All " noSelectionOption="true" />
 					<f:selectItem itemValue="Open" itemLabel="Open" />
 					<f:selectItem itemValue="In progress" itemLabel="In progress" />
 					<f:selectItem itemValue="Resolved" itemLabel="Resolved" />
@@ -79,7 +79,7 @@
 		<h:column>
 		<h:outputLabel value="Member:" ><br /><br />
 			<h:selectOneMenu id="assignee"  value="#{reportBean.project_id}" disabled="#{reportBean.disableMenu}" converter="javax.faces.Integer" style="width:200px;">
-				<f:selectItem itemLabel="Please select a member... " noSelectionOption="true" />
+				<f:selectItem itemLabel="All " noSelectionOption="true" />
    				<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.id} " itemLabel="#{assignee.name} " />
    				<f:ajax listener="#{reportBean.changeAssignee}" render="issue" />
 			</h:selectOneMenu>
