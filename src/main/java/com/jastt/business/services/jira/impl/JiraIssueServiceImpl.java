@@ -14,7 +14,7 @@ import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraIssueService;
 import com.jastt.business.services.jira.impl.client.JiraClient;
 
-@Service("jiraIssueService")
+//@Service("jiraIssueService")
 public class JiraIssueServiceImpl implements JiraIssueService {
 	
 	@Override

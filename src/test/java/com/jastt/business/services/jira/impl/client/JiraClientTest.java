@@ -53,7 +53,7 @@ public class JiraClientTest {
 	}
 	
 	@Test
-	public void getAllProjects_MandatoryFieldsAreNotNull() throws JiraClientException {
+	public void getAllProjects() throws JiraClientException {
 		Set<BasicProject> projectSet = jc.getAllProjects();
 		
 		LOG.info(String.format("Found %d projects on current JIRA server", projectSet.size()));
