@@ -74,6 +74,12 @@ public class IssueServiceImpl implements IssueService, Serializable {
 	}
 	
 	@Override
+	public List<Issue> getIssuesByProject(Project project) {
+		List<Issue> issues = issueDataProvider.getIssuesByProject(project);	
+		return issues;		
+	}
+	
+	@Override
 	public List<Issue> getIssues(Project project, IssueStatusEnum status, Assignee assignee,
 			IssueTypeEnum issueType, Date fromDate, Date toDate) {
 		

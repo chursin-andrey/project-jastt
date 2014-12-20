@@ -9,7 +9,7 @@
 				<column name="id" autoIncrement="true" type="int"> 
 					<constraints primaryKey="true" primaryKeyName="PK_server"/> 
 				</column>
-				<column name="url" type="varchar(100)"> 
+				<column name="url" type="varchar(200)"> 
 					<constraints unique="true" uniqueConstraintName="UQ_server_url" nullable="false"/> 
 				</column>
 			</createTable>
@@ -20,16 +20,16 @@
 				<column name="id" autoIncrement="true" type="int">
 					<constraints primaryKey="true" primaryKeyName="PK_user"/>
 				</column>
-				<column name="login" type="varchar(20)"> 
+				<column name="login" type="varchar(100)"> 
 					<constraints unique="true" uniqueConstraintName="UQ_user_login" nullable="false"/> 
 				</column>
-				<column name="name" type="varchar(50)">
+				<column name="name" type="varchar(100)">
 					<constraints unique="false" uniqueConstraintName="UQ_user_login" nullable="true"/> 
 				</column>
-				<column name="password" type="varchar(20)"> 
+				<column name="password" type="varchar(100)"> 
 					<constraints unique="false" uniqueConstraintName="UQ_user_password" nullable="true"/> 
 				</column>
-				<column name="email" type="varchar(30)"> 
+				<column name="email" type="varchar(100)"> 
 					<constraints unique="false" uniqueConstraintName="UQ_user_email" nullable="true"/> 
 				</column>
 				<column name="user_role" defaultValue="user" type="varchar(20)"> 
@@ -47,10 +47,10 @@
 				<column name="id" autoIncrement="true" type="int"> 
 					<constraints primaryKey="true" primaryKeyName="PK_project"/> 
 				</column> 
-				<column name="key" type="varchar(20)"> 
+				<column name="key" type="varchar(100)"> 
 					<constraints nullable="false"/> 
 				</column> 			
-				<column name="name" type="varchar(20)"> 
+				<column name="name" type="varchar(100)"> 
 					<constraints unique="true" uniqueConstraintName="UQ_project_name" nullable="false"/> 
 				</column>
 				<column name="server_id" type="integer(100)"> 
@@ -85,10 +85,10 @@
 				<column name="id" autoIncrement="true" type="int">
 					<constraints primaryKey="true" primaryKeyName="PK_assignee"/>
 				</column>
-				<column name="name" type="varchar(30)"> 
+				<column name="name" type="varchar(100)"> 
 					<constraints nullable="false"/> 
 				</column>
-				<column name="email" type="varchar(30)"> 
+				<column name="email" type="varchar(100)"> 
 					<constraints unique="true" uniqueConstraintName="UQ_assignee_email" nullable="false"/> 
 				</column>
 			</createTable>
@@ -99,7 +99,7 @@
 				<column name="id" autoIncrement="true" type="int">
 					<constraints primaryKey="true" primaryKeyName="PK_issue"/>
 				</column>
-				<column name="key" type="varchar(20)"> 
+				<column name="key" type="varchar(100)"> 
 					<constraints nullable="false"/> 
 				</column>
 				<column name="issue_type" type="varchar(20)"> 
@@ -123,7 +123,7 @@
 				<column name="time_spent" type="integer(100)"> 
 					<constraints nullable="false"/> 
 				</column>
-				<column name="version" type="varchar(10)"> 
+				<column name="version" type="varchar(20)"> 
 					<constraints nullable="true"/> 
 				</column>
 				<column name="project_id" type="integer(100)"> 

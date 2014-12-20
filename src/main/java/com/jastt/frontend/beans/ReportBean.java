@@ -40,7 +40,7 @@ public class ReportBean implements Serializable{
 	
 	private List<Issue> issues;
 	private List<Project> projects;
-	private List<Assignee> assignees;
+	private Set<Assignee> assignees;
 	private String issueType;
 	private Integer project_id;
 	private String project_name;
@@ -85,7 +85,7 @@ public class ReportBean implements Serializable{
 		if(project != null) {
 			disableMenu = false; 
 			//issues = issueService.getIssues(project, null, null, null, null, null);
-			assignees = assigneeService.getAllAssignees();
+			assignees = assigneeService.getAssigneesByProject(project);
 		} else disableMenu = true;
 		
 	}
@@ -235,14 +235,13 @@ public class ReportBean implements Serializable{
 		this.projects = projects;
 	}
 	
-	public List<Assignee> getAssignees() {
+	public Set<Assignee> getAssignees() {
 		return assignees;
 	}
 
-	public void setAssignees(List<Assignee> assignees) {
+	public void setAssignees(Set<Assignee> assignees) {
 		this.assignees = assignees;
 	}
-
 
 	public Integer getProject_id() {
 		return project_id;

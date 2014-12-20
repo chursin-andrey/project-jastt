@@ -18,7 +18,7 @@ public interface IssueDataProvider extends PageableDataProvider<IssueEntity, Iss
 
 	public Issue getIssueByKey(String key);
 	public Issue getIssueByStatus(String status);
-	public Issue getIssueByProject(Project project);
+	public List<Issue> getIssuesByProject(Project project);
 	
 	public Issue getLatestIssue();
 	

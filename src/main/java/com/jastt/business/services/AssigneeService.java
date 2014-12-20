@@ -8,8 +8,8 @@ import java.util.*;
 
 public interface AssigneeService {
 	public Assignee getAssigneeById(Integer id);
-	public List<Assignee> getAllAssignees();
-	public List<Assignee> getAssigneesByProject(Project project);
+	public Set<Assignee> getAllAssignees();
+	public Set<Assignee> getAssigneesByProject(Project project);
 	public Assignee getAssigneeByName(String name);
 	public void addAssignee(Assignee assignee);
 }

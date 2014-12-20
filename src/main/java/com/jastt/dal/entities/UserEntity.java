@@ -68,7 +68,7 @@ public class UserEntity extends GenericDalEntity<Integer> implements java.io.Ser
 		this.serverEntity = serverEntity;
 	}
 
-	@Column(name = "LOGIN", unique = true, nullable = false, length = 20)
+	@Column(name = "LOGIN", unique = true, nullable = false, length = 100)
 	public String getLogin() {
 		return this.login;
 	}
@@ -77,7 +77,7 @@ public class UserEntity extends GenericDalEntity<Integer> implements java.io.Ser
 		this.login = login;
 	}
 
-	@Column(name = "NAME", length = 50)
+	@Column(name = "NAME", length = 100)
 	public String getName() {
 		return this.name;
 	}
@@ -86,7 +86,7 @@ public class UserEntity extends GenericDalEntity<Integer> implements java.io.Ser
 		this.name = name;
 	}
 
-	@Column(name = "PASSWORD", length = 20)
+	@Column(name = "PASSWORD", length = 100)
 	public String getPassword() {
 		return this.password;
 	}
@@ -95,7 +95,7 @@ public class UserEntity extends GenericDalEntity<Integer> implements java.io.Ser
 		this.password = password;
 	}
 
-	@Column(name = "EMAIL", length = 30)
+	@Column(name = "EMAIL", length = 100)
 	public String getEmail() {
 		return this.email;
 	}
