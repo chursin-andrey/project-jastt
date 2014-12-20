@@ -10,6 +10,11 @@ public class JiraClientException extends IOException {
 
 	private Integer statusCode;
 	
+	public JiraClientException(String errorMessage, int statusCode) {
+		super(errorMessage);
+		this.statusCode = statusCode;
+	}
+	
 	public JiraClientException(Throwable cause) {
 		super(cause);
 	}
