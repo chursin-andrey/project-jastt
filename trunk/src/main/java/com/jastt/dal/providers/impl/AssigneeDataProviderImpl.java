@@ -1,8 +1,10 @@
 package com.jastt.dal.providers.impl;
 
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -31,9 +33,9 @@ public class AssigneeDataProviderImpl extends BaseDataProviderImpl<AssigneeEntit
 
 	@Transactional
 	@Override
-	public List<Assignee> getAssigneesByProject(Project project) {
+	public Set<Assignee> getAssigneesByProject(Project project) {
 		Session session = sessionFactory.getCurrentSession();
-		List<Assignee> resultList = new ArrayList<>();
+		Set<Assignee> resultList = new HashSet<>();
 		List<AssigneeEntity> entityList = new ArrayList<>();
 		try{
 			

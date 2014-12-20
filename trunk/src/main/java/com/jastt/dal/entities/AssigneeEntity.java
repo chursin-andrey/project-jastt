@@ -44,7 +44,7 @@ public class AssigneeEntity extends GenericDalEntity<Integer> implements java.io
 	}
 
 
-	@Column(name = "NAME", nullable = false, length = 30)
+	@Column(name = "NAME", nullable = false, length = 100)
 	public String getName() {
 		return this.name;
 	}
@@ -53,7 +53,7 @@ public class AssigneeEntity extends GenericDalEntity<Integer> implements java.io
 		this.name = name;
 	}
 
-	@Column(name = "EMAIL", unique = true, nullable = false, length = 30)
+	@Column(name = "EMAIL", unique = true, nullable = false, length = 100)
 	public String getEmail() {
 		return this.email;
 	}

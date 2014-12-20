@@ -2,6 +2,7 @@ package com.jastt.dal.providers;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.joda.time.DateTime;
@@ -20,6 +21,7 @@ import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
+import com.jastt.business.services.AssigneeService;
 import com.jastt.dal.entities.UserEntity;
 import com.jastt.dal.exceptions.DaoException;
 import com.jastt.dal.providers.pagination.LoadOptions;
@@ -41,6 +43,8 @@ public class UsersDataProviderTest {
 	private ProjectDataProvider projectDataProvider;
 	@Autowired
 	private AssigneeDataProvider assigneeDataProvider;
+	@Autowired
+	private AssigneeService assigneeService;
 
 	
 
@@ -83,9 +87,13 @@ public class UsersDataProviderTest {
 
 	@Test
 	public void getUsers_TwoUsersInDatabase_AllLoadedSuccessfully() {
-		Project project = projectDataProvider.getProjectByName("project_name");
-		Issue issue = issueDataProvider.getLatestIssue(project);
-		System.out.println("Latest Issue key " + issue.getKey());
+		Project project = projectDataProvider.getProjectByName("demo pro");
+		Set<Assignee> assignees = assigneeService.getAssigneesByProject(project);
+		for(Assignee asg : assignees) {
+			System.out.println("Assignee printed>> " + asg.getName());
+		}
+		//Issue issue = issueDataProvider.getLatestIssue(project);
+		//System.out.println("Latest Issue key " + issue.getKey());
 	}
 	
 	@Test

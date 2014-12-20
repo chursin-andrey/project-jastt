@@ -40,7 +40,7 @@ public class ServerEntity extends GenericDalEntity<Integer> implements java.io.S
 	}
 
 
-	@Column(name = "URL", unique = true, nullable = false, length = 100)
+	@Column(name = "URL", unique = true, nullable = false, length = 200)
 	public String getUrl() {
 		return this.url;
 	}

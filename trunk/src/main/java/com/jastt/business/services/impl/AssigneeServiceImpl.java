@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jastt.business.services.AssigneeService;
+import com.jastt.business.services.IssueService;
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
@@ -14,7 +15,10 @@ import com.jastt.dal.entities.IssueEntity;
 import com.jastt.dal.providers.AssigneeDataProvider;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AssigneeServiceImpl implements AssigneeService, Serializable {
@@ -24,6 +28,8 @@ public class AssigneeServiceImpl implements AssigneeService, Serializable {
 	
 	@Autowired
 	private AssigneeDataProvider assigneeDataProvider;
+	@Autowired
+	private IssueService issueService;
 	
 	@Override
 	public Assignee getAssigneeById(Integer id){
@@ -31,14 +37,20 @@ public class AssigneeServiceImpl implements AssigneeService, Serializable {
 	}
 	
 	@Override
-	public List<Assignee> getAllAssignees() {
-		List<Assignee>  assignees = assigneeDataProvider.findAll(AssigneeEntity.class, Assignee.class);	
+	public Set<Assignee> getAllAssignees() {
+		Set<Assignee> assignees = new HashSet<Assignee> (assigneeDataProvider.findAll(AssigneeEntity.class, Assignee.class));	
 		return  assignees;		
 	}
 	
 	@Override
-	public List<Assignee> getAssigneesByProject(Project project) {
-		return assigneeDataProvider.getAssigneesByProject(project);
+	public Set<Assignee> getAssigneesByProject(Project project) { 
+		Set<Assignee> assignees = new HashSet<Assignee>();
+		List<Issue> issues = issueService.getIssuesByProject(project);
+		if(project != null)
+		for(Issue issList : issues) {
+			assignees.add(issList.getAssignee());
+		}
+		return assignees;
 	}
 
 	@Override

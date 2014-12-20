@@ -72,7 +72,7 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 		this.timeSpent = timeSpent;
 	}
 
-	@Column(name = "VERSION", length = 10)
+	@Column(name = "VERSION", length = 20)
 	public String getVersion() {
 		return this.version;
 	}
@@ -101,7 +101,7 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 		this.projectEntity = projectEntity;
 	}
 
-	@Column(name = "KEY", nullable = false, length = 20)
+	@Column(name = "KEY", nullable = false, length = 100)
 	public String getKey() {
 		return this.key;
 	}

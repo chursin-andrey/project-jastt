@@ -62,7 +62,7 @@ public class ProjectEntity extends GenericDalEntity<Integer> implements java.io.
 		this.serverEntity = serverEntity;
 	}
 
-	@Column(name = "KEY", nullable = false, length = 20)
+	@Column(name = "KEY", nullable = false, length = 100)
 	public String getKey() {
 		return this.key;
 	}
@@ -71,7 +71,7 @@ public class ProjectEntity extends GenericDalEntity<Integer> implements java.io.
 		this.key = key;
 	}
 
-	@Column(name = "NAME", unique = true, nullable = false, length = 20)
+	@Column(name = "NAME", unique = true, nullable = false, length = 100)
 	public String getName() {
 		return this.name;
 	}

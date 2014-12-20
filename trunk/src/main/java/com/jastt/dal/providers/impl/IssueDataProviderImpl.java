@@ -77,24 +77,25 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 	
 	@Transactional
 	@Override
-	public Issue getIssueByProject(Project project) {
+	public List<Issue> getIssuesByProject(Project project) {
 		Session session = sessionFactory.getCurrentSession();
 
-		Issue iss = null;
-
-		try {
-			Criteria criteria = session.createCriteria(IssueEntity.class);
-			criteria.add(Restrictions.eq("project", project));
-
-			IssueEntity dataEntity = (IssueEntity) criteria.uniqueResult();
-			if (dataEntity != null) {
-				iss = mappingService.map(dataEntity, Issue.class);
+		List<Issue> resultList = new ArrayList<>();
+		List<IssueEntity> entityList = new ArrayList<>();
+		try{
+			Criteria isuCriteria = session.createCriteria(IssueEntity.class);
+			if(project != null) isuCriteria.add(Restrictions.eq("projectEntity.id", project.getId() ) );
+		
+			entityList = isuCriteria.list();
+			for (IssueEntity is : entityList) {
+				Issue isue = mappingService.map(is, Issue.class);
+				resultList.add(isue);
 			}
 		} catch (Exception ex) {
 			LOG.error(String.format("Error loading Issue by project=%s", project), ex);
 		}
 
-		return iss;
+		return resultList;
 	}
 	
 
