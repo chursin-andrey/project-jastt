@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
+import com.jastt.business.domain.entities.Permission;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
@@ -28,6 +29,7 @@ import com.jastt.business.enums.IssueTypeEnum;
 import com.jastt.business.enums.PredefinedDateEnum;
 import com.jastt.business.services.AssigneeService;
 import com.jastt.business.services.IssueService;
+import com.jastt.business.services.PermissionService;
 import com.jastt.business.services.ProjectService;
 import com.jastt.business.services.ServerService;
 import com.jastt.business.services.UserService;
@@ -47,8 +49,7 @@ public class IssueServiceImpl implements IssueService, Serializable {
 	
 	private static final long serialVersionUID = 2430454333364991862L;
 	private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
-	
-	
+		
 	@Autowired
 	private IssueDataProvider issueDataProvider;
 	@Autowired
@@ -61,6 +62,9 @@ public class IssueServiceImpl implements IssueService, Serializable {
 	private ServerService serverService;
 	@Autowired
 	private AssigneeService assigneeService; 
+	@Autowired
+	private PermissionService permissionService;
+	
 	
 	@Override
 	public Issue getIssueById(Integer id){
@@ -165,45 +169,56 @@ public class IssueServiceImpl implements IssueService, Serializable {
 				logger.info("User "+user.getLogin()+" has none of projects.");
 				return;	
 			}
+			
 					
-			for(Project project : projects){
-					
-				Project p = projectService.getProjectByName(project.getName());	
+			for(Project projectFromJira : projects){
+		
+				Project project = projectService.getProjectByName(projectFromJira.getName());		
 				
-				if(p == null){					
-					//if project  does not exist in a database		
-					String url = user.getServer().getUrl();
-					Server server = serverService.getServerByUrl(url);
-					project.setServer(server);
-					 projectService.addProject(project);
+				if(project == null){				
+				/* if project  does not exist in a database	*/
+											
+					projectFromJira.setServer(user.getServer());
+					projectService.addProject(projectFromJira);
 					
-					 Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, project);
-					 saveIssues(issuesSet);
-					
+					project = projectService.getProjectByName(projectFromJira.getName());
+					Permission permission = permissionService.getPermission(user, project);
+					if(permission == null){
+						permissionService.addPermission(user, project);
+					}
+						
+					Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, project); 			
+					saveIssues(issuesSet);
+						
 				}else{			
-					//if project already exist in a database				
-					Issue latestIssue = issueDataProvider.getLatestIssue(p);
+				/* if project already exist in a database */
+					
+					Permission permission = permissionService.getPermission(user, project);
+					if(permission == null){
+						permissionService.addPermission(user, project);
+					}
+								
+					Issue latestIssue = issueDataProvider.getLatestIssue(project);
 													
 					if(latestIssue==null){
 			
-						Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, project);
+						Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, projectFromJira);
 						saveIssues(issuesSet);
 												
 					}else{	
 									
 						DateTime fromDate = new DateTime(latestIssue.getCreated());	
-						Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, project, fromDate);
+						Set<Issue> issuesSet = jiraIssueService.getAllIssuesForProject(user, projectFromJira, fromDate);
 						saveIssues(issuesSet);									
-					}
-					
+					}				
 				}
-					
+								
 			
 			}
 			
 			
 		} catch(JiraClientException jiraClientException){
-			logger.error("JiraClientException happened during execution of update method. ",jiraClientException.getStatusCode());
+			logger.error("JiraClientException happened during execution of update method. CODE: "+jiraClientException.getStatusCode());
 		}catch(Exception unknownException){
 			logger.error("Unknown exception happened during execution of update method. ",unknownException.getMessage());
 		}
