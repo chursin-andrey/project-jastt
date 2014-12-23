@@ -24,7 +24,7 @@
 		<h:panelGrid columns="2" width="250" cellspacing="0">
 			<h:column style="height:200;">
 				<h:selectOneRadio value="#{reportBean.timespent}" style="height:200;" layout="pageDirection">
-   					<f:selectItem itemValue="allTime" style="margin-bottom:10px;" itemLabel="" /> 
+   					<f:selectItem itemValue="allTime" style="margin-bottom:10px;" itemLabel=""  /> 
    					<f:selectItem itemValue="date" itemLabel="" />
    					<f:ajax listener="#{reportBean.changeTime}" render="issue allTime dateFrom dateTo" />
 				</h:selectOneRadio>
@@ -70,7 +70,7 @@
 		</h:column>
 		<h:column>
 		<h:outputLabel value="Member:" ><br /><br />
-			<h:selectOneMenu id="assignee"  value="#{reportBean.project_id}" disabled="#{reportBean.disableMenu}" converter="javax.faces.Integer" style="width:200px;">
+			<h:selectOneMenu id="assignee"  value="#{reportBean.assignee_id}" disabled="#{reportBean.disableMenu}" converter="javax.faces.Integer" style="width:200px;">
 				<f:selectItem itemLabel="All " noSelectionOption="true" />
    				<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.id} " itemLabel="#{assignee.name} " />
    				<f:ajax listener="#{reportBean.changeAssignee}" render="issue" />
@@ -78,12 +78,15 @@
 		</h:outputLabel>
 		<br /><br />
 		<h:outputLabel value="Members:" ><br /><br />
-
+		  	<p:selectCheckboxMenu id="assignees" value="#{reportBean.assignees_name}" label="Members"
+                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+            	<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.name} " itemLabel="#{assignee.name} " />
+        	</p:selectCheckboxMenu>
 		</h:outputLabel> <br /><br /><br />
 		</h:column>
 		<h:column>
 		<br />
-			<h:commandButton value="Add" action="result" style="width:150px;"/>
+			
 			<br /><br /><br /><br />
 			<h:commandButton value="Clear" update="project issue status assignee" action="#{reportBean.clearReport()}" style="width:150px;"/>
 			<br /><br />
@@ -155,6 +158,9 @@
 							<h:outputText  value="#{report.project.name}"  />
                			 </p:column>
 						<p:column headerText="Task">
+						<p:dataTable var="task" value="#{reportBean.reportIssues}" id="Report" lazy="true">
+						
+						</p:dataTable>
 							<h:outputText  value="#{report.issueType}"  />
 						</p:column>
 						<p:column headerText="Hours">

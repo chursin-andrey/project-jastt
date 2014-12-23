@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Projections;
@@ -187,7 +188,7 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 			Assignee assignee, IssueTypeEnum issueType, Date fromDate,
 			Date toDate) {
 				
-		
+		Assignee ass1 = new Assignee("Bob", "mail");
 		List<Issue> resultList = new ArrayList<>();
 		List<IssueEntity> entityList = new ArrayList<>();
 		try{
@@ -197,8 +198,11 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 				if(status != null) isuCriteria.add(Restrictions.eq("status", status.getDescription() ) );
 				if(assignee != null) isuCriteria.add(Restrictions.eq("assigneeEntity.id", assignee.getId() ) );
 				if(issueType != null) isuCriteria.add(Restrictions.eq("issueType", issueType.getDescription()) );
-				if(fromDate != null) isuCriteria.add(Restrictions.eq("IssueEntity.created", fromDate ) );
-				if(toDate != null) isuCriteria.add(Restrictions.eq("IssueEntity.updated", toDate ) );
+				if((fromDate != null)&&(toDate != null)) isuCriteria.add(Restrictions.between("updated", fromDate, toDate ) ); 
+				/*Criterion criterion = null;
+				criterion = Restrictions.or( criterion,
+				         Restrictions.eq( "assigneeEntity.id",  assignee.getId() ) );
+				isuCriteria.add(criterion);*/
 					
 			entityList = isuCriteria.list();
 			for (IssueEntity is : entityList) {

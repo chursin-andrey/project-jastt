@@ -2,6 +2,7 @@ package com.jastt.frontend.beans;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -41,10 +42,10 @@ public class ReportBean implements Serializable{
 	private List<Issue> issues;
 	private List<Project> projects;
 	private Set<Assignee> assignees;
+	private List<String> assignees_name;
 	private String issueType;
-	private Integer project_id;
 	private String project_name;
-	private String assignee_id;
+	private Integer assignee_id;
 	private String issue_id;
 	private Project project;
 	private Issue issue;
@@ -73,7 +74,8 @@ public class ReportBean implements Serializable{
 	
 	@PostConstruct
 	public void init() {
-		disableMenu = true; disableSelectTime = true; disableSelectDate = true;
+		disableMenu = true;  disableSelectDate = true;
+		timespent = "allTime";
 		//Server serv = new Server("http://localhost:8083");
 		projects = projectService.getAllProjects();
 
@@ -115,10 +117,17 @@ public class ReportBean implements Serializable{
 		IssueStatusEnum issueStatus = null;
 		if(reportIssues != null) reportIssues.clear();
 
-		if(project_id != null) assignee = assigneeService.getAssigneeById(project_id); else assignee = null;
+		if(assignee_id != null) assignee = assigneeService.getAssigneeById(assignee_id); else assignee = null;
 		if(issueType != null) type = IssueTypeEnum.getType(issueType); 
 		if(status != null) issueStatus = IssueStatusEnum.getType(status); 
-		reportIssues = issueService.getIssues(project, issueStatus, assignee, type, null, null);
+		reportIssues = new ArrayList<Issue>();
+		if(assignees_name.size() != 0) {
+			for(String assign : assignees_name)
+				
+				reportIssues.addAll(issueService.getIssues(project, issueStatus, assigneeService.getAssigneeByName(assign), type, dateFrom, dateTo));
+		} else
+			reportIssues = issueService.getIssues(project, issueStatus, assignee, type, dateFrom, dateTo);
+		
 		
 	}
 	
@@ -136,7 +145,7 @@ public class ReportBean implements Serializable{
 		project_name = null;
 		issueType = null;
 		status = null;
-		project_id = null;
+		assignee_id = null;
 		disableMenu = true;
 		
 	}
@@ -243,14 +252,6 @@ public class ReportBean implements Serializable{
 		this.assignees = assignees;
 	}
 
-	public Integer getProject_id() {
-		return project_id;
-	}
-
-	public void setProject_id(Integer project_id) {
-		this.project_id = project_id;
-	}
-
 	public Project getProject() {
 		return project;
 	}
@@ -276,11 +277,11 @@ public class ReportBean implements Serializable{
 		this.assignee = assignee;
 	}
 
-	public String getAssignee_id() {
+	public Integer getAssignee_id() {
 		return assignee_id;
 	}
 
-	public void setAssignee_id(String assignee_id) {
+	public void setAssignee_id(Integer assignee_id) {
 		this.assignee_id = assignee_id;
 	}
 
@@ -314,6 +315,14 @@ public class ReportBean implements Serializable{
 
 	public void setIssueType(String issueType) {
 		this.issueType = issueType;
+	}
+
+	public List<String> getAssignees_name() {
+		return assignees_name;
+	}
+
+	public void setAssignees_name(List<String> assignees_name) {
+		this.assignees_name = assignees_name;
 	}
 
 
