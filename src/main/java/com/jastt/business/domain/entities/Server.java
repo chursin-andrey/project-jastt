@@ -41,9 +41,9 @@ public class Server extends PersistentEntity<Integer>{
 			return false;
 		Server other = (Server) obj;
 		if (url == null) {
-			if (other.url != null)
+			if (other.getUrl() != null)
 				return false;
-		} else if (!url.equals(other.url))
+		} else if (!url.equals(other.getUrl()))
 			return false;
 		return true;
 	}		

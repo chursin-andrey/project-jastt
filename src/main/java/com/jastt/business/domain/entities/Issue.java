@@ -153,14 +153,14 @@ public class Issue extends PersistentEntity<Integer>{
 			return false;
 		Issue other = (Issue) obj;
 		if (key == null) {
-			if (other.key != null)
+			if (other.getKey() != null)
 				return false;
-		} else if (!key.equals(other.key))
+		} else if (!key.equals(other.getKey()))
 			return false;
 		if (project == null) {
-			if (other.project != null)
+			if (other.getProject() != null)
 				return false;
-		} else if (!project.equals(other.project))
+		} else if (!project.equals(other.getProject()))
 			return false;
 		return true;
 	}

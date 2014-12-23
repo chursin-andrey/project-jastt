@@ -52,14 +52,14 @@ public class Assignee extends PersistentEntity<Integer>{
 			return false;
 		Assignee other = (Assignee) obj;
 		if (email == null) {
-			if (other.email != null)
+			if (other.getEmail() != null)
 				return false;
-		} else if (!email.equals(other.email))
+		} else if (!email.equals(other.getEmail()))
 			return false;
 		if (name == null) {
-			if (other.name != null)
+			if (other.getName() != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equals(other.getName()))
 			return false;
 		return true;
 	}
