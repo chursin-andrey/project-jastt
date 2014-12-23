@@ -63,14 +63,14 @@ public class Project extends PersistentEntity<Integer>{
 			return false;
 		Project other = (Project) obj;
 		if (key == null) {
-			if (other.key != null)
+			if (other.getKey() != null)
 				return false;
-		} else if (!key.equals(other.key))
+		} else if (!key.equals(other.getKey()))
 			return false;
 		if (server == null) {
-			if (other.server != null)
+			if (other.getServer() != null)
 				return false;
-		} else if (!server.equals(other.server))
+		} else if (!server.equals(other.getServer()))
 			return false;
 		return true;
 	}
