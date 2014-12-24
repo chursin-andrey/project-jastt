@@ -25,9 +25,9 @@ import com.jastt.dal.exceptions.DaoException;
 
 @Component(value="userBean")
 @Scope("request")
-public class UserBean {
+public class UserBean implements Serializable {
 	
-	//private static final long serialVersionUID = 2819227216048472445L;
+	private static final long serialVersionUID = 2819227216048472445L;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(UserBean.class);
 	
@@ -41,6 +41,7 @@ public class UserBean {
 	private ServerDataProvider serverDataProvider;
 	
 	private User user;
+	private Server server;
 		
 	private String name;
 	private String login;
@@ -138,15 +139,19 @@ public class UserBean {
     public void init() {
         user = new User();
         user.setServer(null);
-        user.setUserRole("user");
+//        server = new Server();
+//        user.setServer(server);
+//        user.setUserRole("user");
     }
 
     public void addUser() {
-//        if (userRole.equalsIgnoreCase("admin")) {
-//    		user.setUserRole(UserRoleEnum.ADMIN.toString());
-//    	} else {
-//    		user.setUserRole(UserRoleEnum.USER.toString());
-//    	}
+        if (userRole.equalsIgnoreCase("admin")) {
+    		user.setUserRole("admin");
+    	} else {
+    		user.setUserRole("user");
+//    		server = new Server();
+//    		server.setUrl(url);
+    	}
         userService.addUser(user);
         usersBean.updateValues();
     }

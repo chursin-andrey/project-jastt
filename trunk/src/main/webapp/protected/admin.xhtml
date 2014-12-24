@@ -79,25 +79,23 @@
 					<p:outputLabel for="editEmail" value="E-mail:" />
 					<p:inputText id="editEmail" value="#{usersBean.user.email}">
 					</p:inputText>
-			
 					
-					<p:outputLabel id="editLabelPwd1" for="editPwd1" value="Password:" />
-        			<p:password id="editPwd1" value="#{usersBean.user.password}" />
-   					<!--  required="{usersBean.admin}" readonly="{!usersBean.admin}" /> -->
- 					
- 					<!--  <p:outputLabel id="editLabelPwd2" for="editPwd2" value="Password confirmation:" />
-        			<p:password id="editPwd2" value="{usersBean.user.password}" required="{usersBean.admin}" /> 	
-        			readonly="{!usersBean.admin}" />
-        			
 					<p:outputLabel for="editIsAdmin" value="Admin:" />
-        			<p:selectBooleanCheckbox id="editIsAdmin" value="{usersBean.admin}" >
+        			<p:selectBooleanCheckbox id="editIsAdmin" value="#{usersBean.admin}" >
         				<p:ajax update="editLabelUrl, editUrl, editLabelPwd1, editPwd1, editLabelPwd2, editPwd2" />
         			</p:selectBooleanCheckbox>	
         			
         			<p:outputLabel id="editLabelUrl" for="editUrl" value="URL:"/>
-					<p:inputText id="editUrl" value="{usersBean.user.server.url}" required="{!usersBean.admin}"
-						readonly="{usersBean.admin}" />
-					 -->									
+					<p:inputText id="editUrl" value="#{usersBean.user.server.url}" required="#{!usersBean.admin}"
+						readonly="#{usersBean.admin}" />
+			
+					<p:outputLabel id="editLabelPwd1" for="editPwd1" value="Password:" />
+        			<p:password id="editPwd1" value="#{usersBean.user.password}" 
+   						required="#{usersBean.admin}" readonly="#{!usersBean.admin}" />
+ 					
+ 					<p:outputLabel id="editLabelPwd2" for="editPwd2" value="Password confirmation:" />
+        			<p:password id="editPwd2" value="#{usersBean.user.password}" required="#{usersBean.admin}"  	
+        				readonly="#{!usersBean.admin}" />							
 					
 					<p:commandButton value="Apply" action="#{usersBean.saveUser}"
 						update=" :usersForm:usersTable" oncomplete="edit_dialog.hide()"
@@ -125,26 +123,23 @@
 					<p:inputText id="email" value="#{userBean.user.email}">
 					</p:inputText>
 					
-					<p:outputLabel id="lblPwd1" for="pwd1" value="Password:" />
-        			<p:password id="pwd1" value="#{userBean.user.password}" />
-        			<!-- required="{userBean.admin}" readonly="{!userBean.admin}" /> -->
- 					
- 					<!--
-        			<p:outputLabel id="lblPwd2" for="pwd2" value="Password confirmation:" />
-        			<p:password id="pwd2" value="{userBean.user.password}" />
-        			required="{usersBean.admin}" readonly="{!userBean.admin}" /> -->
-        				
-        			<!-- 
 					<p:outputLabel for="isAdmin" value="Admin:" />
-        			<p:selectBooleanCheckbox id="isAdmin" value="{userBean.admin}" >
+        			<p:selectBooleanCheckbox id="isAdmin" value="#{userBean.admin}" >
         				<p:ajax update="lblUrl, url, lblPwd1, pwd1, lblPwd2, pwd2" />
         			</p:selectBooleanCheckbox>	
         			
         			<p:outputLabel id="lblUrl" for="url" value="URL:"/>
-					<p:inputText id="url" value="{userBean.user.server.url}" required="{!userBean.admin}"
-						readonly="{userBean.admin}" />
-					 -->									
+					<p:inputText id="url" value="#{userBean.url}" required="#{!userBean.admin}"
+						readonly="#{userBean.admin}" />
 					
+					<p:outputLabel id="lblPwd1" for="pwd1" value="Password:" />
+        			<p:password id="pwd1" value="#{userBean.user.password}" 
+        				required="#{userBean.admin}" readonly="#{!userBean.admin}" />
+ 					
+ 					<p:outputLabel id="lblPwd2" for="pwd2" value="Password confirmation:" />
+        			<p:password id="pwd2" value="#{userBean.user.password}" 
+        				required="#{userBean.admin}" readonly="#{!usersBean.admin}" />
+        													
 					<p:commandButton value="Save" action="#{userBean.addUser}"
 						update=":addForm :usersForm:usersTable" oncomplete="add_dialog.hide()"
 						icon="ui-icon-check">
