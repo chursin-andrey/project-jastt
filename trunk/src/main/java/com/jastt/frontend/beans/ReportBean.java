@@ -152,8 +152,17 @@ public class ReportBean implements Serializable{
 	public void cancelAction(){
 		reportIssues.clear();
 	}
+	
 	public void exportToPDF(ActionEvent actionEvent) throws JRException, IOException {
-			reportingService.exportToPdf(issues);
+			reportingService.exportToPdf(reportIssues);
+	}
+	
+	public void exportToXlsx(ActionEvent actionEvent) throws JRException, IOException {
+		reportingService.exportToXlsx(reportIssues);
+	}
+	
+	public void exportToXls(ActionEvent actionEvent) throws JRException, IOException {
+		reportingService.exportToXls(reportIssues);
 	}
 
 	public String getStatus() {
