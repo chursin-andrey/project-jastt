@@ -119,4 +119,47 @@
 			<column name="assignee_id">2</column>
 		</insert>
 	</changeSet>
+	
+	<changeSet id="update-admin-record" author="chursin"
+		context="v1.0,test">
+		<update catalogName="public"
+			schemaName="public"
+			tableName="user_">
+			<column name="name" value="Admin" />
+			<where>login LIKE 'admin'</where>
+		</update>
+		
+	</changeSet>
+	
+	<changeSet id="delete-rows-with-cyrillic-symbols" author="chursin"
+		context="v1.0,test">
+		<delete catalogName="public"
+			schemaName="public"
+			tableName="user_">
+			<where>id in(2,3)</where>
+		</delete>
+	</changeSet>
+	
+	<changeSet id="jira-stub-server" author="chursin"
+		context="v1.0,test">
+		<insert	catalogName="public"
+			schemaName="public"
+			tableName="server">
+			<column name="id" value="3" />
+			<column name="url" value="https://alpha.com" />
+		</insert>
+	</changeSet>
+	
+	<changeSet id="jira-stub-user" author="chursin"
+		context="v1.0,test">
+		<insert catalogName="public"
+			schemaName="public" 
+			tableName="user_">
+			<column name="login" value="pojo"/>
+			<column name="password" value="123"/>
+			<column name="server_id" value="3"></column>
+		</insert>
+	</changeSet>
+	
+	
 </databaseChangeLog>
