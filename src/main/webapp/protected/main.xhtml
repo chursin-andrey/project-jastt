@@ -168,7 +168,12 @@
 						</p:column>
 					</p:dataTable>
 					<br/>
-					<h:commandButton value="Export to PDF" actionListener="#{reportBean.exportToPDF}" />
+					
+					<h:panelGrid columns="3" width="250">
+					<h:commandButton value="Export to PDF" actionListener="#{reportBean.exportToPDF}"/>
+					<h:commandButton value="Export to Xls" actionListener="#{reportBean.exportToXls}"/>
+					<h:commandButton value="Export to Xlsx" actionListener="#{reportBean.exportToXlsx}"/>
+					</h:panelGrid>
         	</p:tab>
     	</p:tabView>    		
 </h:form>

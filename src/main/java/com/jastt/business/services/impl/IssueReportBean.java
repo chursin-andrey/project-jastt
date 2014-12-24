@@ -5,7 +5,7 @@ import com.jastt.business.domain.entities.Issue;
 public class IssueReportBean {
 	private String assigneeName;
 	private String projectName;
-	private String issueKey;
+	private String issueType;
 	private int issueTimeSpent;
 
 	public IssueReportBean() {
@@ -15,7 +15,7 @@ public class IssueReportBean {
 	public IssueReportBean(Issue issue) {
 		this.assigneeName = issue.getAssignee().getName();
 		this.projectName = issue.getProject().getName();
-		this.issueKey = issue.getKey();
+		this.issueType = issue.getIssueType();
 		this.issueTimeSpent = issue.getTimeSpent();
 	}
 
@@ -35,12 +35,12 @@ public class IssueReportBean {
 		this.projectName = projectName;
 	}
 
-	public String getIssueKey() {
-		return issueKey;
+	public String getIssueType() {
+		return issueType;
 	}
 
-	public void setIssueKey(String issueKey) {
-		this.issueKey = issueKey;
+	public void setIssueType(String issueType) {
+		this.issueType = issueType;
 	}
 
 	public int getIssueTimeSpent() {
