@@ -20,10 +20,10 @@ import com.jastt.business.services.UserService;
 import com.jastt.frontend.beans.LoginBean;
 
 @Component(value="usersBean")
-@Scope("request")
-public class UsersBean  {
+@Scope("session")
+public class UsersBean implements Serializable {
 	
-	//private static final long serialVersionUID = 2092800049856823809L;
+	private static final long serialVersionUID = 2092800049856823809L;
 
 	private static final Logger LOG = LoggerFactory.getLogger(UsersBean.class);
 	
@@ -76,20 +76,18 @@ public class UsersBean  {
 	}
 
     public void editUser(User user) {
-    	this.user = user;
-//        if (user.getUserRole().equalsIgnoreCase("admin")) {
-//        	setAdmin(true);
-//        	this.user.setUserRole(UserRoleEnum.ADMIN.toString());
-//        	setPassword(password);
-//        	setUserRole(UserRoleEnum.ADMIN.toString());
-//        } else {
-//        	setAdmin(false);
-//        	this.user.setUserRole(UserRoleEnum.USER.toString());
-//        	setUserRole(UserRoleEnum.USER.toString());
-//        }  
+    	this.user = user;  
     }
        
     public void saveUser() {
+        if (isAdmin()) {
+        	this.user.setUserRole("admin");
+        	setPassword(password);
+        	setUserRole("admin");
+        } else {
+        	this.user.setUserRole("user");
+        	setUserRole("user");
+        }
         userService.updateUser(user);
         updateValues();
     }
