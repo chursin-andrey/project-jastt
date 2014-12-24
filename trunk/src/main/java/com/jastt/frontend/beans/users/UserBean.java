@@ -25,11 +25,14 @@ import com.jastt.dal.exceptions.DaoException;
 
 @Component(value="userBean")
 @Scope("request")
-public class UserBean implements Serializable {
+public class UserBean {
 	
-	private static final long serialVersionUID = 2819227216048472445L;
+	//private static final long serialVersionUID = 2819227216048472445L;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(UserBean.class);
+	
+	@Autowired
+	private UsersBean usersBean;
 	
 	@Autowired
 	private UserService userService;
@@ -37,18 +40,26 @@ public class UserBean implements Serializable {
 	@Autowired
 	private ServerDataProvider serverDataProvider;
 	
-	@Autowired
-	private LoginBean loginBean;
-	
+	private User user;
+		
 	private String name;
 	private String login;
 	private String email;
 	private String url;
 	private String oldPassword;
 	private String newPassword;
+	private String password;	
 	private String userRole;
-	private boolean admin = false;
+	private boolean admin;
 	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public boolean isAdmin() {
 		return admin;
 	}
@@ -56,10 +67,6 @@ public class UserBean implements Serializable {
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
 	}
-
-	private List<User> users;
-	private User user;
-	private Server server;
 	
 	
 	public String getUserRole() {
@@ -117,79 +124,30 @@ public class UserBean implements Serializable {
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
 	}
+	
+    public User getUser() {
+        return user;
+    }
 
-	public void deleteUser(String login){
-		userService.deleteUser(login);
-		try{
-			FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
-		}catch(Exception e){
-			LOG.error(e.getMessage());
-		}
-	}
-	
-	public void loadFields(String login) {
-		user = userService.getUserByLogin(login);
-		name = user.getName();
-		this.login = user.getLogin();
-		email = user.getEmail();
-		if (user.getUserRole().equalsIgnoreCase("admin")) {
-			userRole = UserRoleEnum.ADMIN.toString();
-			admin = true;
-		}
-		else {
-			userRole = UserRoleEnum.USER.toString();
-			admin = false;
-			//url = user.getServer().getUrl();
-		}
-	}
-	
-	public void resetFields() {
-		name = null;
-		login = null;
-		email = null;
-		url = null;
-		oldPassword = null;
-		newPassword = null;
-	}	
-	
-	public void addUser() {
-		user = new User();
-		user.setLogin(login);
-		user.setName(name);
-		user.setEmail(email);
-		if (isAdmin()) {
-			user.setUserRole(UserRoleEnum.ADMIN.toString());
-			user.setPassword(newPassword);
-		} else {
-			user.setUserRole(UserRoleEnum.USER.toString());
-			//user.setServer(server);
-		}		
-		userService.addUser(user);
-	}
-	
-	public void editUser() {
-		User user = null;
-		System.out.println("Hello " + login);
-		LOG.info("Trying to edit user: " + login);
-		try {
-			user = userService.getUserByLogin(login);
-			if (user != null) {
-				user.setName(name);
-				user.setLogin(login);
-				user.setEmail(email);
-				user.setUserRole(userRole);
-				user.setPassword(newPassword);
-				userService.updateUser(user);
-			} else {
-				LOG.error("User not found");
-			}
-			
-		} catch (Exception ex) {
-			
-		} finally {
-			//resetFields();
-		}
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 	
 
+    @PostConstruct
+    public void init() {
+        user = new User();
+        user.setServer(null);
+        user.setUserRole("user");
+    }
+
+    public void addUser() {
+//        if (userRole.equalsIgnoreCase("admin")) {
+//    		user.setUserRole(UserRoleEnum.ADMIN.toString());
+//    	} else {
+//    		user.setUserRole(UserRoleEnum.USER.toString());
+//    	}
+        userService.addUser(user);
+        usersBean.updateValues();
+    }
 }
