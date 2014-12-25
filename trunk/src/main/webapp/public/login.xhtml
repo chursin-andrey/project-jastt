@@ -70,14 +70,18 @@
 				<p:outputLabel for="rememberMe" value="Remember Me" styleClass="label"/>
 				<p:selectBooleanCheckbox id="rememberMe" styleClass="input"/>
 				
-				<p:commandButton id="submit" value="Login"   actionListener="#{loginBean.doLogin}" update="grid, isAdmin" styleClass="button"/>
-					
+				<p:commandButton id="submit" value="Login"   actionListener="#{loginBean.doLogin}" 
+						update="grid, isAdmin" styleClass="button" onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>			
 				</h:panelGrid>
-				
 				
 				<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 				
 		</h:form>
+		
+		<p:dialog id="loadStatus" widgetVar="statusDialog" modal="true" draggable="false" closable="false" 
+			resizable="false" showHeader="false"  style="background-color: transparent; box-shadow: none; border: none;"  >
+					<p:graphicImage  value="/resources/img/loading.gif" />	
+		</p:dialog>
     </ui:define>
     
 </ui:composition>

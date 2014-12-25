@@ -1,13 +1,9 @@
 package com.jastt.frontend.beans;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
-
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -18,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.jastt.business.domain.entities.Permission;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
@@ -54,13 +48,14 @@ public class LoginBean implements Serializable {
 	private String url;
 	private boolean adminSwitch;
 	private boolean rememberMe;
+
 	
-	public void doLogin() {	
+	public void doLogin() {
 		if(adminSwitch){
 			loginAsAdmin();
 		}else{
 			loginAsUser();
-		}		
+		}	
 	}
 	
 	public String doLogout(){
@@ -238,4 +233,5 @@ public class LoginBean implements Serializable {
 		this.rememberMe = rememberMe;
 	}
 	
+
 }
