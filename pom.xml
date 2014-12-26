@@ -216,6 +216,13 @@
 				</includes>
 			</resource>
 			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/*.jasper</include>
+				</includes>
+			</resource>
+			<!-- <resource>
 				<directory>src/main/webapp</directory>
 				<filtering>true</filtering>
 				<includes>
@@ -224,7 +231,7 @@
 					<include>**/*.ico</include>
 					<include>**/*.png</include>
 				</includes>
-			</resource>
+			</resource> -->
 		</resources>
 
 		<plugins>
