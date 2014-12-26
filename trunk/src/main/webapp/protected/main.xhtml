@@ -170,9 +170,15 @@
 					<br/>
 					
 					<h:panelGrid columns="3" width="250">
-					<h:commandButton value="Export to PDF" actionListener="#{reportBean.exportToPDF}"/>
-					<h:commandButton value="Export to Xls" actionListener="#{reportBean.exportToXls}"/>
-					<h:commandButton value="Export to Xlsx" actionListener="#{reportBean.exportToXlsx}"/>
+						<h:commandButton value="Export to PDF" actionListener="#{reportBean.exportIssueList}">
+							<f:param name="reportFormat" value="pdf"/>
+						</h:commandButton>
+						<h:commandButton value="Export to Xls" actionListener="#{reportBean.exportIssueList}">
+							<f:param name="reportFormat" value="xls"/>
+						</h:commandButton>
+						<h:commandButton value="Export to Xlsx" actionListener="#{reportBean.exportIssueList}">
+							<f:param name="reportFormat" value="xlsx"/>
+						</h:commandButton>
 					</h:panelGrid>
         	</p:tab>
     	</p:tabView>    		

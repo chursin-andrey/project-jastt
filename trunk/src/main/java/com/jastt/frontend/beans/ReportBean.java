@@ -3,13 +3,18 @@ package com.jastt.frontend.beans;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -153,16 +158,33 @@ public class ReportBean implements Serializable{
 		reportIssues.clear();
 	}
 	
-	public void exportToPDF(ActionEvent actionEvent) throws JRException, IOException {
-			reportingService.exportToPdf(reportIssues);
-	}
-	
-	public void exportToXlsx(ActionEvent actionEvent) throws JRException, IOException {
-		reportingService.exportToXlsx(reportIssues);
-	}
-	
-	public void exportToXls(ActionEvent actionEvent) throws JRException, IOException {
-		reportingService.exportToXls(reportIssues);
+	public void exportIssueList(ActionEvent actionEvent) throws JRException, IOException {		
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String reportFormat = params.get("reportFormat");
+		if (!Arrays.asList("pdf", "xls", "xlsx").contains(reportFormat)) return;
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();		
+		ServletOutputStream outputStream = response.getOutputStream();
+		
+		switch (reportFormat) {
+		case "pdf":
+			response.addHeader("Content-disposition","attachment; filename=issueReport.pdf");
+			reportingService.exportToPdf(reportIssues, outputStream);
+			break;
+		case "xls":
+			response.addHeader("Content-disposition","attachment; filename=issueReport.xls");
+			reportingService.exportToXls(reportIssues, outputStream);
+			break;
+		case "xlsx":
+			response.addHeader("Content-disposition","attachment; filename=issueReport.xlsx");
+			reportingService.exportToXlsx(reportIssues, outputStream);
+		default: 
+			break;
+		}
+		
+		outputStream.flush();
+		outputStream.close();
+		FacesContext.getCurrentInstance().responseComplete();
 	}
 
 	public String getStatus() {
