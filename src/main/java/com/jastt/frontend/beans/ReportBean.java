@@ -55,6 +55,23 @@ public class ReportBean implements Serializable{
 	private Project project;
 	private Issue issue;
 	private Assignee assignee;
+	
+	public int getHours() {
+		return hours;
+	}
+
+	public void setHours(int hours) {
+		this.hours = hours;
+	}
+
+	public int getMinuts() {
+		return minuts;
+	}
+
+	public void setMinuts(int minuts) {
+		this.minuts = minuts;
+	}
+
 	private Date dateFrom;
 	private Date dateTo;
 	private boolean disableMenu;
@@ -62,6 +79,8 @@ public class ReportBean implements Serializable{
 	private boolean disableSelectDate;
 	private String timespent;
 	private String status;
+	private int hours;
+	private int minuts;
 	
 	private List<Issue> reportIssues;
 	private List<Project> reportProjects;

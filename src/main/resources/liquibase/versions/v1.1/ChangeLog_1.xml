@@ -89,7 +89,7 @@
 					<constraints nullable="false"/> 
 				</column>
 				<column name="email" type="varchar(100)"> 
-					<constraints unique="true" uniqueConstraintName="UQ_assignee_email" nullable="false"/> 
+					<constraints unique="false" uniqueConstraintName="UQ_assignee_email" nullable="false"/> 
 				</column>
 			</createTable>
 		</changeSet>	
