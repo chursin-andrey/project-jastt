@@ -111,10 +111,10 @@
 						<f:facet name="header">Total Elapsed Time              
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
-                				<h:outputText value="hours:"/> 
-		        				<p:inputText id="globalFilter1" onkeyup="PF('Details').filter()" style="width:250px" placeholder="hours"/>
-                    			<h:outputText value="	minuts:"/>
-                    			<p:inputText id="globalFilter2" onkeyup="PF('Detailse').filter()" style="width:250px" placeholder="minuts"/>
+                    				<h:outputText value="hours:"/> 
+                    				<h:outputText value="#{reportBean.hours}"/>
+                    				<h:outputText value="	minuts:"/>
+                    				<h:outputText value="#{reportBean.minuts}"/>
                 			</p:outputPanel>            
             			</f:facet>
             			<p:column headerText="Date">
@@ -140,33 +140,57 @@
 						</p:column>
 					</p:dataTable>
 			</p:tab>
+			
+			
+			
+			
+			
         	<p:tab title="Report">   
 					<p:dataTable var="report" value="#{reportBean.reportIssues}" id="Report" lazy="true">
-						<f:facet name="header">Total Elapsed Time              
-                			<p:column datasource="Report" trigger="toggler"/>
-               				<p:outputPanel>
-                    			<h:outputText value="hours:"/> 
-                    			<p:inputText id="globalFilter1" onkeyup="PF('Report').filter()" style="width:250px" placeholder="hours"/>
-                    			<h:outputText value="	minuts:"/>
-                    			<p:inputText id="globalFilter2" onkeyup="PF('Report').filter()" style="width:250px" placeholder="minuts"/>
-                			</p:outputPanel>
-                		</f:facet>
-						<p:column headerText="Member">
-							<h:outputText  value="#{report.assignee.name}"  />
-               			 </p:column>
-						<p:column headerText="Project">
-							<h:outputText  value="#{report.project.name}"  />
-               			 </p:column>
-						<p:column headerText="Task">
-						<p:dataTable var="task" value="#{reportBean.reportIssues}" id="Report" lazy="true">
-						
-						</p:dataTable>
-							<h:outputText  value="#{report.issueType}"  />
-						</p:column>
-						<p:column headerText="Hours">
-							<h:outputText  value="#{report.timeSpent}"  />
-						</p:column>
+							 <f:facet name="header">Total Elapsed Time              
+                				<p:column datasource="Report" trigger="toggler"/>
+               					<p:outputPanel>
+                    				<h:outputText value="hours:"/> 
+                    				<h:outputText value="#{reportBean.hours}"/>
+                    				<h:outputText value="	minuts:"/>
+                    				<h:outputText value="#{reportBean.minuts}"/>
+                				</p:outputPanel>
+                			</f:facet>
+                			<p:column style="width:16px">
+            					<p:rowToggler />
+        					</p:column>
+                			<p:column headerText="Member">
+								<h:outputText  value="#{report.assignee.name}"  />
+               				</p:column>
+                			<p:column headerText="Hours">
+								<h:outputText  value="#{report.timeSpent}"  />
+							</p:column> 	
+                		<p:rowExpansion> 
+                		 <p:panelGrid  columns="4" columnClasses="label,value" style="width:700px">   
+                		 
+                		 	<h:outputText value="Member: " />
+                			<h:outputText value="#{report.assignee.name}" />     			
+							
+							<h:outputText value="Project: " />
+                			<h:outputText value="#{report.project.name}" /> 
+                			
+                			<h:outputText value="Task: " />
+                			<h:outputText value="#{report.issueType}" /> 
+                			
+                			<h:outputText value="Hours: " />
+                			<h:outputText value="#{report.timeSpent}" /> 
+                			
+							
+							 </p:panelGrid>
+						</p:rowExpansion> 
 					</p:dataTable>
+					
+					
+					
+					
+					
+					
+					
 					<br/>
 					
 					<h:panelGrid columns="3" width="250">
