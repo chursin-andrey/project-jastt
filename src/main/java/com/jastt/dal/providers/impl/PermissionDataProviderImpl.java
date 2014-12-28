@@ -53,15 +53,15 @@ public class PermissionDataProviderImpl extends BaseDataProviderImpl<PermissionE
 
 	@Transactional
 	@Override
-	public List<Permission> getPermissionByUser(Project project) {
+	public List<Permission> getPermissionByUser(User user) {
 		List<Permission> resultList = new ArrayList<>();
 		List<PermissionEntity> entityList = new ArrayList<>();
 		
 		Session session = sessionFactory.getCurrentSession();
 		try{
 			Criteria criteria = session.createCriteria(PermissionEntity.class);
-			if(project != null) {
-				criteria.add(Restrictions.eq("projectEntity.id", project.getId() ) );
+			if(user != null) {
+				criteria.add(Restrictions.eq("userEntity.id", user.getId() ) );
 			}
 			
 			entityList = criteria.list();
@@ -72,7 +72,7 @@ public class PermissionDataProviderImpl extends BaseDataProviderImpl<PermissionE
 			
 			
 		} catch (Exception ex) {
-			LOG.error(String.format("Error getPermission by project=%s ", project), ex.getMessage());
+			LOG.error(String.format("Error getPermission by user=%s ", user), ex.getMessage());
 			throw new DaoException(ex);
 		}
 		

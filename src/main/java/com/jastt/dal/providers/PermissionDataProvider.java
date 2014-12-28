@@ -10,7 +10,7 @@ import com.jastt.business.domain.entities.*;
 
 public interface PermissionDataProvider extends PageableDataProvider<PermissionEntity, Permission, Integer> {
 	public Permission getPermission(User user, Project project);
-	public List<Permission> getPermissionByUser(Project project);
+	public List<Permission> getPermissionByUser(User user);
 	
 	
 	
