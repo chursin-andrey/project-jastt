@@ -8,43 +8,7 @@
 
 	
 	<ui:define name="content">
-    		<style type="text/css">
-			
-		.form {
-			position : relative;
-			top: 10px;
-			left: 20px;
-				
-			margin-bottom: 50px;
-			padding: 30px;
-			
-			background-color: #F8F8F8 ;
-				
-			border-radius: 5px;			
-			border: solid 1px;
-			border-color: #A8A8A8 ;
-				
-			box-shadow: 10px -4px 4px rgba(150, 150, 150, 0.21);	
-			font: 10pt sans-serif;		
-		}
-		
-		.input{
-			position : relative;
-			left: 45px;
-		}
-		
-		.label{	
-			position : relative;
-			left: 15px;
-		}
-		
-		.button{
-			position : relative;
-			right: 30px;
-			bottom: 5px;
-		}
-		
-	</style>
+	<h:outputStylesheet name="css/login.css" />
    		#{loginBean.checkState()}
 		<h:form id="loginForm" class="login" style="margin : 10px" >
 			<h:panelGrid id="grid" columns="3" styleClass="form" >
