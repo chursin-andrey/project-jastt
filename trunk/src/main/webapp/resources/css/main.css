@@ -1,0 +1,48 @@
+@CHARSET "UTF-8";
+
+.label{
+	margin-left: 10px;
+}
+
+.item{
+	margin-left: 10px;
+	margin-right: 50px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.topMenu td{
+	vertical-align: top;	
+	
+}
+
+.selectOneMenuStyle{
+	margin : 5px;
+}
+
+
+
+.ui-selectonemenu{
+     width: 240px !important;
+     
+}
+
+.ui-selectcheckboxmenu{
+	width: 240px !important;
+}
+
+#.ui-button{
+#	width: 100px;
+#}
+
+.button{
+	width: 100px;
+	margin-left: 10px;
+	margin-right: 0px;
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+
+.tabView{
+	margin-left: 10px;
+}

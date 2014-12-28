@@ -4,108 +4,86 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
     template="/templates/commonLayout.xhtml">
-    
-
+   	
 	<ui:define name="content">
+	<h:outputStylesheet name="css/main.css" />
+	
 	<h:form id="form">
 
-	<h:panelGrid columns="4" width="1040"  cellspacing="20" >
-		<h:column>
-	
-		<h:outputLabel value="Project:" ><br /><br />
-			<h:selectOneMenu id="project" value="#{reportBean.project_name}" style="width:200px;">
-			    <f:selectItem itemLabel="Please select a project... " noSelectionOption="true" />
+	<h:panelGrid columns="3"   styleClass="topMenu">
+		<p:column >	
+			<p:outputLabel value="Project:" styleClass="label"/><br />
+			<p:selectOneMenu id="project" value="#{reportBean.project_name}" styleClass="item" >
+				<f:selectItem itemLabel="Please select a project... " noSelectionOption="true" />
    				<f:selectItems var="project" value="#{reportBean.projects}" itemValue="#{project.name}" itemLabel="#{project.name} " />
-   				<f:ajax listener="#{reportBean.changeProject}" render="issue status assignee" />
-			</h:selectOneMenu>
-		</h:outputLabel>
-		<br /><br />
-		<h:outputLabel value="Time:" /><br /><br />
-		<h:panelGrid columns="2" width="250" cellspacing="0">
-			<h:column style="height:200;">
-				<h:selectOneRadio value="#{reportBean.timespent}" style="height:200;" layout="pageDirection">
-   					<f:selectItem itemValue="allTime" style="margin-bottom:10px;" itemLabel=""  /> 
-   					<f:selectItem itemValue="date" itemLabel="" />
-   					<f:ajax listener="#{reportBean.changeTime}" render="issue allTime dateFrom dateTo" />
-				</h:selectOneRadio>
-				
-			</h:column>
-			<h:column>
-				<h:selectOneMenu id="allTime" value="#{reportBean.timespent}" disabled="#{reportBean.disableSelectTime}" style="width:200px;" >
-   					<f:selectItem itemLabel="AllTime" noSelectionOption="true" />
-				</h:selectOneMenu>
-				<br /><br />
-				 <p:outputLabel value="from: " />
-       			 <p:calendar id="dateFrom" size="5" style="font-size:11px;" value="#{reportBean.dateFrom}" disabled="#{reportBean.disableSelectDate}"/>
- 				  <p:outputLabel value=" to: " />
-       			 <p:calendar id="dateTo" size="5" style="font-size:11px;" value="#{reportBean.dateTo}" disabled="#{reportBean.disableSelectDate}" />
-			</h:column>
-		</h:panelGrid>
-		
+   				<f:ajax listener="#{reportBean.changeProject}" render="issue status" /> 
+			</p:selectOneMenu>	
+			<br />
+			<h:outputLabel value="Members:" styleClass="label"/><br />
+			<p:selectCheckboxMenu id="assignees" value="#{reportBean.assignees_name}" label="Members" filter="true" filterMatchMode="startsWith" styleClass="item" >
+        		<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.name} " itemLabel="#{assignee.name} " />
+        	</p:selectCheckboxMenu>	
+		</p:column>
 			
-		
-		</h:column>
-		<h:column>
-			<h:outputLabel value="Task:" ><br /><br />
-			<h:selectOneMenu id="issue"  value="#{reportBean.issueType}" disabled="#{reportBean.disableMenu}" style="width:200px;">
+		<p:column>
+			<p:outputLabel value="Task:" styleClass="label"/><br />
+			<p:selectOneMenu id="issue"  value="#{reportBean.issueType}" disabled="#{reportBean.disableMenu}" styleClass="item">
 				<f:selectItem itemLabel="All " noSelectionOption="true" />
    				<f:selectItem itemValue="Bug" itemLabel="Bug" />
    				<f:selectItem itemValue="Improvement" itemLabel="Improvement" />
    				<f:selectItem itemValue="New feature" itemLabel="New feature" />
    				<f:selectItem itemValue="Task" itemLabel="Task" />
-			<f:ajax listener="#{reportBean.changeIssue}" render="assignee" />
-			</h:selectOneMenu>
-			</h:outputLabel>
-			<br /><br />
-			<h:outputLabel value="Status:" ><br /><br />
-				<h:selectOneMenu id="status"  value="#{reportBean.status}" onchange="submit" immediate="true" disabled="#{reportBean.disableMenu}" style="width:200px;">
-					<f:selectItem itemLabel="All " noSelectionOption="true" />
-					<f:selectItem itemValue="Open" itemLabel="Open" />
-					<f:selectItem itemValue="In progress" itemLabel="In progress" />
-					<f:selectItem itemValue="Resolved" itemLabel="Resolved" />
-					<f:selectItem itemValue="Reopened" itemLabel="Reopened" />
-					<f:selectItem itemValue="Closed" itemLabel="Closed" />
-				</h:selectOneMenu>
-			</h:outputLabel> <br /><br /><br />
-		</h:column>
-		<h:column>
-		<h:outputLabel value="Member:" ><br /><br />
-			<h:selectOneMenu id="assignee"  value="#{reportBean.assignee_id}" disabled="#{reportBean.disableMenu}" converter="javax.faces.Integer" style="width:200px;">
-				<f:selectItem itemLabel="All " noSelectionOption="true" />
-   				<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.id} " itemLabel="#{assignee.name} " />
-   				<f:ajax listener="#{reportBean.changeAssignee}" render="issue" />
-			</h:selectOneMenu>
-		</h:outputLabel>
-		<br /><br />
-		<h:outputLabel value="Members:" ><br /><br />
-		  	<p:selectCheckboxMenu id="assignees" value="#{reportBean.assignees_name}" label="Members"
-                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
-            	<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.name} " itemLabel="#{assignee.name} " />
-        	</p:selectCheckboxMenu>
-		</h:outputLabel> <br /><br /><br />
-		</h:column>
-		<h:column>
-		<br />
+				<f:ajax listener="#{reportBean.changeIssue}" />
+			</p:selectOneMenu>
 			
-			<br /><br /><br /><br />
-			<h:commandButton value="Clear" update="project issue status assignee" action="#{reportBean.clearReport()}" style="width:150px;"/>
-			<br /><br />
-		</h:column>
-	</h:panelGrid>
-	
-
-
-
+			<br />
+			<p:outputLabel value="Status:" styleClass="label"/><br />
+			<p:selectOneMenu id="status"  value="#{reportBean.status}" onchange="submit" immediate="true" disabled="#{reportBean.disableMenu}" styleClass="item">
+				<f:selectItem itemLabel="All " noSelectionOption="true" />
+				<f:selectItem itemValue="Open" itemLabel="Open" />
+				<f:selectItem itemValue="In progress" itemLabel="In progress" />
+				<f:selectItem itemValue="Resolved" itemLabel="Resolved" />
+				<f:selectItem itemValue="Reopened" itemLabel="Reopened" />
+				<f:selectItem itemValue="Closed" itemLabel="Closed" />
+			</p:selectOneMenu>	
+			
+		</p:column>
 		
+		<p:column>
+			<p:outputLabel value="Time:" styleClass="label"/><br />
+			<h:panelGrid columns="2" width="250" cellspacing="0" styleClass="item">	
+				<p:column style="height:200;">
+					<p:selectOneRadio value="#{reportBean.timespent}" style="height:200;" layout="pageDirection">
+   						<f:selectItem itemValue="allTime" style="margin-bottom:10px;" itemLabel=""  /> 
+   						<f:selectItem itemValue="date" itemLabel="" />
+   						<f:ajax listener="#{reportBean.changeTime}" render="issue allTime dateFrom dateTo" />
+					</p:selectOneRadio>	
+				</p:column>
+		
+				<p:column>
+					<p:selectOneMenu id="allTime" value="#{reportBean.timespent}" disabled="#{reportBean.disableSelectTime}" style="width:200px;" >
+   						<f:selectItem itemLabel="AllTime" noSelectionOption="true" />
+					</p:selectOneMenu>	
+					<br />	
+				 	<p:outputLabel value="from: " styleClass="label"/>
+       			 	<p:calendar id="dateFrom" size="5" style="font-size:11px;" value="#{reportBean.dateFrom}" disabled="#{reportBean.disableSelectDate}"/>
+ 				  	<p:outputLabel value=" to: " styleClass="label"/>
+       			 	<p:calendar id="dateTo" size="5" style="font-size:11px;" value="#{reportBean.dateTo}" disabled="#{reportBean.disableSelectDate}" />
+				</p:column>
+			</h:panelGrid>	
+		</p:column>
+		
+	</h:panelGrid>
+	
 
-	<h:panelGrid columns="3" width="400"  cellspacing="20">
-	<h:commandButton value="Show" update="Report Details" action="#{reportBean.showReport()}" style="width:100px;"/>
-	<h:commandButton value="Cancel" action="#{reportBean.cancelAction()}" style="width:100px;"/>
-	<h:commandButton value="Update" action="#{reportBean.updateData()}" style="width:100px;"/>
+	<h:panelGrid columns="3"  >
+		<p:commandButton value="Show" actionListener="#{reportBean.showReport()}" update="tabs" styleClass="button"/>
+		<p:commandButton value="Clear" actionListener="#{reportBean.cancelAction()}" update="tabs" styleClass="button"/>
+		<p:commandButton value="Update" action="#{reportBean.updateData()}" styleClass="button"/>
 	</h:panelGrid>
 	
 	
-		<p:tabView activeIndex="0">
+		<p:tabView activeIndex="0" id="tabs" styleClass="tabView">
 			<p:tab title="Details">
 					<p:dataTable var="details" value="#{reportBean.reportIssues}" id="Details" lazy="true">
 						<f:facet name="header">Total Elapsed Time              
