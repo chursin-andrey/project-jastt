@@ -127,7 +127,7 @@
 			
 			
         	<p:tab title="Report">   
-					<p:dataTable var="report" value="#{reportBean.reportIssues}" id="Report" lazy="true">
+					<p:dataTable var="report" value="#{reportBean.reportIssues}" id="Report" rowIndexVar="rowIndex" lazy="true">
 							 <f:facet name="header">Total Elapsed Time              
                 				<p:column datasource="Report" trigger="toggler"/>
                					<p:outputPanel>
@@ -140,6 +140,9 @@
                 			<p:column style="width:16px">
             					<p:rowToggler />
         					</p:column>
+        					<p:column headerText="№" style="width:50px">
+            				<h:outputText  value="#{rowIndex+1}"  />
+            			</p:column>
                 			<p:column headerText="Member">
 								<h:outputText  value="#{report.assignee.name}"  />
                				</p:column>
@@ -147,7 +150,7 @@
 								<h:outputText  value="#{report.timeSpent}"  />
 							</p:column> 	
                 		<p:rowExpansion> 
-                		 <p:panelGrid  columns="4" columnClasses="label,value" style="width:700px">   
+                		 <p:panelGrid  columns="8" columnClasses="label,value" style="width:700px">   
                 		 
                 		 	<h:outputText value="Member: " />
                 			<h:outputText value="#{report.assignee.name}" />     			
