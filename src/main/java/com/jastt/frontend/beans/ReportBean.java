@@ -48,13 +48,15 @@ public class ReportBean implements Serializable{
 	private List<Issue> issues;
 	private List<Project> projects;
 	private Set<Assignee> assignees;
-	private List<String> assignees_name;
+	private Set<String> assignees_name;
 	private String issueType;
 	private String project_name;
 	private Integer assignee_id;
 	private String issue_id;
 	private Project project;
 	private Issue issue;
+
+
 	private Assignee assignee;
 	
 	public int getHours() {
@@ -147,33 +149,15 @@ public class ReportBean implements Serializable{
 		if(status != null) issueStatus = IssueStatusEnum.getType(status); 
 		reportIssues = new ArrayList<Issue>();
 		if(assignees_name.size() != 0) {
-			for(String assign : assignees_name)
-				
-				reportIssues.addAll(issueService.getIssues(project, issueStatus, assigneeService.getAssigneeByName(assign), type, dateFrom, dateTo));
-			/*int result = 0;
-			for(int i = 0; i < reportIssues.size(); i++) {
-				
-				 int prom = reportIssues.get(i).getTimeSpent();
-				 result += prom;
-				
+			for(String assign : assignees_name) {
+				reportIssues.addAll(issueService.getIssues(project, issueStatus, assigneeService.getAssigneeByName(assign), type, dateFrom, dateTo));	
 			}
-			setHours(result);*/
 			addHours(reportIssues);
+						
 		} else {
 			reportIssues = issueService.getIssues(project, issueStatus, assignee, type, dateFrom, dateTo);
-			/*int result = 0;
-			for(int i = 0; i < reportIssues.size(); i++) {
-				
-				 int prom = reportIssues.get(i).getTimeSpent();
-				 result += prom;
-				
-			}
-			setHours(result);*/
 			addHours(reportIssues);
-
-		}
-		
-		
+		}		
 	}
 	
 	
@@ -403,11 +387,11 @@ public class ReportBean implements Serializable{
 		this.issueType = issueType;
 	}
 
-	public List<String> getAssignees_name() {
+	public Set<String> getAssignees_name() {
 		return assignees_name;
 	}
 
-	public void setAssignees_name(List<String> assignees_name) {
+	public void setAssignees_name(Set<String> assignees_name) {
 		this.assignees_name = assignees_name;
 	}
 

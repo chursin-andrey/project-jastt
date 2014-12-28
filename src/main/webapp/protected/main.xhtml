@@ -85,7 +85,7 @@
 	
 		<p:tabView activeIndex="0" id="tabs" styleClass="tabView">
 			<p:tab title="Details">
-					<p:dataTable var="details" value="#{reportBean.reportIssues}" id="Details" lazy="true">
+					<p:dataTable var="details" value="#{reportBean.reportIssues}" id="Details" rowIndexVar="rowIndex" lazy="true">
 						<f:facet name="header">Total Elapsed Time              
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
@@ -95,6 +95,9 @@
                     				<h:outputText value="#{reportBean.minuts}"/>
                 			</p:outputPanel>            
             			</f:facet>
+            			<p:column headerText="№">
+            				<h:outputText  value="#{rowIndex+1}"  />
+            			</p:column>
             			<p:column headerText="Date">
             				<h:outputText  value="#{details.created}"  />
             			</p:column>
