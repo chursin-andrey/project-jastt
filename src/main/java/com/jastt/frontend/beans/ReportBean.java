@@ -36,6 +36,7 @@ import com.jastt.business.services.AssigneeService;
 import com.jastt.business.services.IssueService;
 import com.jastt.business.services.ProjectService;
 import com.jastt.business.services.ReportingService;
+import com.jastt.business.services.impl.IssueServiceImpl;
 import com.jastt.business.services.jira.JiraClientException;
 
 @Component
@@ -149,11 +150,45 @@ public class ReportBean implements Serializable{
 			for(String assign : assignees_name)
 				
 				reportIssues.addAll(issueService.getIssues(project, issueStatus, assigneeService.getAssigneeByName(assign), type, dateFrom, dateTo));
-		} else
+			/*int result = 0;
+			for(int i = 0; i < reportIssues.size(); i++) {
+				
+				 int prom = reportIssues.get(i).getTimeSpent();
+				 result += prom;
+				
+			}
+			setHours(result);*/
+			addHours(reportIssues);
+		} else {
 			reportIssues = issueService.getIssues(project, issueStatus, assignee, type, dateFrom, dateTo);
+			/*int result = 0;
+			for(int i = 0; i < reportIssues.size(); i++) {
+				
+				 int prom = reportIssues.get(i).getTimeSpent();
+				 result += prom;
+				
+			}
+			setHours(result);*/
+			addHours(reportIssues);
+
+		}
 		
 		
 	}
+	
+	
+	public void addHours(List<Issue> reportIssues) {
+
+		int result = 0;
+		for(int i = 0; i < reportIssues.size(); i++) {
+			
+			 int prom = reportIssues.get(i).getTimeSpent();
+			 result += prom;
+			
+		}
+		setHours(result);
+	}
+	
 	
 	public void updateData() throws JiraClientException{
 		Subject subject = SecurityUtils.getSubject();	
@@ -175,6 +210,7 @@ public class ReportBean implements Serializable{
 	}
 	public void cancelAction(){
 		reportIssues.clear();
+		setHours(0);
 	}
 	
 	public void exportIssueList(ActionEvent actionEvent) throws JRException, IOException {		
