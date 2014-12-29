@@ -25,8 +25,7 @@ public class PermissionServiceImpl implements PermissionService {
 
 	
 	public List<Permission> getPermissionsByUser(User user) {
-		// TODO Auto-generated method stub
-		return null;
+		return permissionDataProvider.getPermissionByUser(user);
 	}
 
 
