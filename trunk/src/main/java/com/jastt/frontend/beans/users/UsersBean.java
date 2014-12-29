@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -42,7 +43,17 @@ public class UsersBean implements Serializable {
     private User user;
     private List<User> users;
     
-    private String username;
+    private String email;
+    
+    public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	private String username;
     
 	public String getUsername() {
 		return username;
@@ -117,12 +128,14 @@ public class UsersBean implements Serializable {
 	}
 	
     public void editUser(User user) {
-    	if (user.getUserRole().equalsIgnoreCase("admin")) {
-    		setAdmin(true);;
-    	} else {
-    		setAdmin(false);;
-    	}
+    	resetFields();
     	this.user = user;
+    	if (this.user.getUserRole().equalsIgnoreCase("admin")) {
+    		setAdmin(true);
+    	} else {
+    		setAdmin(false);
+    		url = this.user.getServer().getUrl();
+    	}
     }
     
     public String getUsername(User user) {
@@ -156,10 +169,22 @@ public class UsersBean implements Serializable {
     		}
         }
         userService.updateUser(user);
+        resetFields();
         updateValues();
     }
     
-    public void cancelHandle() {
+    public void resetFields() {
+    	name = null;
+    	login = null;
+    	email = null;
+    	url = null;
+    	password = null;
+    	userRole = null;
+    	admin = false;
+    }
+    
+    public void cancelHandle(ActionEvent actionEvent) {
+    	resetFields();
     	try {
 			FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
 		} catch(Exception e) {
@@ -172,6 +197,8 @@ public class UsersBean implements Serializable {
 		userService.deleteUser(user.getLogin());
 		try {
 			FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
+			//String messageString = "User with login " + user.getLogin() + " has been deleted.";
+	        //FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", messageString));
 		} catch(Exception e) {
 			LOG.error(e.getMessage());
 		}
