@@ -27,7 +27,7 @@
 						
 				<p:outputLabel for="isAdmin" value="Is Admin" styleClass="label"/>
 				<p:selectBooleanCheckbox id="isAdmin" value="#{loginBean.adminSwitch}" styleClass="input"  >
-					<p:ajax  listener="#{loginBean.isAdminValueListener}" update="url"/>
+					<p:ajax listener="#{loginBean.isAdminValueListener}" update="url"/>
 				</p:selectBooleanCheckbox>
 				
 				<br/>
