@@ -6,21 +6,26 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
+import org.primefaces.event.CloseEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import sun.print.resources.serviceui;
+
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.enums.UserRoleEnum;
 import com.jastt.business.services.UserService;
 import com.jastt.frontend.beans.LoginBean;
+import com.jastt.utils.annotations.SessionScope;
 
 @Component(value="usersBean")
-@Scope("session")
+@SessionScope
 public class UsersBean implements Serializable {
 	
 	private static final long serialVersionUID = 2092800049856823809L;
@@ -32,15 +37,46 @@ public class UsersBean implements Serializable {
     private User user;
     private List<User> users;
     
-    private String url;
+    private String username;
+    
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	private String name;
+    
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	private String login;
+	
+    public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	private String url;
     private String userRole;
     private Server server;
 	private String password;
-	private boolean admin;
+	private boolean admin = false;
 	
 	@PostConstruct
     public void init() {
         users = userService.getAllUsers();
+        
     }
     
     public String getUserRole() {
@@ -74,25 +110,38 @@ public class UsersBean implements Serializable {
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
 	}
-
+	
     public void editUser(User user) {
-    	this.user = user;  
+    	if (user.getUserRole().equalsIgnoreCase("admin")) {
+    		setAdmin(true);;
+    	} else {
+    		setAdmin(false);;
+    	}
+    	this.user = user;
+    }
+    
+    public String getUsername(User user) {
+    	name = user.getName();
+    	login = user.getLogin();
+    	if (!name.isEmpty()) {
+    		username = name;
+    	} else {
+    		username = login;
+    	}
+    	return username;
     }
        
     public void saveUser() {
         if (isAdmin()) {
-        	this.user.setUserRole("admin");
-        	setPassword(password);
-        	setUserRole("admin");
+        	user.setUserRole("admin");
         } else {
-        	this.user.setUserRole("user");
-        	setUserRole("user");
+        	user.setUserRole("user");
         }
         userService.updateUser(user);
         updateValues();
     }
     
-	public void deleteUser(User user) {
+	public void deleteUser() {
 		userService.deleteUser(user.getLogin());
 		try {
 			FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
@@ -101,6 +150,7 @@ public class UsersBean implements Serializable {
 		}
 		updateValues();
 	}
+	
 
     public void updateValues() {
         users = userService.getAllUsers();

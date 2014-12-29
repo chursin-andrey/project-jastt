@@ -5,8 +5,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.RequestScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.validator.ValidatorException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +19,11 @@ import org.springframework.stereotype.Component;
 
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
+import com.jastt.business.services.ServerService;
 import com.jastt.business.services.UserService;
 import com.jastt.dal.providers.ServerDataProvider;
 import com.jastt.frontend.beans.LoginBean;
+import com.jastt.utils.annotations.RequestScope;
 import com.jastt.business.enums.UserRoleEnum;
 import com.jastt.dal.exceptions.DaoException;
 
@@ -31,11 +36,19 @@ public class UserBean implements Serializable {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(UserBean.class);
 	
+	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*" +
+            "@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	
+	private static final String LOGIN_PATTERN = "^[a-z0-9_-]{4,16}$";
+	
 	@Autowired
 	private UsersBean usersBean;
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ServerService serverService;
 	
 	@Autowired
 	private ServerDataProvider serverDataProvider;
@@ -51,7 +64,7 @@ public class UserBean implements Serializable {
 	private String newPassword;
 	private String password;	
 	private String userRole;
-	private boolean admin;
+	private boolean admin = false;
 	
 	public String getPassword() {
 		return password;
@@ -138,21 +151,83 @@ public class UserBean implements Serializable {
     @PostConstruct
     public void init() {
         user = new User();
-        user.setServer(null);
-//        server = new Server();
-//        user.setServer(server);
-//        user.setUserRole("user");
+        server = new Server();
+    }
+    
+    public void validateLogin(FacesContext facesContext, UIComponent componentToValid, Object value)
+    		throws ValidatorException{
+        String login = value.toString();
+        User userByLogin = userService.getUserByLogin(login);
+        if(userByLogin != null) {
+            String messageString = "User with login " + login + " already exists.";
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Couldn`t create user", messageString);
+            throw new ValidatorException(facesMessage);
+        }
+        if(!login.matches(LOGIN_PATTERN)) {
+            String messageString = "Login has a wrong format";
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wrong login format", messageString);
+            throw new ValidatorException(facesMessage);
+        }
+    }
+    
+    public void validateEmail(FacesContext facesContext, UIComponent componentToValid, Object value) throws ValidatorException{
+        String email = value.toString();
+        if(!email.matches(EMAIL_PATTERN)) {
+            String messageString = "Email has a wrong format";
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wrong email format", messageString);
+            throw new ValidatorException(facesMessage);
+        }
+    }
+    
+    public void resetFields() {
+    	name = null;
+    	login = null;
+    	email = null;
+    	url = null;
+    	password = null;
+    	userRole = null;
+    	admin = false;
+    }
+    
+    public void verifyJiraLogin() {
+    	Server server = new Server(getUrl());
+    	
     }
 
     public void addUser() {
-        if (userRole.equalsIgnoreCase("admin")) {
+    	User user = new User();
+    	user = userService.getUserByLogin(getLogin());
+    	
+    	if (user == null) {
+        	user = new User();
+        	user.setName(name);
+        	user.setLogin(login);
+        	user.setEmail(email);
+    	}
+    	
+        if (isAdmin()) {
     		user.setUserRole("admin");
+    		user.setPassword(password);
+    		
     	} else {
     		user.setUserRole("user");
-//    		server = new Server();
-//    		server.setUrl(url);
+    		server = new Server(url);
+    		try {
+            	server = serverService.getServerByUrl(url);
+    			if(server == null){
+    				serverService.addServer(url);
+    				server = serverService.getServerByUrl(url);
+    			} else {
+    	        	user.setServer(serverService.getServerByUrl(url));
+    			}
+    		} catch (Exception ex) {
+    			
+    		}
+    		
+    		user.setServer(serverService.getServerByUrl(url));
     	}
         userService.addUser(user);
+        resetFields();
         usersBean.updateValues();
     }
 }

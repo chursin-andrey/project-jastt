@@ -6,11 +6,12 @@
     template="/templates/commonLayout.xhtml">
 	
 	<ui:define name="content">
+	
 	<div align="left">
 		<h:form id="usersForm">
 			<h:panelGrid>
-				<p:commandButton value="Add user" onclick="add_dialog.show()"
-					update=":addForm" />
+				<p:commandButton type="button" value="Add user" onclick="add_dialog.show()"
+					update=":addForm" icon="ui-icon-circle-plus" />
 			</h:panelGrid>
 				
 			<p:spacer height="10" />
@@ -36,27 +37,34 @@
     				<h:outputText value="#{user.userRole}"/>
     			</p:column>	
     				
-    			<p:column headerText="Action">
+    			<p:column headerText="Options">
         			<p:commandButton value="Edit" style="margin:5px"
-        				actionListener="#{usersBean.editUser(user)}"
+        				action="#{usersBean.editUser(user)}"
         				update=":editForm" oncomplete="edit_dialog.show()">
         			 </p:commandButton>
-        				
-        			<p:commandButton value="Delete" style="margin:5px"
-        				actionListener="#{usersBean.deleteUser(user)}"
-        				update=":usersForm:usersTable" >
-        				<p:confirm header="Confirmation" message="Are you sure want to remove user?"
-        					icon="ui-icon-alert" />			
-        			</p:commandButton>
         			
-           			<p:confirmDialog global="true">
-						<div align="center">
-							<p:commandButton value="Yes" type="button"
-								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-							<p:commandButton value="No" type="button"
-								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-						</div>		
-					</p:confirmDialog>
+        			 
+					<p:commandButton value="Delete" style="margin:5px"
+        				oncomplete="confirmDeleteUser.show()" update=":usersForm:usersTable"
+        				actionListener="#{usersBean.getUsername(user)}" 
+        				icon="ui-icon-circle-minus" >
+        				<f:setPropertyActionListener target="#{usersBean.user}" value="#{user}" /> 	
+        			</p:commandButton>
+        			 
+        			<p:confirmDialog message="Are you sure you want to delete user #{usersBean.username}?"
+        				 header="Delete Confirmation" severity="alert" widgetVar="confirmDeleteUser"
+        				 modal="true">
+        				 <p:growl id="delete_messages" sticky="false" />
+        				<div align="center">
+        					<p:commandButton value="Yes" update="delete_messages :usersForm:usersTable"
+        					 	actionListener="#{usersBean.deleteUser}"
+        					 	oncomplete="confirmDeleteUser.hide()">
+        					 	<f:setPropertyActionListener target="#{usersBean.user}" value="#{user}" /> 	
+        					 </p:commandButton>
+        					<p:commandButton value="No" type="button" update="confirmDeleteUser"
+        						 onclick="confirmDeleteUser.hide()" />
+        				</div>
+    				</p:confirmDialog>
     			</p:column>
 			</p:dataTable>
 		</h:form>
@@ -64,17 +72,20 @@
 		
 		
 		<p:dialog header="Change user account info" widgetVar="edit_dialog" modal="true"
-			resizable="false" maximizable="false" closeOnEscape="true">
+			resizable="false" dynamic="true" maximizable="false" closeOnEscape="true">
 			<h:form id="editForm">
-				<p:messages id="messages" showDetail="true" autoUpdate="true" />
+
+				<p:messages id="editing_errors" showDetail="true" autoUpdate="true"
+					closable="true" />
         		
         		<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
         			<p:outputLabel for="editName" value="Name:" />
 					<p:inputText id="editName" value="#{usersBean.user.name}" />
 					
 					<p:outputLabel for="editLogin" value="Login:"/>
-					<p:inputText id="editLogin" value="#{usersBean.user.login}" required="true">
-					</p:inputText>
+					<p:inputText id="editLogin" value="#{usersBean.user.login}"
+						required="true"	disabled="true"
+						requiredMessage="Login is required" />
 						
 					<p:outputLabel for="editEmail" value="E-mail:" />
 					<p:inputText id="editEmail" value="#{usersBean.user.email}">
@@ -86,41 +97,50 @@
         			</p:selectBooleanCheckbox>	
         			
         			<p:outputLabel id="editLabelUrl" for="editUrl" value="URL:"/>
-					<p:inputText id="editUrl" value="#{usersBean.user.server.url}" required="#{!usersBean.admin}"
-						readonly="#{usersBean.admin}" />
+					<p:inputText id="editUrl" value="#{usersBean.user.server.url}"
+						required="#{!usersBean.admin}" disabled="#{usersBean.admin}" />
 			
 					<p:outputLabel id="editLabelPwd1" for="editPwd1" value="Password:" />
         			<p:password id="editPwd1" value="#{usersBean.user.password}" 
-   						required="#{usersBean.admin}" readonly="#{!usersBean.admin}" />
+   						required="#{usersBean.admin}" disabled="#{!usersBean.admin}"
+   						requiredMessage="Password is required" />
  					
  					<p:outputLabel id="editLabelPwd2" for="editPwd2" value="Password confirmation:" />
-        			<p:password id="editPwd2" value="#{usersBean.user.password}" required="#{usersBean.admin}"  	
-        				readonly="#{!usersBean.admin}" />							
+        			<p:password id="editPwd2" value="#{usersBean.user.password}"
+        				required="#{usersBean.admin}" disabled="#{!usersBean.admin}"
+        				requiredMessage="Password is required" />							
 					
-					<p:commandButton value="Apply" action="#{usersBean.saveUser}"
-						update=" :usersForm:usersTable" oncomplete="edit_dialog.hide()"
-						icon="ui-icon-check">
-					</p:commandButton>
-					<p:commandButton value="Cancel" 	
-						onclick="edit_dialog.hide()" icon="ui-icon-close" />   			
+					<p:commandButton value="Apply" actionListener="#{usersBean.saveUser}"
+						update=":editForm :usersForm:usersTable" icon="ui-icon-check"
+						oncomplete="if (args &amp;&amp; !args.validationFailed) edit_dialog.hide()" />
+					<p:commandButton value="Cancel" type="button" onclick="edit_dialog.hide()"
+						 icon="ui-icon-close">
+						 <p:ajax update=":editForm"/>
+					</p:commandButton>   			
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>	
-			
+		
 		
 		<p:dialog header="Create new user account" widgetVar="add_dialog" modal="true"
-			resizable="false" maximizable="false" closeOnEscape="true">
-			<h:form id="addForm">
+			resizable="false" maximizable="false" dynamic="true" closeOnEscape="true">
+			<h:form id="addForm">				
+				<p:messages id="adding_errors" showSummary="false" showDetail="true"
+					closable="true" />
         		<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
         			<p:outputLabel for="name" value="Name:" />
-					<p:inputText id="name" value="#{userBean.user.name}" />
+					<p:inputText id="name" value="#{userBean.name}" />
 					
 					<p:outputLabel id="lblID" for="login" value="Login:"/>
-					<p:inputText id="login" value="#{userBean.user.login}" required="true">
+					<p:inputText id="login" value="#{userBean.login}" required="true"
+						requiredMessage="Login is required" validator="#{userBean.validateLogin}"
+						autocomplete="false">
 					</p:inputText>
 						
 					<p:outputLabel for="email" value="E-mail:" />
-					<p:inputText id="email" value="#{userBean.user.email}">
+					<p:inputText id="email" value="#{userBean.email}" validator="#{userBean.validateEmail}"
+						autocomplete="false"> 
+						<f:validator validatorId="emailValidator" />
 					</p:inputText>
 					
 					<p:outputLabel for="isAdmin" value="Admin:" />
@@ -129,23 +149,26 @@
         			</p:selectBooleanCheckbox>	
         			
         			<p:outputLabel id="lblUrl" for="url" value="URL:"/>
-					<p:inputText id="url" value="#{userBean.url}" required="#{!userBean.admin}"
-						readonly="#{userBean.admin}" />
+					<p:inputText id="url" value="#{userBean.url}"
+						required="#{!userBean.admin}" disabled="#{userBean.admin}"
+						requiredMessage="URL is required"  />
 					
 					<p:outputLabel id="lblPwd1" for="pwd1" value="Password:" />
-        			<p:password id="pwd1" value="#{userBean.user.password}" 
-        				required="#{userBean.admin}" readonly="#{!userBean.admin}" />
+        			<p:password id="pwd1" match="pwd2" value="#{userBean.password}" 
+        				required="#{userBean.admin}" disabled="#{!userBean.admin}"
+        				requiredMessage="Password is required" />
  					
  					<p:outputLabel id="lblPwd2" for="pwd2" value="Password confirmation:" />
-        			<p:password id="pwd2" value="#{userBean.user.password}" 
-        				required="#{userBean.admin}" readonly="#{!usersBean.admin}" />
+        			<p:password id="pwd2" value="#{userBean.password}" 
+        				required="#{userBean.admin}" disabled="#{!userBean.admin}"
+        				requiredMessage="Password is required" />
         													
-					<p:commandButton value="Save" action="#{userBean.addUser}"
-						update=":addForm :usersForm:usersTable" oncomplete="add_dialog.hide()"
-						icon="ui-icon-check">
-					</p:commandButton>
-					<p:commandButton value="Cancel"
-						 onclick="add_dialog.hide()" icon="ui-icon-close" />   			
+					<p:commandButton value="Save" actionListener="#{userBean.addUser}"
+						update=":addForm :usersForm:usersTable" icon="ui-icon-check"
+						oncomplete="if (args &amp;&amp; !args.validationFailed) add_dialog.hide()" />
+					<p:commandButton value="Cancel"	type="button" onclick="add_dialog.hide()"
+						 icon="ui-icon-close" update=":add_dialog">
+					</p:commandButton>   			
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>			
