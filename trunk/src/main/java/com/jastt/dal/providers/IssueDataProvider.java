@@ -2,6 +2,7 @@ package com.jastt.dal.providers;
 
 
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import com.jastt.business.enums.*;
 
 
 
-public interface IssueDataProvider extends PageableDataProvider<IssueEntity, Issue, Integer> {
+public interface IssueDataProvider extends PageableDataProvider<IssueEntity, Issue, Integer>, Serializable {
 
 	public Issue getIssueByKey(String key);
 	public Issue getIssueByStatus(String status);

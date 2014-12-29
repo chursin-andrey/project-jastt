@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
+import com.jastt.business.domain.entities.Permission;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
@@ -34,6 +35,7 @@ import com.jastt.business.enums.IssueStatusEnum;
 import com.jastt.business.enums.IssueTypeEnum;
 import com.jastt.business.services.AssigneeService;
 import com.jastt.business.services.IssueService;
+import com.jastt.business.services.PermissionService;
 import com.jastt.business.services.ProjectService;
 import com.jastt.business.services.ReportingService;
 import com.jastt.business.services.impl.IssueServiceImpl;
@@ -49,6 +51,7 @@ public class ReportBean implements Serializable{
 	private List<Project> projects;
 	private Set<Assignee> assignees;
 	private Set<String> assignees_name;
+	private List<Permission> permissions;
 	private String issueType;
 	private String project_name;
 	private Integer assignee_id;
@@ -58,22 +61,6 @@ public class ReportBean implements Serializable{
 
 
 	private Assignee assignee;
-	
-	public int getHours() {
-		return hours;
-	}
-
-	public void setHours(int hours) {
-		this.hours = hours;
-	}
-
-	public int getMinuts() {
-		return minuts;
-	}
-
-	public void setMinuts(int minuts) {
-		this.minuts = minuts;
-	}
 
 	private Date dateFrom;
 	private Date dateTo;
@@ -98,13 +85,25 @@ public class ReportBean implements Serializable{
 	private AssigneeService assigneeService;
 	@Autowired
 	private ReportingService reportingService;  
+	@Autowired
+	private PermissionService permissionService;  
 	
 	@PostConstruct
 	public void init() {
+		Subject subject = SecurityUtils.getSubject();	
+		User user = (User)subject.getSession().getAttribute("user");
 		disableMenu = true;  disableSelectDate = true;
+		projects = new ArrayList<Project>();
+		
 		timespent = "allTime";
 		//Server serv = new Server("http://localhost:8083");
-		projects = projectService.getAllProjects();
+		//projects = projectService.getAllProjects();
+		permissions = permissionService.getPermissionsByUser(user);
+		for(Permission perm : permissions){
+				project = projectService.getProjectById(perm.getProject().getId());
+				projects.add(project);
+
+		}
 
 		assignees = assigneeService.getAllAssignees();
 	}
@@ -132,6 +131,7 @@ public class ReportBean implements Serializable{
 		if(timespent.equals("allTime")) { 
 			disableSelectTime = false; 
 			disableSelectDate = true;
+			dateFrom = null; dateTo = null;
 		}
 		else {
 			disableSelectTime = true; 
@@ -144,7 +144,6 @@ public class ReportBean implements Serializable{
 		IssueStatusEnum issueStatus = null;
 		if(reportIssues != null) reportIssues.clear();
 
-		if(assignee_id != null) assignee = assigneeService.getAssigneeById(assignee_id); else assignee = null;
 		if(issueType != null) type = IssueTypeEnum.getType(issueType); 
 		if(status != null) issueStatus = IssueStatusEnum.getType(status); 
 		reportIssues = new ArrayList<Issue>();
@@ -155,7 +154,7 @@ public class ReportBean implements Serializable{
 			addHours(reportIssues);
 						
 		} else {
-			reportIssues = issueService.getIssues(project, issueStatus, assignee, type, dateFrom, dateTo);
+			reportIssues = issueService.getIssues(project, issueStatus, null, type, dateFrom, dateTo);
 			addHours(reportIssues);
 		}		
 	}
@@ -188,7 +187,6 @@ public class ReportBean implements Serializable{
 		project_name = null;
 		issueType = null;
 		status = null;
-		assignee_id = null;
 		disableMenu = true;
 		
 	}
@@ -196,7 +194,6 @@ public class ReportBean implements Serializable{
 		reportIssues.clear();
 		setHours(0);
 	}
-	
 	public void exportIssueList(ActionEvent actionEvent) throws JRException, IOException {		
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String reportFormat = params.get("reportFormat");
@@ -224,6 +221,14 @@ public class ReportBean implements Serializable{
 		outputStream.flush();
 		outputStream.close();
 		FacesContext.getCurrentInstance().responseComplete();
+	}
+
+	public List<Permission> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(List<Permission> permissions) {
+		this.permissions = permissions;
 	}
 
 	public String getStatus() {
@@ -394,6 +399,24 @@ public class ReportBean implements Serializable{
 	public void setAssignees_name(Set<String> assignees_name) {
 		this.assignees_name = assignees_name;
 	}
+	
+	
+	public int getHours() {
+		return hours;
+	}
+
+	public void setHours(int hours) {
+		this.hours = hours;
+	}
+
+	public int getMinuts() {
+		return minuts;
+	}
+
+	public void setMinuts(int minuts) {
+		this.minuts = minuts;
+	}
+
 
 
 }

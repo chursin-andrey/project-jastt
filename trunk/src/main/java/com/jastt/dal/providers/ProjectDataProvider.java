@@ -1,5 +1,6 @@
 package com.jastt.dal.providers;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,7 @@ import com.jastt.business.domain.entities.User;
 
 
 @Repository
-public interface ProjectDataProvider extends PageableDataProvider<ProjectEntity, Project, Integer> {
+public interface ProjectDataProvider extends PageableDataProvider<ProjectEntity, Project, Integer>, Serializable {
 
 	Project getProjectByName(String name);
 	Project getProjectByKey(String key);

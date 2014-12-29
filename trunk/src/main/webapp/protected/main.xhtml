@@ -17,11 +17,11 @@
 			<p:selectOneMenu id="project" value="#{reportBean.project_name}" styleClass="item" >
 				<f:selectItem itemLabel="Please select a project... " noSelectionOption="true" />
    				<f:selectItems var="project" value="#{reportBean.projects}" itemValue="#{project.name}" itemLabel="#{project.name} " />
-   				<f:ajax listener="#{reportBean.changeProject}" render="issue status" /> 
+   				<f:ajax listener="#{reportBean.changeProject}" render="issue status assignees time" /> 
 			</p:selectOneMenu>	
 			<br />
 			<h:outputLabel value="Members:" styleClass="label"/><br />
-			<p:selectCheckboxMenu id="assignees" value="#{reportBean.assignees_name}" label="Members" filter="true" filterMatchMode="startsWith" styleClass="item" >
+			<p:selectCheckboxMenu id="assignees" value="#{reportBean.assignees_name}" label="Members" disabled="#{reportBean.disableMenu}" filter="true" filterMatchMode="startsWith" styleClass="item" >
         		<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.name} " itemLabel="#{assignee.name} " />
         	</p:selectCheckboxMenu>	
 		</p:column>
@@ -54,7 +54,7 @@
 			<p:outputLabel value="Time:" styleClass="label"/><br />
 			
 			<p:outputPanel>
-				<p:selectOneRadio value="#{reportBean.timespent}" style="height:200;" layout="pageDirection" styleClass="radio" >
+				<p:selectOneRadio value="#{reportBean.timespent}" id="time" style="height:200;" layout="pageDirection" disabled="#{reportBean.disableMenu}" styleClass="radio" >
    						<f:selectItem itemValue="allTime" style="margin-bottom:10px;" itemLabel="" /> 
    						<f:selectItem itemValue="date" itemLabel="" />
    						<f:ajax listener="#{reportBean.changeTime}" render="issue allTime dateFrom dateTo" />
@@ -102,7 +102,9 @@
             				<h:outputText  value="#{rowIndex+1}"  />
             			</p:column>
             			<p:column headerText="Date">
-            				<h:outputText  value="#{details.created}"  />
+            				<h:outputText  value="#{details.created}"  >
+            					<f:convertDateTime pattern="dd.MM.yyyy" />
+            				 </h:outputText>
             			</p:column>
 						<p:column headerText="Member">
 							<h:outputText  value="#{details.assignee.name}"  />

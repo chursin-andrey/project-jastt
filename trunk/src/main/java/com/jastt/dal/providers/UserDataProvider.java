@@ -1,5 +1,6 @@
 package com.jastt.dal.providers;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.jastt.dal.entities.UserEntity;
@@ -8,7 +9,7 @@ import com.jastt.business.domain.entities.User;
 
 
 
-public interface UserDataProvider extends PageableDataProvider<UserEntity , User, Integer> {
+public interface UserDataProvider extends PageableDataProvider<UserEntity , User, Integer>, Serializable {
 
 
 	public void updatePassword(User user, String newPassword);
