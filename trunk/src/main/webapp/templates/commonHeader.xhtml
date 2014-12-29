@@ -7,60 +7,27 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 	
-	<style type="text/css">
-		.logout {
-			float:right;
-		}	
-		.menuItem {
-			margin-right : 5px;
-			margin-left : 5px;
-		}
-		.logotype{
-			position : relative
-			left: 0px;
-		}	
-		.menu{
-			position : relative;
-			left: -60px;	
-		}	
-		.title{
-			position : relative;
-			#top: 10px;
-			left: 30px;
-			font-family: "Verdana", "sans-serif";
-			font-style: italic;
-			#color: #003366;
-			color: #14305f;
-			text-shadow: 10px -4px 4px rgba(150, 150, 150, 0.32);	
-		}		
-	</style>
 
+<h:outputStylesheet name="css/default.css" />
+<h:outputStylesheet name="css/template.css" />
 	
 <h:body>
 	<h:form>
-		<h:panelGrid columns="3" width="1040" cellspacing="10">
-			<h:panelGroup styleClass="logotype">
+		<h:panelGrid columns="2" styleClass="logotype">
+			<h:column>
 				<p:graphicImage value="/resources/img/jastt_logo.png" />
-			</h:panelGroup>
-			
-			<h:panelGroup id="menuBox" styleClass="menu">
+			</h:column>
+			<h:column>
 				<h1 class="title">JIRA Activity Simple Time Tracker</h1> 
-				
-				<h:panelGroup id="menu" rendered="#{menuBean.visibleForAuthenticated}">
-					<p:commandLink value="Admin Panel" styleClass="menuItem" rendered="#{menuBean.visibleForAdmin}" action="/protected/admin.xhtml?faces-redirect=true">	
-					</p:commandLink>
-					
-					<p:commandLink value="Report" styleClass="menuItem" rendered="#{menuBean.visibleForAdmin}" action="/protected/main.xhtml?faces-redirect=true">				
-					</p:commandLink>
-					
-					
-				</h:panelGroup>
-				
-				<p:commandLink value="LogOut" action="#{loginBean.doLogout}" styleClass="logout" rendered="#{menuBean.visibleForAuthenticated}"/>	
-			</h:panelGroup>
-			
-		
+			</h:column>		
 		</h:panelGrid>
+		
+		<h:panelGroup id="menu" rendered="#{menuBean.visibleForAuthenticated}" styleClass="menu">
+			<p:commandLink value="Admin Panel" styleClass="menuItem" rendered="#{menuBean.visibleForAdmin}" action="/protected/admin.xhtml?faces-redirect=true"/>	
+			<p:commandLink value="Report" styleClass="menuItem" rendered="#{menuBean.visibleForAdmin}" action="/protected/main.xhtml?faces-redirect=true"/>									
+			<p:commandLink value="LogOut" action="#{loginBean.doLogout}" styleClass="menuItem" rendered="#{menuBean.visibleForAuthenticated}"/>
+		</h:panelGroup>
+		
 	</h:form>
 </h:body>
 </html>

@@ -2,6 +2,8 @@
 
 .label{
 	margin-left: 10px;
+	font-weight: bold;
+	color: #14305f;
 }
 
 .item{
@@ -11,10 +13,58 @@
 	margin-bottom: 10px;
 }
 
-.topMenu td{
-	vertical-align: top;	
+.time td{
+	position: relative;
+	top: 10px;
+	vertical-align: top;
+	border-style: none !important;
+}
+.radio{
+	float:left;
+}
+.radioR1{
 	
 }
+.radioR2{
+	margin-top: 50px;
+}
+.predefineddate{
+	margin-top: 10px;
+}
+
+.calendar{
+	margin-top: 30px;
+} 
+
+
+
+.topMenu td{
+	
+	vertical-align: top;	
+	background-color: #F8F8F8 ;
+	
+	border: solid 1px;
+	border-color: #CFD1D1;
+	#border-color: #14305f;
+	
+	border-radius: 5px;
+	#width : 100%;
+	padding: 14px;
+}
+
+.topMenuColumn1 {
+	#width : 20%;
+}
+.topMenuColumn2 {
+	#width : 20%;
+}
+.topMenuColumn3 {
+	width : 100%;
+}
+
+
+
+
 
 .selectOneMenuStyle{
 	margin : 5px;
@@ -23,26 +73,31 @@
 
 
 .ui-selectonemenu{
-     width: 240px !important;
+     width: 270px !important;
      
 }
 
 .ui-selectcheckboxmenu{
-	width: 240px !important;
+	width: 270px !important;
 }
 
-#.ui-button{
-#	width: 100px;
-#}
+
+.buttonPanel {
+	width : 100%;
+	background-color: #F8F8F8 ;
+	border-radius: 5px;
+	border: solid 1px;
+	border-color: #CFD1D1;
+}
 
 .button{
 	width: 100px;
 	margin-left: 10px;
 	margin-right: 0px;
 	margin-top: 20px;
-	margin-bottom: 40px;
+	margin-bottom: 20px;
 }
 
 .tabView{
-	margin-left: 10px;
+	margin-top: 2px;
 }

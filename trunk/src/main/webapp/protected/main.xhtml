@@ -7,10 +7,11 @@
    	
 	<ui:define name="content">
 	<h:outputStylesheet name="css/main.css" />
+	<h:outputStylesheet name="css/default.css" />
 	
 	<h:form id="form">
 
-	<h:panelGrid columns="3"   styleClass="topMenu">
+	<h:panelGrid columns="3"   styleClass="topMenu" columnClasses="topMenuColumn1, topMenuColumn2, topMenuColumn3">
 		<p:column >	
 			<p:outputLabel value="Project:" styleClass="label"/><br />
 			<p:selectOneMenu id="project" value="#{reportBean.project_name}" styleClass="item" >
@@ -51,35 +52,37 @@
 		
 		<p:column>
 			<p:outputLabel value="Time:" styleClass="label"/><br />
-			<h:panelGrid columns="2" width="250" cellspacing="0" styleClass="item">	
-				<p:column style="height:200;">
-					<p:selectOneRadio value="#{reportBean.timespent}" style="height:200;" layout="pageDirection">
-   						<f:selectItem itemValue="allTime" style="margin-bottom:10px;" itemLabel=""  /> 
+			
+			<p:outputPanel>
+				<p:selectOneRadio value="#{reportBean.timespent}" style="height:200;" layout="pageDirection" styleClass="radio" >
+   						<f:selectItem itemValue="allTime" style="margin-bottom:10px;" itemLabel="" /> 
    						<f:selectItem itemValue="date" itemLabel="" />
    						<f:ajax listener="#{reportBean.changeTime}" render="issue allTime dateFrom dateTo" />
-					</p:selectOneRadio>	
-				</p:column>
-		
-				<p:column>
-					<p:selectOneMenu id="allTime" value="#{reportBean.timespent}" disabled="#{reportBean.disableSelectTime}" style="width:200px;" >
-   						<f:selectItem itemLabel="AllTime" noSelectionOption="true" />
-					</p:selectOneMenu>	
-					<br />	
-				 	<p:outputLabel value="from: " styleClass="label"/>
-       			 	<p:calendar id="dateFrom" size="5" style="font-size:11px;" value="#{reportBean.dateFrom}" disabled="#{reportBean.disableSelectDate}"/>
- 				  	<p:outputLabel value=" to: " styleClass="label"/>
-       			 	<p:calendar id="dateTo" size="5" style="font-size:11px;" value="#{reportBean.dateTo}" disabled="#{reportBean.disableSelectDate}" />
-				</p:column>
-			</h:panelGrid>	
+				</p:selectOneRadio>
+				 
+				 <p:selectOneMenu id="allTime" value="#{reportBean.timespent}" disabled="#{reportBean.disableSelectTime}"  styleClass="predefineddate">
+   					<f:selectItem itemLabel="AllTime" noSelectionOption="true" />
+				</p:selectOneMenu>
+				<br />
+				<div class="calendar">
+					<p:outputLabel value="From: " styleClass="label"/>
+       				<p:calendar id="dateFrom" size="5" style="font-size:11px;" value="#{reportBean.dateFrom}" disabled="#{reportBean.disableSelectDate}"/>
+					<p:outputLabel value=" To: " styleClass="label"/>
+       			 	<p:calendar id="dateTo" size="5" style="font-size:11px;" value="#{reportBean.dateTo}" disabled="#{reportBean.disableSelectDate}" /> 
+				</div>
+			</p:outputPanel>
+					
 		</p:column>
 		
 	</h:panelGrid>
 	
 
-	<h:panelGrid columns="3"  >
-		<p:commandButton value="Show" actionListener="#{reportBean.showReport()}" update="tabs" styleClass="button"/>
-		<p:commandButton value="Clear" actionListener="#{reportBean.cancelAction()}" update="tabs" styleClass="button"/>
-		<p:commandButton value="Update" action="#{reportBean.updateData()}" styleClass="button"/>
+	<h:panelGrid columns="1" styleClass="buttonPanel" >
+		<h:column>
+			<p:commandButton value="Show" actionListener="#{reportBean.showReport()}" update="tabs" styleClass="button"/>
+			<p:commandButton value="Clear" actionListener="#{reportBean.cancelAction()}" update="tabs" styleClass="button"/>
+			<p:commandButton value="Update" action="#{reportBean.updateData()}" styleClass="button"/>
+		</h:column>
 	</h:panelGrid>
 	
 	
@@ -171,10 +174,7 @@
 					
 					
 					
-					
-					
-					
-					
+		
 					<br/>
 					
 					<h:panelGrid columns="3" width="250">
