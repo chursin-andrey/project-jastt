@@ -39,7 +39,7 @@ public class UserBean implements Serializable {
 	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*" +
             "@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	
-	private static final String LOGIN_PATTERN = "^[a-z0-9_-]{4,16}$";
+	private static final String LOGIN_PATTERN = "^[a-z0-9_-]{6,16}$";
 	
 	@Autowired
 	private UsersBean usersBean;
@@ -195,15 +195,15 @@ public class UserBean implements Serializable {
     }
 
     public void addUser() {
-    	User user = new User();
-    	user = userService.getUserByLogin(getLogin());
+    	user = userService.getUserByLogin(login);
     	
     	if (user == null) {
         	user = new User();
-        	user.setName(name);
-        	user.setLogin(login);
-        	user.setEmail(email);
     	}
+    	
+    	user.setName(name);
+    	user.setLogin(login);
+    	user.setEmail(email);
     	
         if (isAdmin()) {
     		user.setUserRole("admin");
@@ -217,9 +217,9 @@ public class UserBean implements Serializable {
     			if(server == null){
     				serverService.addServer(url);
     				server = serverService.getServerByUrl(url);
-    			} else {
-    	        	user.setServer(serverService.getServerByUrl(url));
     			}
+    	        
+    			user.setServer(serverService.getServerByUrl(url));
     		} catch (Exception ex) {
     			
     		}
@@ -228,6 +228,9 @@ public class UserBean implements Serializable {
     	}
         userService.addUser(user);
         resetFields();
+        //String messageString = "User with login " + user.getLogin() + " has been created.";
+        //FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", messageString);
+        //FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", messageString));
         usersBean.updateValues();
     }
 }
