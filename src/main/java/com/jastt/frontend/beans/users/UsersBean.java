@@ -20,6 +20,7 @@ import sun.print.resources.serviceui;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.enums.UserRoleEnum;
+import com.jastt.business.services.ServerService;
 import com.jastt.business.services.UserService;
 import com.jastt.frontend.beans.LoginBean;
 import com.jastt.utils.annotations.SessionScope;
@@ -34,6 +35,10 @@ public class UsersBean implements Serializable {
 	
     @Autowired
     private UserService userService;
+    
+	@Autowired
+	private ServerService serverService;
+	
     private User user;
     private List<User> users;
     
@@ -123,7 +128,7 @@ public class UsersBean implements Serializable {
     public String getUsername(User user) {
     	name = user.getName();
     	login = user.getLogin();
-    	if (!name.isEmpty()) {
+    	if (!name.isEmpty() && name != null) {
     		username = name;
     	} else {
     		username = login;
@@ -132,13 +137,35 @@ public class UsersBean implements Serializable {
     }
        
     public void saveUser() {
+    	
         if (isAdmin()) {
         	user.setUserRole("admin");
         } else {
         	user.setUserRole("user");
+    		server = new Server(url);
+    		try {
+            	server = serverService.getServerByUrl(url);
+    			if(server == null) {
+    				serverService.addServer(url);
+    				server = serverService.getServerByUrl(url);
+    			} else {
+    	        	user.setServer(serverService.getServerByUrl(url));
+    			}
+    		} catch (Exception ex) {
+    			
+    		}
         }
         userService.updateUser(user);
         updateValues();
+    }
+    
+    public void cancelHandle() {
+    	try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
+		} catch(Exception e) {
+			LOG.error(e.getMessage());
+		}
+    	updateValues();
     }
     
 	public void deleteUser() {
