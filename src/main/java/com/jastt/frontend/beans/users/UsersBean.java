@@ -1,13 +1,11 @@
 package com.jastt.frontend.beans.users;
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
+import javax.annotation.PreDestroy;
 
 import org.primefaces.event.CloseEvent;
 import org.slf4j.Logger;
@@ -16,18 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import sun.print.resources.serviceui;
-
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.enums.UserRoleEnum;
 import com.jastt.business.services.ServerService;
 import com.jastt.business.services.UserService;
-import com.jastt.frontend.beans.LoginBean;
-import com.jastt.utils.annotations.SessionScope;
+import com.jastt.frontend.utils.Dialogs;
+import com.jastt.frontend.utils.Faces;
+
+import org.primefaces.model.LazyDataModel;
 
 @Component(value="usersBean")
-@SessionScope
+@Scope("session")
 public class UsersBean implements Serializable {
 	
 	private static final long serialVersionUID = 2092800049856823809L;
@@ -40,10 +38,44 @@ public class UsersBean implements Serializable {
 	@Autowired
 	private ServerService serverService;
 	
+	@Autowired
+    private LazyDataModel<User> userDataModel;
+	
     private User user;
     private List<User> users;
-    
+       
+    private String login;
+	private String url;
+    private String userRole;
     private String email;
+    private Server server;
+	private String password;
+	private String username;
+	private boolean admin = false;
+
+	public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+    
+	public LazyDataModel<User> getUserDataModel() {
+        return userDataModel;
+    }
+
+    public void setUserDataModel(LazyDataModel<User> userDataModel) {
+        this.userDataModel = userDataModel;
+    }
     
     public String getEmail() {
 		return email;
@@ -52,8 +84,6 @@ public class UsersBean implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	private String username;
     
 	public String getUsername() {
 		return username;
@@ -72,8 +102,6 @@ public class UsersBean implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	private String login;
 	
     public String getLogin() {
 		return login;
@@ -82,17 +110,10 @@ public class UsersBean implements Serializable {
 	public void setLogin(String login) {
 		this.login = login;
 	}
-
-	private String url;
-    private String userRole;
-    private Server server;
-	private String password;
-	private boolean admin = false;
 	
 	@PostConstruct
     public void init() {
-        users = userService.getAllUsers();
-        
+        users = userService.getAllUsers(); 
     }
     
     public String getUserRole() {
@@ -127,16 +148,35 @@ public class UsersBean implements Serializable {
 		this.admin = admin;
 	}
 	
+    public void addNewUser() {
+        Faces.updateElements(Dialogs.NEW_USER_DIALOG_ID);
+        Faces.showDialog(Dialogs.NEW_USER_DIALOG_WIDGET);
+    }
+	
     public void editUser(User user) {
+    	Faces.updateElements(Dialogs.EDIT_USER_DIALOG_ID);
+        Faces.showDialog(Dialogs.EDIT_USER_DIALOG_WIDGET);
     	resetFields();
     	this.user = user;
-    	if (this.user.getUserRole().equalsIgnoreCase("admin")) {
+    	if (this.user.getUserRole().equalsIgnoreCase(UserRoleEnum.ADMIN.getMark())) {
     		setAdmin(true);
     	} else {
     		setAdmin(false);
     		url = this.user.getServer().getUrl();
     	}
     }
+    
+    public void confirmUserRemoval(User user) {
+    	getUsername(user);
+        Faces.showDialog(Dialogs.CONFIRM_USER_REMOVAL_DIALOG_WIDGET);
+    }
+    
+	public void deleteUser() {
+		userService.deleteUser(user.getLogin());		
+        Faces.info("growl", "User has been removed.",
+                String.format("User %s successfully removed.", username));
+        updateValues();
+	}
     
     public String getUsername(User user) {
     	name = user.getName();
@@ -150,29 +190,28 @@ public class UsersBean implements Serializable {
     }
        
     public void saveUser() {
-    	
         if (isAdmin()) {
-        	user.setUserRole("admin");
+        	user.setUserRole(UserRoleEnum.ADMIN.getMark());
         } else {
-        	user.setUserRole("user");
+        	user.setUserRole(UserRoleEnum.USER.getMark());
     		server = new Server(url);
-    		try {
-            	server = serverService.getServerByUrl(url);
-    			if(server == null) {
-    				serverService.addServer(url);
-    				server = serverService.getServerByUrl(url);
-    			} else {
-    	        	user.setServer(serverService.getServerByUrl(url));
-    			}
-    		} catch (Exception ex) {
+    		
+            server = serverService.getServerByUrl(url);
     			
+            if(server == null) {
+            	serverService.addServer(url);
+    			server = serverService.getServerByUrl(url);
     		}
+    	        
+    		user.setServer(serverService.getServerByUrl(url));
         }
+        
         userService.updateUser(user);
-        resetFields();
         updateValues();
+        resetFields();
     }
     
+    @PreDestroy
     public void resetFields() {
     	name = null;
     	login = null;
@@ -182,48 +221,10 @@ public class UsersBean implements Serializable {
     	userRole = null;
     	admin = false;
     }
-    
-    public void cancelHandle(ActionEvent actionEvent) {
-    	resetFields();
-    	try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
-		} catch(Exception e) {
-			LOG.error(e.getMessage());
-		}
-    	updateValues();
-    }
-    
-	public void deleteUser() {
-		userService.deleteUser(user.getLogin());
-		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");
-			//String messageString = "User with login " + user.getLogin() + " has been deleted.";
-	        //FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", messageString));
-		} catch(Exception e) {
-			LOG.error(e.getMessage());
-		}
-		updateValues();
-	}
-	
+    	
 
     public void updateValues() {
         users = userService.getAllUsers();
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 
 }

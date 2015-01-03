@@ -104,30 +104,6 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 	}
 	
 	
-	//add others item
-	@Transactional
-	@Override
-	public void addUser(User user)
-	{
-		Session session = sessionFactory.getCurrentSession();
-		try {
-			
-			
-		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while add user", ex.getMessage());	
-        	throw new DaoException(ex);
-		} catch (Exception ex) {
-			LOG.error("Unknown error occured while add user", ex.getMessage());
-			throw new DaoException(ex);
-		}
-	}
-	
-	//add others item
-	@Transactional
-	@Override
-	public void editUser(User user) {
-	}
-	
 	@Transactional
 	@Override
 	public void deleteUserByLogin(String login) {

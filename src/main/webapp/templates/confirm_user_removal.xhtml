@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition>
+   		<p:confirmDialog message="Are you sure you want to delete user #{usersBean.username}?"
+    		header="Delete Confirmation" modal="false" severity="alert" widgetVar="confirmUserRemovalDialog">
+        	<div align="center">
+        		<p:commandButton value="Yes" update=":user_form:growl :user_form:usersTable"
+            		actionListener="#{usersBean.deleteUser}"
+            		onclick="PF('confirmUserRemovalDialog').hide()">
+                	<f:setPropertyActionListener target="#{usersBean.user}" value="#{user}" />      
+            	</p:commandButton>
+            	<p:commandButton value="No" type="button" update="confirmUserRemovalDialog"
+            		onclick="PF('confirmUserRemovalDialog').hide()" />
+        	</div>
+     	</p:confirmDialog>
+	</ui:composition>
+</html>

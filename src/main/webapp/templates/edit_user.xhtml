@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+
+<h:body>
+	<ui:composition>
+		<p:dialog header="Change user account info" widgetVar="editUserDialog" modal="true"
+			resizable="false" dynamic="true" maximizable="false" closeOnEscape="true">
+	    <h:form id="edit_form">
+
+		<p:messages id="errors" showDetail="false" showSummary="true" autoUpdate="true"
+			closable="false" />
+        		
+        	<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+        		<p:outputLabel for="editName" value="Name:" />
+				<p:inputText id="editName" value="#{usersBean.user.name}" />
+					
+				<p:outputLabel for="editLogin" value="Login:"/>
+				<p:inputText id="editLogin" value="#{usersBean.user.login}"
+					required="true"	disabled="true"
+					requiredMessage="Login is required" />
+						
+				<p:outputLabel for="editEmail" value="E-mail:" />
+				<p:inputText id="editEmail" value="#{usersBean.user.email}">
+				</p:inputText>
+					
+				<p:outputLabel for="editIsAdmin" value="Admin:" />
+        		<p:selectBooleanCheckbox id="editIsAdmin" value="#{usersBean.admin}" >
+        			<p:ajax update="editLabelUrl, editUrl, editLabelPwd1, editPwd1, editLabelPwd2, editPwd2" />
+        		</p:selectBooleanCheckbox>	
+        		
+        		<p:outputLabel id="editLabelUrl" for="editUrl" value="URL:"/>
+				<p:inputText id="editUrl" value="#{usersBean.url}"
+					required="#{!usersBean.admin}" disabled="#{usersBean.admin}" />
+			
+				<p:outputLabel id="editLabelPwd1" for="editPwd1" value="Password:" />
+        		<p:password id="editPwd1" value="#{usersBean.user.password}" 
+   					requiredMessage="Password is required." />
+   					<!-- required="{usersBean.admin}" disabled="{!usersBean.admin}"  -->
+ 					
+ 				<p:outputLabel id="editLabelPwd2" for="editPwd2" value="Password confirmation:" />
+        		<p:password id="editPwd2" value="#{usersBean.user.password}"
+        			requiredMessage="Password is required." />
+        			<!-- required="{usersBean.admin}" disabled="{!usersBean.admin}" -->							
+					
+				<p:commandButton value="Apply" actionListener="#{usersBean.saveUser}"
+					update=":edit_form :user_form:usersTable" icon="ui-icon-check"
+					oncomplete="if (args &amp;&amp; !args.validationFailed) editUserDialog.hide()" />
+				<p:commandButton value="Cancel" type="button" onclick="editUserDialog.hide()"
+					 icon="ui-icon-close" >
+				</p:commandButton>   			
+			</h:panelGrid>
+		</h:form>
+		</p:dialog>	
+	</ui:composition>
+</h:body>
+</html>
