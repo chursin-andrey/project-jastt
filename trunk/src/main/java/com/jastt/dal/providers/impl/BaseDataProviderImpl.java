@@ -89,8 +89,10 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 
 		try {
 			T dataEntity = mappingService.map(entity, dalEntityClass);
-			session.saveOrUpdate(dataEntity);
-			entity.setId(dataEntity.getId());
+			//session.saveOrUpdate(dataEntity);
+			//entity.setId(dataEntity.getId());
+			session.save(dataEntity);
+			//entity.setId(dataEntity.getId());
 		} catch (HibernateException ex) {
         	LOG.error("Hibernate error occured while creating or updating data entity", ex.getMessage());	
         	throw new DaoException(ex);
@@ -127,11 +129,11 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 	@Transactional
 	@Override
 	public void merge(K entity, Class<T> dalEntityClass) {
-		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			T dataEntity = mappingService.map(entity, dalEntityClass);
-			session.merge(dataEntity);
+			//session.merge(dataEntity);
+			session.update(dataEntity);
 		} catch (HibernateException ex) {
         	LOG.error("Hibernate error occured while creating or updating data entity", ex.getMessage());	
         	throw new DaoException(ex);

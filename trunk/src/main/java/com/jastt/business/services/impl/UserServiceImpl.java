@@ -18,8 +18,10 @@ import com.jastt.dal.providers.UserDataProvider;
 import com.jastt.dal.providers.base.GenericDataProvider;
 
 @Service(value="userService")
-public class UserServiceImpl implements UserService, Serializable{
+public class UserServiceImpl implements UserService {
 
+	//implements UserService, Serializable
+	
 	private static final long serialVersionUID = -8435278915682891057L;
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);	
@@ -44,6 +46,8 @@ public class UserServiceImpl implements UserService, Serializable{
 
 	@Override
 	public void addUser(User user) {
+		String password = user.getPassword();
+		user.setPassword(password);
 		userDataProvider.save(user, UserEntity.class);
 	}
 
