@@ -11,5 +11,6 @@ public interface PermissionService {
 	public Permission getPermission(User user ,Project project);
 	public List<Permission> getPermissionsByUser(User user);
 	public void addPermission(User user, Project project);
+	public void deletePermissionsByUser(User user);
 	
 }
