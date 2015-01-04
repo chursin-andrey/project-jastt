@@ -1,5 +1,6 @@
 package com.jastt.business.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +11,18 @@ import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.services.PermissionService;
 import com.jastt.dal.entities.PermissionEntity;
+import com.jastt.dal.entities.UserEntity;
 import com.jastt.dal.providers.PermissionDataProvider;
+import com.jastt.dal.providers.UserDataProvider;
 
 @Service(value="permissionService")
 public class PermissionServiceImpl implements PermissionService {
 	
 	@Autowired
 	private PermissionDataProvider permissionDataProvider;
+	@Autowired
+	private UserDataProvider userDataProvider;
+	
 	
 	@Override
 	public Permission getPermission(User user, Project project) {
@@ -37,7 +43,15 @@ public class PermissionServiceImpl implements PermissionService {
 		
 	}
 	
-
+	@Override
+	public void deletePermissionsByUser(User user) {	
+		List<Permission> perms = new ArrayList<Permission>();
+		perms = permissionDataProvider.getPermissionByUser(user);
+		for(Permission pr : perms) {
+			permissionDataProvider.delete(pr, PermissionEntity.class);
+		}
+		
+	}
 
 }
 
