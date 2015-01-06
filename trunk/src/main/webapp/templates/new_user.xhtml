@@ -56,7 +56,7 @@
 					<p:commandButton value="Save" actionListener="#{userBean.createUser}"
 						update=":new_user_form:matchGrid :new_user_form :user_form:usersTable :user_form:growl" icon="ui-icon-check"
 						oncomplete="if (args &amp;&amp; !args.validationFailed) newUserDialog.hide()" />
-					<p:commandButton value="Cancel" type="button" onclick="PF('newUserDialog').hide()"
+					<p:commandButton value="Cancel" action="cancel" immediate="true"
 						icon="ui-icon-close">
 					</p:commandButton>   			
 				</h:panelGrid>

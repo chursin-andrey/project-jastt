@@ -89,10 +89,8 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 
 		try {
 			T dataEntity = mappingService.map(entity, dalEntityClass);
-			//session.saveOrUpdate(dataEntity);
-			//entity.setId(dataEntity.getId());
-			session.save(dataEntity);
-			//entity.setId(dataEntity.getId());
+			session.saveOrUpdate(dataEntity);
+			entity.setId(dataEntity.getId());
 		} catch (HibernateException ex) {
         	LOG.error("Hibernate error occured while creating or updating data entity", ex.getMessage());	
         	throw new DaoException(ex);
