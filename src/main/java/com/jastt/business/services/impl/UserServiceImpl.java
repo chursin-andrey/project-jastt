@@ -18,9 +18,7 @@ import com.jastt.dal.providers.UserDataProvider;
 import com.jastt.dal.providers.base.GenericDataProvider;
 
 @Service(value="userService")
-public class UserServiceImpl implements UserService {
-
-	//implements UserService, Serializable
+public class UserServiceImpl implements UserService, Serializable {
 	
 	private static final long serialVersionUID = -8435278915682891057L;
 
