@@ -152,8 +152,8 @@
 	<changeSet id="worklog_table_test_data" author="buslov"
 		context="v1.0,test">
 		<insert tableName="worklog">
+			<column name="self">https://jira.atlassian.com/rest/api/2/issue/182560/worklog/120597</column>
 			<column name="author">Paul Watson [Atlassian]</column>
-			<column name="comment">Added sections to the draft.</column>
 			<column name="created">2014-10-03 07:18:38</column>
 			<column name="updated">2014-10-03 07:18:38</column>
 			<column name="started">2014-10-03 07:15:00</column>
@@ -161,8 +161,8 @@
 			<column name="issue_id">1</column>
 		</insert>
 		<insert tableName="worklog">
+			<column name="self">https://jira.atlassian.com/rest/api/2/issue/182560/worklog/120598</column>
 			<column name="author">Paul Watson [Atlassian]</column>
-			<column name="comment">Completed Linux section</column>
 			<column name="created">2014-10-07 09:25:00</column>
 			<column name="updated">2014-10-07 09:25:00</column>
 			<column name="started">2014-10-07 09:20:00</column>			
@@ -170,8 +170,8 @@
 			<column name="issue_id">1</column>
 		</insert>
 		<insert tableName="worklog">
+			<column name="self">https://jira.atlassian.com/rest/api/2/issue/108045/worklog/91899</column>
 			<column name="author">Seb Ruiz [Atlassian]</column>
-			<column name="comment" value=""/>
 			<column name="created">2014-11-06 10:18:38</column>
 			<column name="updated">2014-11-06 10:18:38</column>
 			<column name="started">2014-11-06 10:15:00</column>		
@@ -179,8 +179,8 @@
 			<column name="issue_id">2</column>
 		</insert>
 		<insert tableName="worklog">
+			<column name="self">https://jira.atlassian.com/rest/api/2/issue/108045/worklog/91902</column>
 			<column name="author">Nick Pellow [Atlassian]</column>
-			<column name="comment" value=""/>
 			<column name="created">2014-11-07 09:25:00</column>
 			<column name="updated">2014-11-07 09:25:00</column>
 			<column name="started">2014-11-07 09:20:00</column>			
