@@ -32,7 +32,6 @@ import com.jastt.business.services.ReportingService;
 public class ReportingServiceImpl implements ReportingService {
 
 //	private static final Logger LOG = LoggerFactory.getLogger(ReportingServiceImpl.class);
-//	Map<String,Object> params= new HashMap<String,Object>();
 	
 	private JRDataSource buildIssueDataSource(List<Issue> issues) {
 		if (issues == null || issues.isEmpty()) return new JREmptyDataSource();

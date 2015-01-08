@@ -18,6 +18,18 @@ public class Worklog extends PersistentEntity<Integer> {
 		
 	}
 
+	public Worklog(Issue issue, String self, String author, Date created, Date updated,
+			Date started, int timeSpent) {
+		super();
+		this.issue = issue;
+		this.self = self;
+		this.author = author;
+		this.created = created;
+		this.updated = updated;
+		this.started = started;
+		this.timeSpent = timeSpent;
+	}
+
 	public Issue getIssue() {
 		return issue;
 	}
