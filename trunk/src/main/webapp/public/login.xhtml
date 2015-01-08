@@ -13,25 +13,25 @@
 		<h:form id="loginForm" class="login" style="margin : 10px" >
 			<h:panelGrid id="grid" columns="3" styleClass="form" >
 			
-				<p:outputLabel for="username" value="Username:" styleClass="label"/>
+				<p:outputLabel for="username" value="Username:"/>
 				<p:inputText id="username" value="#{loginBean.login}" required="true" styleClass="input" />
 			    <!-- <p:message for="username" /> -->
 				    
-				<p:outputLabel for="password" value="Password:" styleClass="label"/>
+				<p:outputLabel for="password" value="Password:"/>
 				<p:password id="password" value="#{loginBean.password}"  required="true" styleClass="input"/>
 				<!-- <p:message for="password" /> -->
 				
-				<p:outputLabel for="url" value="Jira URL:" styleClass="label"/>
+				<p:outputLabel for="url" value="Jira URL:"/>
 				<p:inputText id="url"  value="#{loginBean.url}" required="true" disabled="#{loginBean.adminSwitch}" styleClass="input"/>
 				<!-- <p:message for="url" /> -->
 						
-				<p:outputLabel for="isAdmin" value="Is Admin" styleClass="label"/>
+				<p:outputLabel for="isAdmin" value="Is Admin"/>
 				<p:selectBooleanCheckbox id="isAdmin" value="#{loginBean.adminSwitch}" styleClass="input"  >
 					<p:ajax listener="#{loginBean.isAdminValueListener}" update="url"/>
 				</p:selectBooleanCheckbox>
 				
 				<br/>
-				<p:outputLabel for="rememberMe" value="Remember Me" styleClass="label"/>
+				<p:outputLabel for="rememberMe" value="Remember Me"/>
 				<p:selectBooleanCheckbox id="rememberMe" styleClass="input"/>
 				
 				<p:commandButton id="submit" value="Login"   actionListener="#{loginBean.doLogin}" 
