@@ -1,80 +1,42 @@
 @CHARSET "UTF-8";
 
-.label{
+.ui-outputlabel{
 	margin-left: 10px;
-	font-weight: bold;
-	color: #14305f;
 }
 
 .item{
 	margin-left: 10px;
-	margin-right: 50px;
+	margin-right: 10px;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
-.time td{
-	position: relative;
-	top: 10px;
-	vertical-align: top;
-	border-style: none !important;
-}
 .radio{
+	/*margin-top: 10px;*/
+	margin-top: 15px;
+	margin-left: 10px;
+	margin-right: 20px;
 	float:left;
+	/*height: 150px !important;*/
+	height: 120px !important;
 }
-.radioR1{
-	
-}
-.radioR2{
-	margin-top: 50px;
-}
+
 .predefineddate{
 	margin-top: 10px;
 }
 
-.calendar{
-	margin-top: 30px;
+.calendar-box{
+	/*margin-top: 40px;*/
+	margin-top: 37px;
+}
+
+.calendar-item{
+	width: 100px !important;
 } 
 
 
-
-.topMenu td{
-	
-	vertical-align: top;	
-	background-color: #F8F8F8 ;
-	
-	border: solid 1px;
-	border-color: #CFD1D1;
-	#border-color: #14305f;
-	
-	border-radius: 5px;
-	#width : 100%;
-	padding: 14px;
-}
-
-.topMenuColumn1 {
-	#width : 20%;
-}
-.topMenuColumn2 {
-	#width : 20%;
-}
-.topMenuColumn3 {
-	width : 100%;
-}
-
-
-
-
-
-.selectOneMenuStyle{
-	margin : 5px;
-}
-
-
-
 .ui-selectonemenu{
-     width: 270px !important;
-     
+     width: 270px !important;     
 }
 
 .ui-selectcheckboxmenu{
@@ -82,22 +44,38 @@
 }
 
 
-.buttonPanel {
-	width : 100%;
-	background-color: #F8F8F8 ;
-	border-radius: 5px;
-	border: solid 1px;
-	border-color: #CFD1D1;
+.top-control-panels td{	
+	vertical-align: top;
+	
 }
 
-.button{
+.top-left-panel{
+	padding: 14px;
+}
+
+.top-center-panel{
+	padding: 14px;
+}
+
+.top-right-panel{
+	padding: 14px;
+	width : 100%;
+	min-width: 330px;
+}
+
+.main-buttons-panel{
+	width : 100%;
+	padding: 20px;
+}
+
+.main-buttons{									
 	width: 100px;
-	margin-left: 10px;
-	margin-right: 0px;
-	margin-top: 20px;
-	margin-bottom: 20px;
+	margin-right: 10px;
 }
 
 .tabView{
 	margin-top: 2px;
+	border-radius: 5px;
 }
+
+

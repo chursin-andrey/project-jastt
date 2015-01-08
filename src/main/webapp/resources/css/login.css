@@ -15,17 +15,19 @@
 				
 			box-shadow: 10px -4px 4px rgba(150, 150, 150, 0.21);	
 			font: 10pt sans-serif;		
-		}
+}
+
+.ui-outputlabel{	
+			position : relative;
+			left: 15px;
+}
 		
 		.input{
 			position : relative;
 			left: 45px;
-		}
+}
 		
-		.label{	
-			position : relative;
-			left: 15px;
-		}
+
 		
 		.button{
 			position : relative;

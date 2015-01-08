@@ -7,27 +7,26 @@
    	
 	<ui:define name="content">
 	<h:outputStylesheet name="css/main.css" />
-	<h:outputStylesheet name="css/default.css" />
-	
+		
 	<h:form id="form">
 
-	<h:panelGrid columns="3"   styleClass="topMenu" columnClasses="topMenuColumn1, topMenuColumn2, topMenuColumn3">
+	<h:panelGrid columns="3"   styleClass="top-control-panels" columnClasses="top-left-panel panel, top-center-panel panel, top-right-panel panel">
 		<p:column >	
-			<p:outputLabel value="Project:" styleClass="label"/><br />
+			<p:outputLabel value="Project:"/><br />
 			<p:selectOneMenu id="project" value="#{reportBean.project_name}" styleClass="item" >
 				<f:selectItem itemLabel="Please select a project... " noSelectionOption="true" />
    				<f:selectItems var="project" value="#{reportBean.projects}" itemValue="#{project.name}" itemLabel="#{project.name} " />
    				<f:ajax listener="#{reportBean.changeProject}" render="issue status assignees time" /> 
 			</p:selectOneMenu>	
 			<br />
-			<h:outputLabel value="Members:" styleClass="label"/><br />
+			<p:outputLabel value="Members:"/><br />
 			<p:selectCheckboxMenu id="assignees" value="#{reportBean.assignees_name}" label="Members" disabled="#{reportBean.disableMenu}" filter="true" filterMatchMode="startsWith" styleClass="item" >
         		<f:selectItems var="assignee" value="#{reportBean.assignees}" itemValue="#{assignee.name} " itemLabel="#{assignee.name} " />
         	</p:selectCheckboxMenu>	
 		</p:column>
 			
 		<p:column>
-			<p:outputLabel value="Task:" styleClass="label"/><br />
+			<p:outputLabel value="Task:"/><br />
 			<p:selectOneMenu id="issue"  value="#{reportBean.issueType}" disabled="#{reportBean.disableMenu}" styleClass="item">
 				<f:selectItem itemLabel="All " noSelectionOption="true" />
    				<f:selectItem itemValue="Bug" itemLabel="Bug" />
@@ -38,7 +37,7 @@
 			</p:selectOneMenu>
 			
 			<br />
-			<p:outputLabel value="Status:" styleClass="label"/><br />
+			<p:outputLabel value="Status:"/><br />
 			<p:selectOneMenu id="status"  value="#{reportBean.status}" onchange="submit" immediate="true" disabled="#{reportBean.disableMenu}" styleClass="item">
 				<f:selectItem itemLabel="All " noSelectionOption="true" />
 				<f:selectItem itemValue="Open" itemLabel="Open" />
@@ -51,10 +50,10 @@
 		</p:column>
 		
 		<p:column>
-			<p:outputLabel value="Time:" styleClass="label"/><br />
+			<p:outputLabel value="Time:"/><br />
 			
 			<p:outputPanel>
-				<p:selectOneRadio value="#{reportBean.timespent}" id="time" style="height:200;" layout="pageDirection" disabled="#{reportBean.disableMenu}" styleClass="radio" >
+				<p:selectOneRadio value="#{reportBean.timespent}" id="time"  layout="pageDirection" disabled="#{reportBean.disableMenu}" styleClass="radio" >
    						<f:selectItem itemValue="allTime" style="margin-bottom:10px;" itemLabel="" /> 
    						<f:selectItem itemValue="date" itemLabel="" />
    						<f:ajax listener="#{reportBean.changeTime}" render="issue allTime dateFrom dateTo" />
@@ -64,11 +63,11 @@
    					<f:selectItem itemLabel="AllTime" noSelectionOption="true" />
 				</p:selectOneMenu>
 				<br />
-				<div class="calendar">
-					<p:outputLabel value="From: " styleClass="label"/>
-       				<p:calendar id="dateFrom" size="5" style="font-size:11px;" value="#{reportBean.dateFrom}" disabled="#{reportBean.disableSelectDate}"/>
-					<p:outputLabel value=" To: " styleClass="label"/>
-       			 	<p:calendar id="dateTo" size="5" style="font-size:11px;" value="#{reportBean.dateTo}" disabled="#{reportBean.disableSelectDate}" /> 
+				<div class="calendar-box">
+					<p:outputLabel value="From: "/>
+       				<p:calendar id="dateFrom" size="4" value="#{reportBean.dateFrom}" disabled="#{reportBean.disableSelectDate}" styleClass="calendar-item"/>
+					<p:outputLabel value=" To: "/>
+       			 	<p:calendar id="dateTo" size="4"  value="#{reportBean.dateTo}" disabled="#{reportBean.disableSelectDate}" styleClass="calendar-item"/> 
 				</div>
 			</p:outputPanel>
 					
@@ -77,18 +76,18 @@
 	</h:panelGrid>
 	
 
-	<h:panelGrid columns="1" styleClass="buttonPanel" >
+	<h:panelGrid columns="1" styleClass="main-buttons-panel panel" >
 		<h:column>
-			<p:commandButton value="Show" actionListener="#{reportBean.showReport()}" update="tabs" styleClass="button"/>
-			<p:commandButton value="Clear" actionListener="#{reportBean.cancelAction()}" update="tabs" styleClass="button"/>
-			<p:commandButton value="Update" action="#{reportBean.updateData()}" styleClass="button"/>
+			<p:commandButton value="Show" actionListener="#{reportBean.showReport()}" update="tabs" styleClass="main-buttons"/>
+			<p:commandButton value="Clear" actionListener="#{reportBean.cancelAction()}" update="tabs" styleClass="main-buttons"/>
+			<p:commandButton value="Update" action="#{reportBean.updateData()}" styleClass="main-buttons"/>
 		</h:column>
 	</h:panelGrid>
 	
 	
 		<p:tabView activeIndex="0" id="tabs" styleClass="tabView">
 			<p:tab title="Details">
-					<p:dataTable var="details" value="#{reportBean.reportIssues}" id="Details" rowIndexVar="rowIndex" lazy="true">
+					<p:dataTable var="details" value="#{reportBean.reportIssues}" id="Details" rowIndexVar="rowIndex" lazy="true" >
 						<f:facet name="header">Total Elapsed Time              
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
@@ -98,30 +97,30 @@
                     				<h:outputText value="#{reportBean.minuts}"/>
                 			</p:outputPanel>            
             			</f:facet>
-            			<p:column headerText="№">
+            			<p:column headerText="№" >
             				<h:outputText  value="#{rowIndex+1}"  />
             			</p:column>
-            			<p:column headerText="Date">
+            			<p:column headerText="Date" >
             				<h:outputText  value="#{details.created}"  >
             					<f:convertDateTime pattern="dd.MM.yyyy" />
             				 </h:outputText>
             			</p:column>
-						<p:column headerText="Member">
+						<p:column headerText="Member" >
 							<h:outputText  value="#{details.assignee.name}"  />
                			</p:column>
-						<p:column headerText="Project">
+						<p:column headerText="Project"  >
 							<h:outputText  value="#{details.project.name}"  />
 						</p:column>
-						<p:column headerText="Task">
+						<p:column headerText="Task" >
 							<h:outputText  value="#{details.issueType}"  />
 						</p:column>
-						<p:column headerText="Status">
+						<p:column headerText="Status" >
 						 <h:outputText  value="#{details.status}"  />
 						</p:column>
 						<p:column headerText="Summary">
 							<h:outputText  value="#{details.summary}"  />
 						</p:column>
-						<p:column headerText="Hours">
+						<p:column headerText="Hours" >
 							<h:outputText  value="#{details.timeSpent}"  />
 						</p:column>
 					</p:dataTable>

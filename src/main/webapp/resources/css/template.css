@@ -1,9 +1,7 @@
 @CHARSET "UTF-8";
 
-.logout {
-			
-			float:right;
-		
+.logout {	
+			float:right;		
 }	
 		
 .menuItem {
@@ -12,8 +10,8 @@
 }
 		
 .logotype{
-			#position : relative;
-			#float:left;			
+			/*position : relative;
+			float:left;	*/		
 }	
 		
 .menu{
@@ -25,7 +23,7 @@
 		
 .title{
 			position : relative;
-			#float:left;
+			/*float:left;*/
 			top: -10px;
 			left: 30px;
 			font-family: "Verdana", "sans-serif";
