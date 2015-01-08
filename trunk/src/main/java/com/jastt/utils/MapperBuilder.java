@@ -8,12 +8,14 @@ import com.jastt.business.domain.entities.Permission;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
+import com.jastt.business.domain.entities.Worklog;
 import com.jastt.dal.entities.AssigneeEntity;
 import com.jastt.dal.entities.IssueEntity;
 import com.jastt.dal.entities.PermissionEntity;
 import com.jastt.dal.entities.ProjectEntity;
 import com.jastt.dal.entities.ServerEntity;
 import com.jastt.dal.entities.UserEntity;
+import com.jastt.dal.entities.WorklogEntity;
 
 
 public class MapperBuilder extends BeanMappingBuilder {
@@ -26,7 +28,8 @@ public class MapperBuilder extends BeanMappingBuilder {
 		mapping(PermissionEntity.class, Permission.class).fields("userEntity","user").fields("projectEntity","project");	
 		mapping(ProjectEntity.class, Project.class).fields("serverEntity","server");	
 		mapping(ServerEntity.class, Server.class);	
-		mapping(UserEntity.class, User.class).fields("serverEntity", "server");		
+		mapping(UserEntity.class, User.class).fields("serverEntity", "server");
+		mapping(WorklogEntity.class, Worklog.class).fields("issueEntity", "issue");
 		
 	}
 	

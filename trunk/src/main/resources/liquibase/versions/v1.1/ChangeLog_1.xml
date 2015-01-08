@@ -138,10 +138,12 @@
 				<column name="id" autoIncrement="true" type="int">
 					<constraints primaryKey="true" primaryKeyName="PK_worklog"/>
 				</column>
+				<column name="self" type="varchar(255)">
+					<constraints unique="true" uniqueConstraintName="UQ_worklog_self" nullable="false"/>
+				</column>
 				<column name="author" type="varchar(100)"> 
 					<constraints nullable="false"/> 
 				</column>
-				<column name="comment" type="varchar(255)"/>
 				<column name="created" type="datetime"> 
 					<constraints nullable="false"/> 
 				</column>
