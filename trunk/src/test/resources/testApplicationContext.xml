@@ -33,15 +33,6 @@
 	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
-	<bean id="dataProvider" class="com.jastt.dal.providers.impl.UserDataProviderImpl">
-	</bean>
-	 
-	<bean id="assigneeDataProvider" class="com.jastt.dal.providers.impl.AssigneeDataProviderImpl">
-	</bean>
-	
-	<bean id="projectDataProvider" class="com.jastt.dal.providers.impl.ProjectDataProviderImpl">
-	</bean>
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 

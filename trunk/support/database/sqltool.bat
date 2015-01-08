@@ -1,1 +1,0 @@
-java -jar ../../../../../opt/hsqldb/lib/sqltool.jar
