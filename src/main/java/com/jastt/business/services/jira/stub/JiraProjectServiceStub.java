@@ -1,5 +1,6 @@
 package com.jastt.business.services.jira.stub;
 
+import java.io.Serializable;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,8 +12,9 @@ import com.jastt.business.services.jira.JiraProjectService;
 
 import static com.jastt.business.services.jira.stub.JiraStubConstants.*;
 
-public class JiraProjectServiceStub implements JiraProjectService {
-
+public class JiraProjectServiceStub implements JiraProjectService, Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private Set<Project> projectSet = new HashSet<Project>();
 	
 	public JiraProjectServiceStub() {

@@ -13,8 +13,6 @@ import com.jastt.business.domain.entities.User;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraProjectService;
 
-import static com.jastt.business.services.jira.stub.JiraStubConstants.*;
-
 public class JiraProjectServiceStubTest {
 
 	private User user;
@@ -23,24 +21,23 @@ public class JiraProjectServiceStubTest {
 	@Before
 	public void setUp() throws Exception {
 		Server server = new Server();
-		server.setUrl(SERVER_URL);
+		server.setUrl(JiraStubConstants.SERVER_URL);
 		
 		user = new User();
 		user.setServer(server);
-		user.setLogin(USERNAME);
-		user.setPassword(PASSWORD);
+		user.setLogin(JiraStubConstants.USERNAME);
+		user.setPassword(JiraStubConstants.PASSWORD);
 	}
 
 	@Test
 	public void testGetAllProjects_AllLoadedSuccessfully() throws JiraClientException {
 		Set<Project> projectSet = jiraProjectService.getAllProjects(user);
-		assertTrue(!projectSet.isEmpty());
 		
-		for (Project project : projectSet) {
-			assertNotNull(project.getKey());
-			assertNotNull(project.getName());
-			assertSame(user.getServer(), project.getServer());
-		}
+		assertEquals(1, projectSet.size());
+		Project project = projectSet.iterator().next();
+		assertEquals(JiraStubConstants.PROJECT_KEY, project.getKey());
+		assertEquals(JiraStubConstants.PROJECT_NAME, project.getName());
+		assertSame(user.getServer(), project.getServer());
 	}
 	
 	@Test(expected = RuntimeException.class)
