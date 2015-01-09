@@ -7,12 +7,11 @@
 	
 	<ui:define name="content">
 		
-		<ui:include src="../templates/new_user.xhtml"/>	
+		<ui:include src="../protected/dialogs/new_user.xhtml"/>	
 		
 		<div align="left">
-		<!--  style="overflow:auto; width:100%; height:600px;" > -->
 		<h:form id="user_form">
-			<p:growl id="growl" sticky="true" showDetail="true" showSummary="true" autoUpdate="true" />
+			<p:growl id="growl" sticky="true" showDetail="true" showSummary="true" autoUpdate="true"  />
 			<h:panelGrid>
 				<p:commandButton value="Add user" actionListener="#{usersBean.addNewUser}"
 					update=":new_user_form" icon="ui-icon-circle-plus" />
@@ -54,12 +53,12 @@
                         icon="ui-icon-circle-minus" >
                         <f:setPropertyActionListener target="#{usersBean.user}" value="#{user}" />      
                     </p:commandButton>
-					<ui:include src="../templates/confirm_user_removal.xhtml"/>
+					<ui:include src="../protected/dialogs/confirm_user_removal.xhtml"/>
     			</p:column>	
 			</p:dataTable>
 		</h:form>
 		</div>
 		
-		<ui:include src="../templates/edit_user.xhtml"/>		
+		<ui:include src="../protected/dialogs/edit_user.xhtml"/>		
 	</ui:define>
 </ui:composition>    

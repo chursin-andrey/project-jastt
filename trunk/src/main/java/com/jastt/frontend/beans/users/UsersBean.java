@@ -1,24 +1,31 @@
 package com.jastt.frontend.beans.users;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
-import org.primefaces.event.CloseEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.enums.UserRoleEnum;
+import com.jastt.business.services.IssueService;
+import com.jastt.business.services.PermissionService;
 import com.jastt.business.services.ServerService;
 import com.jastt.business.services.UserService;
+import com.jastt.business.services.jira.JiraClientException;
+import com.jastt.business.services.jira.JiraProjectService;
 import com.jastt.frontend.utils.Dialogs;
 import com.jastt.frontend.utils.Faces;
 
@@ -39,6 +46,15 @@ public class UsersBean implements Serializable {
 	private ServerService serverService;
 	
 	@Autowired
+	private PermissionService permissionService;
+	
+	@Autowired
+	private IssueService issueService;
+	
+	@Autowired
+	private JiraProjectService jiraProjectService;
+	
+	@Autowired
     private LazyDataModel<User> userDataModel;
 	
     private User user;
@@ -46,10 +62,7 @@ public class UsersBean implements Serializable {
        
     private String login;
 	private String url;
-    private String userRole;
-    private String email;
     private Server server;
-	private String password;
 	private String username;
 	private boolean admin = false;
 
@@ -76,14 +89,6 @@ public class UsersBean implements Serializable {
     public void setUserDataModel(LazyDataModel<User> userDataModel) {
         this.userDataModel = userDataModel;
     }
-    
-    public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
     
 	public String getUsername() {
 		return username;
@@ -115,22 +120,6 @@ public class UsersBean implements Serializable {
     public void init() {
         users = userService.getAllUsers(); 
     }
-    
-    public String getUserRole() {
-		return userRole;
-	}
-
-	public void setUserRole(String userRole) {
-		this.userRole = userRole;
-	}
-	
-    public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
 
 	public String getUrl() {
 		return url;
@@ -148,6 +137,28 @@ public class UsersBean implements Serializable {
 		this.admin = admin;
 	}
 	
+	public void verifyJiraLogin(User user) {
+    	FacesContext fc = FacesContext.getCurrentInstance();
+		try {
+			Set<Project> availableProjects = jiraProjectService.getAllProjects(user);
+			userService.addUser(user);
+			User newUser = userService.getUserByLogin(user.getLogin());
+	        issueService.update(newUser);	        
+	        Faces.info("growl", "User successfully updated",
+	        		String.format("User %s has been added.", getUsername(user)));
+		} catch (JiraClientException jce) {
+			if(jce.getStatusCode() == 401 | jce.getStatusCode() == 403){
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+						"Authentication error!", "Wrong Jira username or password!");	
+				fc.addMessage(null, fm);		
+			} else {
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+						"Communication error!", "Wrong  Jira URL or Jira server is not available!");
+				fc.addMessage(null, fm);
+			}		
+		}
+    }
+	
     public void addNewUser() {
         Faces.updateElements(Dialogs.NEW_USER_DIALOG_ID);
         Faces.showDialog(Dialogs.NEW_USER_DIALOG_WIDGET);
@@ -162,6 +173,8 @@ public class UsersBean implements Serializable {
     		setAdmin(true);
     	} else {
     		setAdmin(false);
+    	}
+    	if (this.user.getServer().getUrl() != null) {
     		url = this.user.getServer().getUrl();
     	}
     }
@@ -172,59 +185,68 @@ public class UsersBean implements Serializable {
     }
     
 	public void deleteUser() {
+		permissionService.deletePermissionsByUser(user);
 		userService.deleteUser(user.getLogin());		
-        Faces.info("growl", "User has been removed.",
-                String.format("User %s successfully removed.", username));
+        Faces.hideDialog(Dialogs.CONFIRM_USER_REMOVAL_DIALOG_WIDGET);
+		Faces.info("growl", "User has been removed.",
+                String.format("User %s successfully removed.", getUsername()));
         updateValues();
 	}
     
-    public String getUsername(User user) {
-    	name = user.getName();
-    	login = user.getLogin();
-    	if (!name.isEmpty() && name != null) {
-    		username = name;
-    	} else {
-    		username = login;
+	public String getUsername(User user) {
+    	if (user.getLogin() != null && !user.getLogin().isEmpty()) {
+    		username = user.getLogin();
+    	}
+    	if (user.getName() != null && !user.getName().isEmpty()) {
+    		username = user.getName();
     	}
     	return username;
     }
        
     public void saveUser() {
-        if (isAdmin()) {
-        	user.setUserRole(UserRoleEnum.ADMIN.getMark());
-        } else {
-        	user.setUserRole(UserRoleEnum.USER.getMark());
+    	if (isAdmin()) {
+    		user.setUserRole(UserRoleEnum.ADMIN.getMark());
+    		userService.addUser(user);
+    	} else {
+    		user.setUserRole(UserRoleEnum.USER.getMark());
     		server = new Server(url);
-    		
             server = serverService.getServerByUrl(url);
-    			
-            if(server == null) {
-            	serverService.addServer(url);
+    		if(server == null){
+    			serverService.addServer(url);
     			server = serverService.getServerByUrl(url);
     		}
-    	        
     		user.setServer(serverService.getServerByUrl(url));
-        }
-        
-        userService.updateUser(user);
+    		verifyJiraLogin(user);
+    	}
+       
+        Faces.hideDialog(Dialogs.EDIT_USER_DIALOG_WIDGET);
+        Faces.info("growl", "User successfully updated",
+        		String.format("User %s successfully added.", getUsername(user)));
+		resetFields();
         updateValues();
-        resetFields();
     }
     
     @PreDestroy
     public void resetFields() {
     	name = null;
     	login = null;
-    	email = null;
     	url = null;
-    	password = null;
-    	userRole = null;
     	admin = false;
     }
     	
 
     public void updateValues() {
         users = userService.getAllUsers();
+    }
+    
+    public void cancelHandle(ActionEvent action) {
+    	resetFields();		
+    	try {		
+    		FacesContext.getCurrentInstance().getExternalContext().redirect("/project-jastt/protected/admin.xhtml");		
+    	} catch(Exception e) {		
+    		LOG.error(e.getMessage());		
+    	}		
+    	updateValues();
     }
 
 }
