@@ -6,51 +6,25 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
-<h:head /> 
+		
 <h:body>
-	<ui:composition>
-		<div>
-			<div id="navBarItem">
-				<h:form>
-					<ul class="mainMenu">
-						<li><p:commandLink class="#{menuBean.cssClass('dashboard')}"
-								actionListener="#{menuBean.click('dashboard')}"
-								action="/protected/dashboard.xhtml">
-								<span>Dashboard</span>
-							</p:commandLink></li>
-						<li><p:commandLink class="#{menuBean.cssClass('students')}"
-								actionListener="#{menuBean.click('students')}"
-								action="/protected/students/students.xhtml">
-								<span>Students</span>
-							</p:commandLink></li>
-						<li><p:commandLink class="#{menuBean.cssClass('teachers')}"
-								actionListener="#{menuBean.click('teachers')}"
-								action="/protected/teachers/teachers.xhtml">
-								<span>Teachers</span>
-							</p:commandLink></li>
-						<li><p:commandLink class="#{menuBean.cssClass('reviews')}"
-								actionListener="#{menuBean.click('reviews')}"
-								action="/protected/reviews/reviews.xhtml">
-								<span>Reviews</span>
-							</p:commandLink></li>
-						<li><p:commandLink class="#{menuBean.cssClass('courses')}"
-								actionListener="#{menuBean.click('courses')}"
-								action="/protected/courses/courses.xhtml">
-								<span>Courses</span>
-							</p:commandLink></li>
-						<li><p:commandLink class="#{menuBean.cssClass('subjects')}"
-								actionListener="#{menuBean.click('subjects')}"
-								action="/protected/subjects/subjects.xhtml">
-								<span>Subjects</span>
-							</p:commandLink></li>
-					</ul>
-				</h:form>
-			</div>
-		</div>
-
-		<div id="pageHeader" style="clear: both;">
-			<ui:insert name="pageHeader" />
-		</div>
-	</ui:composition>
+	<h:form>
+	
+		<h:panelGrid columns="2" styleClass="logotype">
+			<h:column>
+				<p:graphicImage value="/resources/img/jastt_logo.png" />
+			</h:column>
+			<h:column>
+				<h1 class="title">JIRA Activity Simple Time Tracker</h1> 
+			</h:column>		
+		</h:panelGrid>
+		
+		<h:panelGroup id="menu" rendered="#{menuBean.visibleForAuthenticated}" styleClass="menu">
+			<p:commandLink value="Admin Panel" styleClass="menuItem" rendered="#{menuBean.visibleForAdmin}" action="/protected/admin.xhtml?faces-redirect=true"/>	
+			<p:commandLink value="Report" styleClass="menuItem" rendered="#{menuBean.visibleForAdmin}" action="/protected/main.xhtml?faces-redirect=true"/>									
+			<p:commandLink value="LogOut" action="#{loginBean.doLogout}" styleClass="menuItem" rendered="#{menuBean.visibleForAuthenticated}"/>
+		</h:panelGroup>
+		
+	</h:form>
 </h:body>
 </html>
