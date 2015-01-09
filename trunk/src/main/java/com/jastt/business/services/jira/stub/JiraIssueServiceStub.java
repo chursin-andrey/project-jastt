@@ -1,5 +1,6 @@
 package com.jastt.business.services.jira.stub;
 
+import java.io.Serializable;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,8 @@ import com.jastt.business.services.jira.JiraIssueService;
 
 import static com.jastt.business.services.jira.stub.JiraStubConstants.*;
 
-public class JiraIssueServiceStub implements JiraIssueService {
+public class JiraIssueServiceStub implements JiraIssueService, Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	private List<String> issueTypeList = Arrays.asList("Bug", "Improvement", "New feature", "Task");
 	private List<String> statusList = Arrays.asList("Open", "In progress", "Resolved", "Reopened", "Closed");

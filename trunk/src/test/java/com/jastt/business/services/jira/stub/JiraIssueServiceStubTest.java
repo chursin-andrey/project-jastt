@@ -1,6 +1,5 @@
 package com.jastt.business.services.jira.stub;
 
-import static com.jastt.business.services.jira.stub.JiraStubConstants.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -30,20 +29,20 @@ public class JiraIssueServiceStubTest {
 	@Before
 	public void setUp() throws Exception {
 		Server server = new Server();
-		server.setUrl(SERVER_URL);
+		server.setUrl(JiraStubConstants.SERVER_URL);
 		
 		user = new User();
 		user.setServer(server);
-		user.setLogin(USERNAME);
-		user.setPassword(PASSWORD);
+		user.setLogin(JiraStubConstants.USERNAME);
+		user.setPassword(JiraStubConstants.PASSWORD);
 		
-		project = new Project(server, PROJECT_KEY, PROJECT_NAME);
+		project = new Project(server, JiraStubConstants.PROJECT_KEY, JiraStubConstants.PROJECT_NAME);
 	}
 
 	@Test
 	public void testGetAllIssuesForProject_AllLoadedSuccessfully() throws JiraClientException {
 		Set<Issue> issueSet = jiraIssueService.getAllIssuesForProject(user, project);
-		assertEquals(ISSUE_COUNT, issueSet.size());
+		assertEquals(JiraStubConstants.ISSUE_COUNT, issueSet.size());
 		
 		for (Issue issue : issueSet) {
 			assertNotNull(issue.getKey());
@@ -111,7 +110,8 @@ public class JiraIssueServiceStubTest {
 			if (issue.getUpdated().after(fromDate)) issueSet1.add(issue);
 		}
 		
-		Project project1 = new Project(project.getServer(), PROJECT_KEY, PROJECT_NAME);
+		Project project1 = new Project(project.getServer(), 
+				JiraStubConstants.PROJECT_KEY, JiraStubConstants.PROJECT_NAME);
 		Set<Issue> issueSet2 = jiraIssueService.getAllIssuesForProject(user, project1, new DateTime(fromDate));
 		for (Issue issue : issueSet2) {
 			assertSame(project1, issue.getProject());
