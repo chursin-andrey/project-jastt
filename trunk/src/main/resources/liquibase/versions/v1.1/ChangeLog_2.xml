@@ -103,8 +103,8 @@
 			<column name="key">STASH0-2524</column>
 			<column name="issue_type">New Feature</column>
 			<column name="status">To Do</column>
-			<column name="created">2014-10-02</column>
-			<column name="updated">2014-10-15</column>
+			<column name="created">2014-10-02 03:20:40</column>
+			<column name="updated">2014-10-15 03:20:40</column>
 			<column name="priority">Minor</column>
 			<column name="summary">Stash startup pages have no links or instructions</column>
 			<column name="time_spent">180</column>
@@ -117,8 +117,8 @@
 			<column name="key">CRUC0-3671</column>
 			<column name="issue_type">Bug</column>
 			<column name="status">Closed</column>
-			<column name="created">2014-11-05</column>
-			<column name="updated">2014-11-17</column>
+			<column name="created">2014-11-05 02:20:40</column>
+			<column name="updated">2014-11-17 02:20:40</column>
 			<column name="priority">Minor</column>
 			<column name="summary">Replace all project/repo/user selects with autocomplete inputs</column>
 			<column name="time_spent">220</column>
