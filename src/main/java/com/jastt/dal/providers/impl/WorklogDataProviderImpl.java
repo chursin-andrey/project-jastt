@@ -40,7 +40,6 @@ public class WorklogDataProviderImpl extends
 					add(Restrictions.eq("issueEntity.id", issue.getId()));
 			List<WorklogEntity> worklogEntityList = cr.list();
 			
-			
 			for (WorklogEntity worklogEntity : worklogEntityList) {
 				Worklog worklog = mappingService.map(worklogEntity, Worklog.class);
 				worklogList.add(worklog);
@@ -54,6 +53,31 @@ public class WorklogDataProviderImpl extends
         	throw new DaoException(ex);
 		}
 		return worklogList;
+	}
+
+	@Transactional
+	@Override
+	public Worklog getWorklogBySelf(String self) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		Worklog worklog = null;
+		try {
+			Criteria cr = session.createCriteria(WorklogEntity.class).
+					add(Restrictions.eq("self", self));
+			WorklogEntity dataEntity = (WorklogEntity) cr.uniqueResult();			
+			
+			if (dataEntity != null) {
+				worklog = mappingService.map(dataEntity, Worklog.class);
+			}
+			
+		} catch (HibernateException ex) {
+			LOG.error("Hibernate error while loading worklog by self", ex.getMessage());
+        	throw new DaoException(ex);
+		} catch (Exception ex) {
+			LOG.error("Unknown error occured while loading worklog by self", ex.getMessage());
+        	throw new DaoException(ex);
+		}
+		return worklog;
 	}	
 
 }
