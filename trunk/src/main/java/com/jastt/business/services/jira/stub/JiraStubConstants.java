@@ -10,4 +10,5 @@ public class JiraStubConstants {
 	public static final String PROJECT_KEY = "TST";
 	
 	public static final int ISSUE_COUNT = 50;//Total number of issues on server
+	public static final int WORKLOG_COUNT = 2;//Number of worklogs within every issue
 }

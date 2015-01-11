@@ -12,4 +12,5 @@ public interface WorklogDataProvider extends
 		PageableDataProvider<WorklogEntity, Worklog, Integer>, Serializable {
 
 	public List<Worklog> getWorklogs(Issue issue);
+	public Worklog getWorklogBySelf(String self);
 }

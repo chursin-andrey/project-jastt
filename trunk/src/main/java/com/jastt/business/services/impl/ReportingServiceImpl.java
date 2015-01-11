@@ -3,6 +3,7 @@ package com.jastt.business.services.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +30,8 @@ import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.services.ReportingService;
 
 @Service("reportingService")
-public class ReportingServiceImpl implements ReportingService {
+public class ReportingServiceImpl implements ReportingService, Serializable {
+	private static final long serialVersionUID = 1L;
 
 //	private static final Logger LOG = LoggerFactory.getLogger(ReportingServiceImpl.class);
 	

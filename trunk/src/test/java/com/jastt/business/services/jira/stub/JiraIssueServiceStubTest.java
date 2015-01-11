@@ -17,6 +17,7 @@ import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
+import com.jastt.business.domain.entities.Worklog;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraIssueService;
 
@@ -44,6 +45,7 @@ public class JiraIssueServiceStubTest {
 		Set<Issue> issueSet = jiraIssueService.getAllIssuesForProject(user, project);
 		assertEquals(JiraStubConstants.ISSUE_COUNT, issueSet.size());
 		
+		Issue prevIssue = null;
 		for (Issue issue : issueSet) {
 			assertNotNull(issue.getKey());
 			assertNotNull(issue.getSummary());
@@ -57,7 +59,38 @@ public class JiraIssueServiceStubTest {
 			assertNotNull(issue.getAssignee().getName());
 			assertNotNull(issue.getAssignee().getEmail());
 			assertSame(project, issue.getProject());
+			//check that issues don't overlap with each other
+			if (prevIssue != null) {
+				assertTrue(issue.getCreated().compareTo(prevIssue.getUpdated()) >= 0);
+			}
+			prevIssue = issue;
 		}
+	}
+	
+	@Test
+	public void testGetAllIssuesForProject_AllWorklogsGenerated()  throws JiraClientException {
+		Set<Issue> issueSet = jiraIssueService.getAllIssuesForProject(user, project);
+		Set<String> worklogKeys = new HashSet<String>();
+		int worklogCounter = 0;
+		
+		for (Issue issue : issueSet) {
+			Set<Worklog> worklogSet = issue.getWorklogs();
+			assertEquals(JiraStubConstants.WORKLOG_COUNT, worklogSet.size());
+
+			int totalTimeSpent = 0;
+			for (Worklog worklog : issue.getWorklogs()) {
+				assertTrue(worklog.getUpdated().compareTo(worklog.getCreated()) >= 0);
+				assertTrue(issue.getUpdated().compareTo(worklog.getUpdated()) >= 0);
+				assertTrue(worklog.getCreated().compareTo(issue.getCreated()) >= 0);
+				totalTimeSpent += worklog.getTimeSpent();
+				
+				worklogCounter++;
+				worklogKeys.add(worklog.getSelf());
+			}
+			assertEquals(issue.getTimeSpent(), totalTimeSpent);
+		}
+		
+		assertEquals(worklogCounter, worklogKeys.size());
 	}
 	
 	@Test(expected = RuntimeException.class)

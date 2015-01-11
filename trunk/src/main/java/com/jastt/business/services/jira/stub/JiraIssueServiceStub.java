@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
+import com.jastt.business.domain.entities.Worklog;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraIssueService;
 
@@ -29,11 +31,14 @@ public class JiraIssueServiceStub implements JiraIssueService, Serializable {
 	private List<String> assigneeNameList = Arrays.asList("Alice", "Bob", "Carol");
 	private int[] timeIntervals = {20, 30, 45, 25, 15, 35, 40};//in minutes
 	
+	private int worklogCounter = 0;
+	
 	private List<Assignee> assigneeList = new ArrayList<Assignee>();
-	private Set<Issue> issueSet = new HashSet<Issue>();
+	private Set<Issue> issueSet = new LinkedHashSet<Issue>();
 	
 	public JiraIssueServiceStub() {
-		generateIssues();
+//		generateIssues();
+		generateIssuesWithWorklog();
 	}
 	
 	private void generateIssues() {
@@ -67,6 +72,67 @@ public class JiraIssueServiceStub implements JiraIssueService, Serializable {
 			
 			issueSet.add(issue);
 		}
+	}
+	
+	private void generateIssuesWithWorklog() {
+		for (String assigneeName : assigneeNameList) {
+			Assignee assignee = new Assignee(assigneeName, assigneeName + "@mail.com");
+			assigneeList.add(assignee);
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(2014, Calendar.JULY, 1);
+		for (int i = 0; i < ISSUE_COUNT; i++) {
+			Issue issue = new Issue();
+			issue.setKey(String.format("%s-%d", PROJECT_KEY, i + 1));
+			issue.setSummary(String.format("This is Issue%d in %s", i + 1, PROJECT_NAME));
+			issue.setAssignee(assigneeList.get(i % assigneeList.size()));
+			
+			issue.setIssueType(issueTypeList.get(i % issueTypeList.size()));
+			issue.setStatus(statusList.get(i % statusList.size()));
+			issue.setPriority(priorityList.get(i % priorityList.size()));
+			
+			calendar.add(Calendar.HOUR_OF_DAY, 1);
+			issue.setCreated(calendar.getTime());
+			issue.setUpdated(issue.getCreated());
+			issue.setTimeSpent(0);		
+			
+			generateWorklog(issue);
+			calendar.setTime(issue.getUpdated());
+			
+			issueSet.add(issue);
+		}
+	}
+	
+	private void generateWorklog(Issue issue) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(issue.getCreated());
+		
+		int totalTimeSpent = 0;
+		Set<Worklog> worklogSet = new LinkedHashSet<Worklog>();
+		for (int i = 1; i <= WORKLOG_COUNT; i++) {
+			Worklog worklog = new Worklog(); 
+			worklog.setIssue(issue);
+			worklog.setSelf(String.format("%s/rest/api/2/issue/%s/worklog/%d", SERVER_URL, issue.getKey(), i));
+			worklog.setAuthor(issue.getAssignee().getName());
+			
+			worklog.setStarted(calendar.getTime());
+			int timeSpent = timeIntervals[worklogCounter % timeIntervals.length];
+			totalTimeSpent += timeSpent;
+			worklog.setTimeSpent(timeSpent);
+			
+			calendar.add(Calendar.MINUTE, worklog.getTimeSpent());
+			worklog.setCreated(calendar.getTime());
+			worklog.setUpdated(calendar.getTime());
+			
+			worklogSet.add(worklog);
+			worklogCounter++;
+		}
+		
+		issue.setWorklogs(worklogSet);
+		issue.setTimeSpent(totalTimeSpent);
+		issue.setUpdated(calendar.getTime());
 	}
 	
 	@Override

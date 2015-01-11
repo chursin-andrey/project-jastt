@@ -1,9 +1,12 @@
 package com.jastt.business.domain.entities;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Project;
+import com.jastt.dal.entities.WorklogEntity;
 
 public class Issue extends PersistentEntity<Integer>{
 	
@@ -20,6 +23,7 @@ public class Issue extends PersistentEntity<Integer>{
 	private String priority;
 	private String summary;
 	private int timeSpent;
+	private Set<Worklog> worklogs = new HashSet<Worklog>(0);
 	
 	public Issue(){
 		
@@ -133,6 +137,16 @@ public class Issue extends PersistentEntity<Integer>{
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
+
+	public Set<Worklog> getWorklogs() {
+		return worklogs;
+	}
+
+
+	public void setWorklogs(Set<Worklog> worklogs) {
+		this.worklogs = worklogs;
+	}
+
 
 	@Override
 	public int hashCode() {
