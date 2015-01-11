@@ -33,6 +33,7 @@ import com.jastt.business.services.PermissionService;
 import com.jastt.business.services.ProjectService;
 import com.jastt.business.services.ServerService;
 import com.jastt.business.services.UserService;
+import com.jastt.business.services.WorklogService;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraIssueService;
 import com.jastt.business.services.jira.JiraProjectService;
@@ -64,6 +65,8 @@ public class IssueServiceImpl implements IssueService, Serializable {
 	private AssigneeService assigneeService; 
 	@Autowired
 	private PermissionService permissionService;
+	@Autowired
+	private WorklogService worklogService;
 	
 	
 	@Override
@@ -243,7 +246,9 @@ public class IssueServiceImpl implements IssueService, Serializable {
 				Project project = projectService.getProjectByName(projectName);	
 				issue.setAssignee(assigneeService.getAssigneeByName(assigneeName));
 				issue.setProject(projectService.getProjectByName(project.getName()));
-				issueDataProvider.save(issue, IssueEntity.class);							
+				issueDataProvider.save(issue, IssueEntity.class);
+				
+				worklogService.addOrUpdateWorklogs(issue.getWorklogs());
 			}	
 		}
 			
