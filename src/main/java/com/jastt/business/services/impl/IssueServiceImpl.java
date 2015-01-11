@@ -233,26 +233,48 @@ public class IssueServiceImpl implements IssueService, Serializable {
 	private void saveIssues(Set<Issue> issuesSet){
 		List<Issue> issues = new ArrayList<Issue>(issuesSet);
 		
-		for(Issue issue : issues){
-			if(issueDataProvider.getIssueByKey(issue.getKey()) == null){
-				String assigneeName =  issue.getAssignee().getName();
-				Assignee assignee = assigneeService.getAssigneeByName(assigneeName);
-				
-				if(assignee == null){
-					assigneeService.addAssignee(issue.getAssignee());
-				}
-				
-				String projectName = issue.getProject().getName();
-				Project project = projectService.getProjectByName(projectName);	
-				issue.setAssignee(assigneeService.getAssigneeByName(assigneeName));
-				issue.setProject(projectService.getProjectByName(project.getName()));
-				issueDataProvider.save(issue, IssueEntity.class);
-				
+		for(Issue issueFromJira : issues){
+			Issue issueFormDataBase = issueDataProvider.getIssueByKey(issueFromJira.getKey());
+			
+			if(issueFormDataBase == null){
+				Issue issue = prepareToPersist(issueFromJira);		
+				issueDataProvider.save(issue, IssueEntity.class);	
 				worklogService.addOrUpdateWorklogs(issue.getWorklogs());
-			}	
+					
+			}else{
+				Date upTimeFromJira = issueFromJira.getUpdated();
+				Date upTimeFromDataBase = issueFormDataBase.getUpdated();
+							
+				if(!upTimeFromJira .equals(upTimeFromDataBase )){					
+					
+					Issue issue = prepareToPersist(issueFromJira);	
+					issue.setId(issueFormDataBase.getId());
+					issueDataProvider.save(issue, IssueEntity.class);	
+					worklogService.addOrUpdateWorklogs(issue.getWorklogs());		
+				}			
+				
+			}
+		
 		}
 			
 	}
+	
+	
+	private Issue prepareToPersist(Issue issue){
+		String projectName = issue.getProject().getName();
+		String assigneeName =  issue.getAssignee().getName();
+		
+		Assignee assignee = assigneeService.getAssigneeByName(assigneeName);	
+		if(assignee == null){
+			assigneeService.addAssignee(issue.getAssignee());
+		}
+		
+		issue.setAssignee(assigneeService.getAssigneeByName(assigneeName));
+		issue.setProject(projectService.getProjectByName(projectName));
+		
+		return issue;
+	}
+
 	
 		
 }

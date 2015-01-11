@@ -126,7 +126,7 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 		this.status = status;
 	}
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED", nullable = false, length = 10)
 	public Date getCreated() {
 		return this.created;
@@ -136,7 +136,7 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 		this.created = created;
 	}
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "UPDATED", nullable = false, length = 10)
 	public Date getUpdated() {
 		return this.updated;
