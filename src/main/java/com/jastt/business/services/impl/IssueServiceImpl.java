@@ -1,6 +1,7 @@
 package com.jastt.business.services.impl;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,16 +9,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.jws.soap.SOAPBinding.Use;
 import javax.persistence.criteria.From;
-
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Permission;
@@ -107,12 +105,15 @@ public class IssueServiceImpl implements IssueService, Serializable {
 	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees,
 			IssueTypeEnum issueType, PredefinedDateEnum period) {
 		
-		List<Issue> issues = new ArrayList<Issue>();
+		Calendar calendar = Calendar.getInstance();	
+		Date fromDate = calendar.getTime();
+		Date toDate = calendar.getTime();
 		
-		Calendar calendar = Calendar.getInstance();
-		Date fromDate = new Date();
-		Date toDate = new Date();
-		
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		calendar.setFirstDayOfWeek(Calendar.MONDAY);
 		
 		switch (period) {
 			case ALL_TIME:{
@@ -121,49 +122,70 @@ public class IssueServiceImpl implements IssueService, Serializable {
 				break;
 			}
 			case TODAY:{
-				//TODO
+				fromDate = calendar.getTime();
 				break;
 			}
 			case YESTERDAY:{
-				//TODO
+				toDate = calendar.getTime();					
+				calendar.add(Calendar.DATE, -1);
+				fromDate = calendar.getTime();
 				break;
 			}
 			case THIS_WEEK:{
-				//TODO
+				calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+				fromDate = calendar.getTime();
 				break;
 			}
 			case LAST_WEEK:{
-				//TODO
+				calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+				toDate = calendar.getTime();
+				calendar.add(Calendar.DATE, -7);
+				fromDate = calendar.getTime();	
 				break;
 			}
 			case LAST_SEVEN_DAYS:{
-				//TODO
+				calendar.add(Calendar.DATE, -7);
+				fromDate = calendar.getTime();
 				break;
 			}
 			case THIS_MONTH:{
-				//TODO
+				calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+				fromDate = calendar.getTime();
 				break;
 			}
 			case LAST_MONTH:{
-				//TODO
+				calendar.add(Calendar.MONTH, -1);
+				calendar.set(Calendar.DATE, 1);
+				fromDate = calendar.getTime();
+				calendar.set(Calendar.DATE,  calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1);
+				toDate = calendar.getTime();
 				break;
 			}
 			case LAST_THIRTY_DAYS:{
-				//TODO
+				calendar.add(Calendar.DATE, -30);
+				fromDate = calendar.getTime();
 				break;
 			}
 			case THIS_YEAR:{
-				//TODO
+				calendar.set(Calendar.DAY_OF_YEAR, 1);
+				fromDate = calendar.getTime();
 				break;
 			}
 		}
-			
 		
-		return issues;
+		List<Issue> issues = new ArrayList<Issue>();
+		
+		/* TODO Here is must be invocation of getIssues method with from and to date, for example:
+		 * issues = getIssues(project, status, assignees, issueType, fromDate, toDate);
+		 * or
+		 * return getIssues(project, status, assignees, issueType, fromDate, toDate);
+		 */
+		
+		return issues ;
 	}
 
 	@Override
-	public void update(User user) throws JiraClientException {	
+	public void update(User user) throws JiraClientException {
 		try{
 			Set<Project> projects_set = jiraProjectService.getAllProjects(user);
 			List<Project> projects = new ArrayList<Project>(projects_set);
