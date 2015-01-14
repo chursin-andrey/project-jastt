@@ -1,5 +1,6 @@
 package com.jastt.business.services.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import com.jastt.dal.providers.PermissionDataProvider;
 import com.jastt.dal.providers.UserDataProvider;
 
 @Service(value="permissionService")
-public class PermissionServiceImpl implements PermissionService {
+public class PermissionServiceImpl implements PermissionService, Serializable {
 	
 	@Autowired
 	private PermissionDataProvider permissionDataProvider;
