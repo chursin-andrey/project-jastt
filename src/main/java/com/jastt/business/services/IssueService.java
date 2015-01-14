@@ -15,7 +15,7 @@ public interface IssueService {
 	public Issue getIssueById(Integer id);
 	public List<Issue> getIssuesByProject(Project project);
 	public List<Issue> getAllIssues();
-	public List<Issue> getIssues(Project project, IssueStatusEnum status, Assignee assignee, IssueTypeEnum issueType, Date fromDate, Date toDate);
+	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees, IssueTypeEnum issueType, Date fromDate, Date toDate);
 	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees, IssueTypeEnum issueType, PredefinedDateEnum period);
 	public void update(User user) throws JiraClientException;
 	

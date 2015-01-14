@@ -40,6 +40,7 @@ import com.jastt.business.services.ProjectService;
 import com.jastt.business.services.ReportingService;
 import com.jastt.business.services.impl.IssueServiceImpl;
 import com.jastt.business.services.jira.JiraClientException;
+import com.jastt.business.enums.PredefinedDateEnum;
 
 @Component
 @Scope("session")
@@ -69,6 +70,7 @@ public class ReportBean implements Serializable{
 	private boolean disableSelectDate;
 	private String timespent;
 	private String status;
+	private String predefinedDate;
 	private int hours;
 	private int minuts;
 	
@@ -140,6 +142,7 @@ public class ReportBean implements Serializable{
 	}
 	
 	public void showReport() {
+		reportAssignees = new ArrayList<Assignee>();
 		IssueTypeEnum type = null;
 		IssueStatusEnum issueStatus = null;
 		if(reportIssues != null) reportIssues.clear();
@@ -149,8 +152,12 @@ public class ReportBean implements Serializable{
 		reportIssues = new ArrayList<Issue>();
 		if(assignees_name.size() != 0) {
 			for(String assign : assignees_name) {
-				reportIssues.addAll(issueService.getIssues(project, issueStatus, assigneeService.getAssigneeByName(assign), type, dateFrom, dateTo));	
+				reportAssignees.add(assigneeService.getAssigneeByName(assign));	
 			}
+			if(timespent == "date")
+				reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, dateFrom, dateTo);
+			else
+				reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, PredefinedDateEnum.getType(predefinedDate));
 			addHours(reportIssues);
 						
 		} else {
@@ -415,6 +422,14 @@ public class ReportBean implements Serializable{
 
 	public void setMinuts(int minuts) {
 		this.minuts = minuts;
+	}
+
+	public String getPredefinedDate() {
+		return predefinedDate;
+	}
+
+	public void setPredefinedDate(String predefinedDate) {
+		this.predefinedDate = predefinedDate;
 	}
 
 
