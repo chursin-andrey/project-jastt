@@ -1,6 +1,6 @@
 package com.jastt.business.services.jira.impl;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +18,7 @@ public class JiraProjectServiceImpl implements JiraProjectService {
 
 	@Override
 	public Set<Project> getAllProjects(User user) throws JiraClientException {    	
-    	Set<Project> projectSet = new HashSet<Project>(); 
+    	Set<Project> projectSet = new LinkedHashSet<Project>(); 
 		
 		JiraClient jc = new JiraClient(user.getServer().getUrl(), 
 				user.getLogin(), user.getPassword());
