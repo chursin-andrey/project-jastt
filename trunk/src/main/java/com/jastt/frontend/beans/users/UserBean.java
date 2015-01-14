@@ -10,6 +10,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.primefaces.event.CloseEvent;
 
 import javax.faces.validator.ValidatorException;
@@ -218,6 +219,7 @@ public class UserBean implements Serializable {
     public void createUser() {    	
         if (isAdmin()) {
     		user.setUserRole(UserRoleEnum.ADMIN.getMark());
+    		user.setPassword(new Sha512Hash(user.getPassword(), user.getLogin(), 1).toHex());
     		userService.addUser(user);
     		Faces.hideDialog(Dialogs.NEW_USER_DIALOG_WIDGET);
     		Faces.info("growl", "New user successfully added",
