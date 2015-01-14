@@ -29,6 +29,7 @@ import com.jastt.business.services.jira.JiraProjectService;
 import com.jastt.frontend.utils.Dialogs;
 import com.jastt.frontend.utils.Faces;
 
+import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.primefaces.model.LazyDataModel;
 
 @Component(value="usersBean")
@@ -206,6 +207,7 @@ public class UsersBean implements Serializable {
     public void saveUser() {
     	if (isAdmin()) {
     		user.setUserRole(UserRoleEnum.ADMIN.getMark());
+    		user.setPassword(new Sha512Hash(user.getPassword(), user.getLogin(), 1).toHex());
     		userService.addUser(user);
     	} else {
     		user.setUserRole(UserRoleEnum.USER.getMark());

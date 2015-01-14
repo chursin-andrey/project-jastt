@@ -86,7 +86,7 @@ public class UserEntity extends GenericDalEntity<Integer> implements java.io.Ser
 		this.name = name;
 	}
 
-	@Column(name = "PASSWORD", length = 100)
+	@Column(name = "PASSWORD", length = 1024)
 	public String getPassword() {
 		return this.password;
 	}

@@ -22,7 +22,7 @@
 			<column name="id">1</column>
 			<column name="login">admin</column>
 			<column name="name">Administrator</column>
-			<column name="password">admin</column>
+			<column name="password">8450eca01665516d9aeb5317764902b78495502637c96192c81b1683d32d691a0965cf037feca8b9ed9ee6fc6ab8f27fce8f77c4fd9b4a442a00fc317b8237e6</column>
 			<column name="email">admin@email.com</column>
 			<column name="user_role">admin</column>
 		</insert>
