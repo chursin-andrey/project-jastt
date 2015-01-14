@@ -8,6 +8,7 @@
 	xmlns:p="http://primefaces.org/ui">
 		
 <h:body>
+	<ui:composition>
 	<h:form>
 	
 		<h:panelGrid columns="2" styleClass="logotype">
@@ -21,10 +22,12 @@
 		
 		<h:panelGroup id="menu" rendered="#{menuBean.visibleForAuthenticated}" styleClass="menu">
 			<p:commandLink value="Admin Panel" styleClass="menuItem" rendered="#{menuBean.visibleForAdmin}" action="/protected/admin.xhtml?faces-redirect=true"/>	
-			<p:commandLink value="Report" styleClass="menuItem" rendered="#{menuBean.visibleForAdmin}" action="/protected/main.xhtml?faces-redirect=true"/>									
+			<p:commandLink value="Report" styleClass="menuItem" rendered="#{menuBean.visibleForAuthenticated}" action="/protected/main.xhtml?faces-redirect=true"/>									
+			<p:commandLink value="Worklog" styleClass="menuItem" rendered="#{menuBean.visibleForAuthenticated}" action="/protected/worklog.xhtml?faces-redirect=true"/>
 			<p:commandLink value="LogOut" action="#{loginBean.doLogout}" styleClass="menuItem" rendered="#{menuBean.visibleForAuthenticated}"/>
 		</h:panelGroup>
 		
 	</h:form>
+	</ui:composition>
 </h:body>
 </html>
