@@ -36,6 +36,10 @@
 			</h:panelGrid>
 			
 			<p:dataTable id="worklogList" value="#{worklogBean.worklogList}" var="worklog" rowIndexVar="rowIndex" styleClass="tabView">
+				<f:facet name="header">
+					List of Worklogs
+				</f:facet>
+				
 				<p:column headerText="№">
 					<h:outputText value="#{rowIndex+1}"/>
 				</p:column>

@@ -5,7 +5,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -165,7 +164,7 @@ public class JiraIssueServiceStub implements JiraIssueService, Serializable {
 		if (!project.getKey().equals(PROJECT_KEY))
 			throw new JiraClientException("The value " + PROJECT_KEY + " does not exist for the project field", 400);
 		
-		Set<Issue> tmpIssueSet = new HashSet<Issue>();
+		Set<Issue> tmpIssueSet = new LinkedHashSet<Issue>();
 		
 		for (Issue issue : issueSet) {
 			if (issue.getUpdated().after(fromDate.toDate())) {

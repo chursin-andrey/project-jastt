@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -73,7 +74,7 @@ public class JiraClient {
 	}
 	
 	public Set<BasicProject> getAllProjects() throws JiraClientException {    	
-    	Set<BasicProject> projectSet = new HashSet<BasicProject>();
+    	Set<BasicProject> projectSet = new LinkedHashSet<BasicProject>();
     	
     	try {
 			try (JiraRestClient jrc = createJiraRestClient()) {
@@ -90,7 +91,7 @@ public class JiraClient {
     	return projectSet;
     }
 	 
-	int getTotalNumberOfIssuesForQuery(final String jql) throws JiraClientException {
+	public int getTotalNumberOfIssuesForQuery(final String jql) throws JiraClientException {
 		try {
 			try (JiraRestClient jrc = createJiraRestClient()) {
 				SearchRestClient searchClient = jrc.getSearchClient();
@@ -106,10 +107,10 @@ public class JiraClient {
 	
 	Set<Issue> getAllIssuesByQuery(final String jql, final Integer pageSize) throws JiraClientException {
 		String[] requiredFields = {"project", "summary", "issuetype", "status", "created", "updated", "priority", 
-    			"timetracking", "versions", "assignee"};
+    			"timetracking", "versions", "assignee", "worklog"};
     	Set<String> fields = new HashSet<String>(Arrays.asList(requiredFields));
     	
-    	Set<Issue> issueSet = new HashSet<Issue>();
+    	Set<Issue> issueSet = new LinkedHashSet<Issue>();
     	
     	try {
 			try (JiraRestClient jrc = createJiraRestClient()) {
@@ -141,10 +142,10 @@ public class JiraClient {
 	
 	public Set<Issue> getSomeIssuesByQuery(final String jql, final Integer maxResults) throws JiraClientException {
 		String[] requiredFields = {"project", "summary", "issuetype", "status", "created", "updated", "priority", 
-    			"timetracking", "versions", "assignee"};
+    			"timetracking", "versions", "assignee", "worklog"};
     	Set<String> fields = new HashSet<String>(Arrays.asList(requiredFields));
     	
-    	Set<Issue> issueSet = new HashSet<Issue>();    	
+    	Set<Issue> issueSet = new LinkedHashSet<Issue>();    	
     	
     	try {
 			try (JiraRestClient jrc = createJiraRestClient()) {
