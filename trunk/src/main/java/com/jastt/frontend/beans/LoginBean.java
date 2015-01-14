@@ -2,18 +2,22 @@ package com.jastt.frontend.beans;
 
 import java.io.Serializable;
 import java.util.Set;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
@@ -81,7 +85,7 @@ public class LoginBean implements Serializable {
 		
 		FacesContext fc = FacesContext.getCurrentInstance();	
 		Subject subject = SecurityUtils.getSubject();	
-		UsernamePasswordToken token = new UsernamePasswordToken(getLogin()  ,getPassword(), isRememberMe());
+		UsernamePasswordToken token = new UsernamePasswordToken(getLogin()  ,new Sha512Hash(getPassword(), getLogin(), 1).toHex(), isRememberMe());
 
 		try {	
 			User user = userService.getUserByLogin(getLogin());
@@ -142,7 +146,7 @@ public class LoginBean implements Serializable {
 				user  = new User();
 				user .setLogin(getLogin());
 				user .setServer(serverService.getServerByUrl(getUrl()));
-				user .setUserRole(UserRoleEnum.USER.getMark());																							
+				user .setUserRole(UserRoleEnum.USER.getMark());	
 				userService.addUser(user );
 				user = userService.getUserByLogin(getLogin());
 				user.setPassword(getPassword());
