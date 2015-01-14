@@ -58,9 +58,18 @@
    						<f:selectItem itemValue="date" itemLabel="" />
    						<f:ajax listener="#{reportBean.changeTime}" render="issue allTime dateFrom dateTo" />
 				</p:selectOneRadio>
-				 
-				 <p:selectOneMenu id="allTime" value="#{reportBean.timespent}" disabled="#{reportBean.disableSelectTime}"  styleClass="predefineddate">
-   					<f:selectItem itemLabel="AllTime" noSelectionOption="true" />
+				   
+				 <p:selectOneMenu id="allTime" value="#{reportBean.predefinedDate}" disabled="#{reportBean.disableSelectTime}"  styleClass="predefineddate">
+   					<f:selectItem itemValue="All Time" itemLabel="All Time" noSelectionOption="true" />
+   					<f:selectItem itemValue="Today" itemLabel="Today" noSelectionOption="true" />
+   					<f:selectItem itemValue="Yesterday" itemLabel="Yesterday" noSelectionOption="true" />
+   					<f:selectItem itemValue="This week" itemLabel="This week" noSelectionOption="true" />
+   					<f:selectItem itemValue="Last week" itemLabel="Last week" noSelectionOption="true" />
+   					<f:selectItem itemValue="Last seven days" itemLabel="Last seven days" noSelectionOption="true" />
+   					<f:selectItem itemValue="This month" itemLabel="This month" noSelectionOption="true" />
+   					<f:selectItem itemValue="Last month" itemLabel="Last month" noSelectionOption="true" />
+   					<f:selectItem itemValue="Last thirty days" itemLabel="Last thirty days" noSelectionOption="true" />
+   					<f:selectItem itemValue="This year" itemLabel="This year" noSelectionOption="true" />
 				</p:selectOneMenu>
 				<br />
 				<div class="calendar-box">

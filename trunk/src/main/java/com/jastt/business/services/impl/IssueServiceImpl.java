@@ -85,13 +85,17 @@ public class IssueServiceImpl implements IssueService, Serializable {
 	}
 	
 	@Override
-	public List<Issue> getIssues(Project project, IssueStatusEnum status, Assignee assignee,
+	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees,
 			IssueTypeEnum issueType, Date fromDate, Date toDate) {
 		
 		List<Issue> issues = new ArrayList<Issue>();
-		
-		try{	
-			issues = issueDataProvider.getIssues(project, status, assignee, issueType, fromDate, toDate);
+		if(project == null) return null;
+		try{
+			if(assignees != null){
+				for(Assignee asgn : assignees)
+					issues.addAll(issueDataProvider.getIssues(project, status, asgn, issueType, fromDate, toDate));
+			} else
+				issues = issueDataProvider.getIssues(project, status, null, issueType, fromDate, toDate);
 			return issues;	
 		
 		}catch(Exception unknownException){
@@ -174,7 +178,7 @@ public class IssueServiceImpl implements IssueService, Serializable {
 		}
 		
 		List<Issue> issues = new ArrayList<Issue>();
-		
+		issues = getIssues(project, status, assignees, issueType, fromDate, toDate);
 		/* TODO Here is must be invocation of getIssues method with from and to date, for example:
 		 * issues = getIssues(project, status, assignees, issueType, fromDate, toDate);
 		 * or
