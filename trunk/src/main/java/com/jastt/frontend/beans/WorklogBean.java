@@ -49,7 +49,7 @@ public class WorklogBean implements Serializable {
 	
 	@PostConstruct
 	public void init() {
-		/*Subject subject = SecurityUtils.getSubject();	
+		Subject subject = SecurityUtils.getSubject();	
 		User user = (User) subject.getSession().getAttribute("user");
 		if (user == null) return;
 		
@@ -57,9 +57,9 @@ public class WorklogBean implements Serializable {
 		for (Permission prm : userPermissions) {
 			Project tmp = prm.getProject();
 			projectList.add(tmp);
-		}*/
+		}
 		
-		projectList = projectService.getAllProjects();
+//		projectList = projectService.getAllProjects();
 	}
 	
 	public void showButtonClick() {
