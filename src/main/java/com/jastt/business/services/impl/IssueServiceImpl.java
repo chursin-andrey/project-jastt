@@ -177,15 +177,8 @@ public class IssueServiceImpl implements IssueService, Serializable {
 			}
 		}
 		
-		List<Issue> issues = new ArrayList<Issue>();
-		issues = getIssues(project, status, assignees, issueType, fromDate, toDate);
-		/* TODO Here is must be invocation of getIssues method with from and to date, for example:
-		 * issues = getIssues(project, status, assignees, issueType, fromDate, toDate);
-		 * or
-		 * return getIssues(project, status, assignees, issueType, fromDate, toDate);
-		 */
 		
-		return issues ;
+		return getIssues(project, status, assignees, issueType, fromDate, toDate);
 	}
 
 	@Override

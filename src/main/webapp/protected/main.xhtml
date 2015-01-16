@@ -95,8 +95,8 @@
 	
 	
 		<p:tabView activeIndex="0" id="tabs" styleClass="tabView">
-			<p:tab title="Details">
-					<p:dataTable var="details" value="#{reportBean.reportIssues}" id="Details" rowIndexVar="rowIndex" lazy="true" >
+			<p:tab title="Issues">
+					<p:dataTable var="details" value="#{reportBean.reportIssues}" id="Details" rowIndexVar="rowIndex" >
 						<f:facet name="header">Total Elapsed Time              
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
@@ -106,48 +106,62 @@
                     				<h:outputText value="#{reportBean.minuts}"/>
                 			</p:outputPanel>            
             			</f:facet>
+            			
             			<p:column headerText="№" >
             				<h:outputText  value="#{rowIndex+1}"  />
             			</p:column>
-            			<p:column headerText="Date" >
+            			<p:column headerText="Date" sortBy="#{details.created}">
             				<h:outputText  value="#{details.created}"  >
             					<f:convertDateTime pattern="dd.MM.yyyy" />
             				 </h:outputText>
             			</p:column>
-						<p:column headerText="Member" >
+						<p:column headerText="Member" sortBy="#{details.assignee.name}" width="130">
 							<h:outputText  value="#{details.assignee.name}"  />
                			</p:column>
-						<p:column headerText="Project"  >
+						<p:column headerText="Project"  sortBy="#{details.project.name}">
 							<h:outputText  value="#{details.project.name}"  />
 						</p:column>
-						<p:column headerText="Task" >
+						<p:column headerText="Task" sortBy="#{details.issueType}">
 							<h:outputText  value="#{details.issueType}"  />
 						</p:column>
-						<p:column headerText="Status" >
+						<p:column headerText="Status" sortBy="#{details.status}">
 						 <h:outputText  value="#{details.status}"  />
 						</p:column>
-						<p:column headerText="Summary">
+						<p:column headerText="Key" sortBy="#{details.key}" >
+							<h:outputText  value="#{details.key}"  />
+						</p:column>
+						<p:column headerText="Issue" sortBy="#{details.summary}">
 							<h:outputText  value="#{details.summary}"  />
 						</p:column>
-						<p:column headerText="Hours" >
+						<p:column headerText="Hours" sortBy="#{details.timeSpent}" width="80">
 							<h:outputText  value="#{details.timeSpent}"  />
 						</p:column>
 					</p:dataTable>
 			</p:tab>
 			
-			
-			
-			
-			
-        	<p:tab title="Report">   
+					
+        	<p:tab title="Report">
 					<p:dataTable var="report" value="#{reportBean.reportIssues}" id="Report" rowIndexVar="rowIndex" lazy="true">
-							 <f:facet name="header">Total Elapsed Time              
+							 <f:facet name="header">Total Elapsed Time       
                 				<p:column datasource="Report" trigger="toggler"/>
                					<p:outputPanel>
                     				<h:outputText value="hours:"/> 
                     				<h:outputText value="#{reportBean.hours}"/>
                     				<h:outputText value="	minuts:"/>
                     				<h:outputText value="#{reportBean.minuts}"/>
+                    				
+                    				<div class="top-export-buttons-panel">
+										<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/pdf32.png" styleClass="export-button">
+											<f:param name="reportFormat" value="pdf"/>
+										</h:commandButton>
+										<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/xls32.png" styleClass="export-button">
+											<f:param name="reportFormat" value="xls"/>
+										</h:commandButton>
+										<h:commandButton actionListener="#{reportBean.exportIssueList}" image="/resources/img/xlsx32.png" styleClass="export-button">
+											<f:param name="reportFormat" value="xlsx"/>
+										</h:commandButton>
+									</div>
+									 
                 				</p:outputPanel>
                 			</f:facet>
                 			<p:column style="width:16px">
@@ -180,24 +194,25 @@
 							
 							 </p:panelGrid>
 						</p:rowExpansion> 
+						
+					<f:facet name="footer">
+						<h:outputText value="&#160;" /><br/><h:outputText value="&#160;" />
+						
+							
+						<div class="bottom-export-buttons-panel">
+							<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/pdf32.png" styleClass="export-button">
+								<f:param name="reportFormat" value="pdf"/>
+							</h:commandButton>
+							<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/xls32.png" styleClass="export-button">
+								<f:param name="reportFormat" value="xls"/>
+							</h:commandButton>
+							<h:commandButton actionListener="#{reportBean.exportIssueList}" image="/resources/img/xlsx32.png" styleClass="export-button">
+								<f:param name="reportFormat" value="xlsx"/>
+							</h:commandButton>
+						</div>
+					</f:facet>
 					</p:dataTable>
-					
-					
-					
-		
-					<br/>
-					
-					<h:panelGrid columns="3" width="250">
-						<h:commandButton value="Export to PDF" actionListener="#{reportBean.exportIssueList}">
-							<f:param name="reportFormat" value="pdf"/>
-						</h:commandButton>
-						<h:commandButton value="Export to Xls" actionListener="#{reportBean.exportIssueList}">
-							<f:param name="reportFormat" value="xls"/>
-						</h:commandButton>
-						<h:commandButton value="Export to Xlsx" actionListener="#{reportBean.exportIssueList}">
-							<f:param name="reportFormat" value="xlsx"/>
-						</h:commandButton>
-					</h:panelGrid>
+										
         	</p:tab>
     	</p:tabView>    		
 </h:form>
