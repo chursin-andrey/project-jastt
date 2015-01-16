@@ -229,7 +229,8 @@ public class UsersBean implements Serializable {
 	public void deleteUser() {
 		permissionService.deletePermissionsByUser(user);
 		if (currentUser.getLogin().equals(user.getLogin()) && currentUserService.currentUserIsAdmin(currentUser)) {
-			loginBean.doLogout();
+			//loginBean.doLogout();
+			SecurityUtils.getSubject().logout();
 			userService.deleteUser(user.getLogin());
 			try {
 				FacesContext fc = FacesContext.getCurrentInstance();
