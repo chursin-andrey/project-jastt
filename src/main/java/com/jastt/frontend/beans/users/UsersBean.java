@@ -20,16 +20,20 @@ import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.enums.UserRoleEnum;
+import com.jastt.business.services.CurrentUserService;
 import com.jastt.business.services.IssueService;
 import com.jastt.business.services.PermissionService;
 import com.jastt.business.services.ServerService;
 import com.jastt.business.services.UserService;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraProjectService;
+import com.jastt.frontend.beans.LoginBean;
 import com.jastt.frontend.utils.Dialogs;
 import com.jastt.frontend.utils.Faces;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Sha512Hash;
+import org.apache.shiro.subject.Subject;
 import org.primefaces.model.LazyDataModel;
 
 @Component(value="usersBean")
@@ -58,7 +62,14 @@ public class UsersBean implements Serializable {
 	@Autowired
     private LazyDataModel<User> userDataModel;
 	
+	@Autowired
+	private CurrentUserService currentUserService;
+	
+	@Autowired
+	private LoginBean loginBean;
+	
     private User user;
+    private User currentUser;
     private List<User> users;
        
     private String login;
@@ -118,6 +129,10 @@ public class UsersBean implements Serializable {
 	
 	@PostConstruct
     public void init() {
+		Subject subject = SecurityUtils.getSubject();
+		if (subject.isAuthenticated()) {
+			currentUser = currentUserService.getCurrentUser();
+		}
         users = userService.getAllUsers(); 
     }
 
@@ -213,11 +228,23 @@ public class UsersBean implements Serializable {
     
 	public void deleteUser() {
 		permissionService.deletePermissionsByUser(user);
-		userService.deleteUser(user.getLogin());		
-        Faces.hideDialog(Dialogs.CONFIRM_USER_REMOVAL_DIALOG_WIDGET);
-		Faces.info("growl", "User has been removed.",
-                String.format("User %s successfully removed.", getUsername()));
-        updateValues();
+		if (currentUser.getLogin().equals(user.getLogin()) && currentUserService.currentUserIsAdmin(currentUser)) {
+			loginBean.doLogout();
+			userService.deleteUser(user.getLogin());
+			try {
+				FacesContext fc = FacesContext.getCurrentInstance();
+				fc.getExternalContext().redirect("/project-jastt/protected/login.xhtml");
+			} catch(Exception e) {
+				LOG.error("Exception happened during execution of deleteUser() method. ", e.getMessage());
+			}
+		} else {
+			userService.deleteUser(user.getLogin());
+			Faces.hideDialog(Dialogs.CONFIRM_USER_REMOVAL_DIALOG_WIDGET);
+			Faces.info("growl", "User has been removed.",
+					String.format("User %s successfully removed.", getUsername()));
+			updateValues();
+		}
+		
 	}
     
 	public String getUsername(User user) {
