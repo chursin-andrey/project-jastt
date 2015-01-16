@@ -49,7 +49,7 @@ public class UserBean implements Serializable {
 	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*" +
             "@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	
-	private static final String LOGIN_PATTERN = "^[a-z0-9_-]{4,16}$";
+	private static final String LOGIN_PATTERN = "^[A-Za-z0-9_-]{4,16}$";
 	
 	@Autowired
 	private UsersBean usersBean;
@@ -87,9 +87,20 @@ public class UserBean implements Serializable {
 	private String name;
 	private String login;
 	private String url;
-	private boolean admin = false;
 	private String username;
-    
+	private boolean admin = false;
+	private boolean disableSaveButton = true;
+	
+	public boolean isDisableButton() {
+		return disableSaveButton;
+	}
+
+	public void setDisableButton(boolean disableButton) {
+		if (isAdmin()) {
+			this.disableSaveButton = false; 
+		}
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -161,7 +172,7 @@ public class UserBean implements Serializable {
         }
         if(!login.matches(LOGIN_PATTERN)) {
         	String messageSummary = "Login has a wrong format.";
-            String messageDetails = "Length must be greater or equals than allowable minimum of '4' and less than allowable maximum of '16'.";
+            String messageDetails = "Login must contain letters, digits, dash, underscore. Length must be greater or equals than allowable minimum of '4' and less than allowable maximum of '16'.";
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageSummary, messageDetails);
             throw new ValidatorException(facesMessage);
         }       
@@ -187,12 +198,55 @@ public class UserBean implements Serializable {
     	admin = false;
     }
     
+    public void verifyJiraCredentials() {
+    	FacesContext fc = FacesContext.getCurrentInstance();    	
+    	try {
+    		if (!isAdmin()) {
+        		user.setUserRole(UserRoleEnum.USER.getMark());
+        		server = new Server(url);
+                server = serverService.getServerByUrl(url);
+                
+                if(server == null){
+                	serverService.addServer(url);
+                	server = serverService.getServerByUrl(url);
+        		} else {
+        			user.setServer(serverService.getServerByUrl(url));
+        		}
+                
+                user.setServer(serverService.getServerByUrl(url));
+        	}
+    		
+			Set<Project> availableProjects = jiraProjectService.getAllProjects(user);
+			userService.addUser(user);
+			User newUser = userService.getUserByLogin(user.getLogin());
+	        issueService.update(newUser);
+	        disableSaveButton = false;
+		} catch (JiraClientException jce) {
+			FacesMessage facesMessage;
+			if(jce.getStatusCode() == 401 | jce.getStatusCode() == 403) {
+				String messageSummary = "Authentication error.";
+				String messageDetails = "Wrong Jira username or password!";
+	            facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageSummary, messageDetails);		
+			} else {
+				String messageSummary = "Communication error.";
+				String messageDetails = "Wrong  Jira URL or Jira server is not available.";
+				facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageSummary, messageDetails);
+			}
+			fc.addMessage(null, facesMessage);
+			disableSaveButton = true;
+		} finally {
+			resetFields();
+		}
+		
+    }
     
-    public boolean verifyJiraLogin(User user) {
+    
+    public boolean verifyJiraCredentials(User user) {
     	FacesContext fc = FacesContext.getCurrentInstance();
     	try {
 			Set<Project> availableProjects = jiraProjectService.getAllProjects(user);
 			userService.addUser(user);
+			user.setPassword(new Sha512Hash(user.getPassword(), user.getLogin(), 1).toHex());
 			User newUser = userService.getUserByLogin(user.getLogin());
 	        issueService.update(newUser);
 	        return true;
@@ -232,13 +286,16 @@ public class UserBean implements Serializable {
             if(server == null){
             	serverService.addServer(url);
             	server = serverService.getServerByUrl(url);
-    		}         
+    		} else {
+    			user.setServer(serverService.getServerByUrl(url));
+    		}
+            
             user.setServer(serverService.getServerByUrl(url));
-            if(verifyJiraLogin(user)) {
+            if(verifyJiraCredentials(user)) {
+            	Faces.hideDialog(Dialogs.NEW_USER_DIALOG_WIDGET);
             	Faces.info("growl", "User successfully added.",
     	        		String.format("User %s has been added.", getUsername(user)));
-            }
-            	
+            }  	
     	}
 		resetFields();
 		usersBean.updateValues();

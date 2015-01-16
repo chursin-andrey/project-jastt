@@ -12,12 +12,12 @@
 
 <h:body>
 	<ui:composition>
-		<p:dialog id="edit_user_dialog" header="Change user account info" widgetVar="editUserDialog" modal="true"
-			resizable="false" dynamic="true" maximizable="false" closable="false" closeOnEscape="false">
+		<p:dialog id="edit_user_dialog" header="Change user account" widgetVar="editUserDialog"
+			modal="true" draggable="false" resizable="false" dynamic="true" closable="false">
 	    <p:ajax event="close" update="edit_user_dialog" />
 	    <h:form id="edit_form">
 
-		<p:messages id="errors" showDetail="false" showSummary="true" autoUpdate="true"
+		<p:messages id="errors" for="" showDetail="false" showSummary="true" autoUpdate="true"
 			closable="false" />
         		
         	<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
@@ -48,19 +48,18 @@
 			
 				<p:outputLabel id="editLabelPwd1" for="editPwd1" value="Password:" />
         		<p:password id="editPwd1" match="editPwd2" value="#{usersBean.user.password}" 
-   					required="true" requiredMessage="Password is required."
-   					disabled="false" />
+   					required="true" requiredMessage="Password is required." />
  					
  				<p:outputLabel id="editLabelPwd2" for="editPwd2" value="Password confirmation:" />
         		<p:password id="editPwd2" value="#{usersBean.user.password}"
         			requiredMessage="Password must be confirmed."
-        			required="true" disabled="false" />							
+        			required="true"/>							
 					
 				<p:commandButton value="Apply" actionListener="#{usersBean.saveUser}"
-					update=":edit_form :user_form:usersTable" icon="ui-icon-check"
+					update=":user_form:usersTable :user_form:growl" icon="ui-icon-check"
 					oncomplete="if (args &amp;&amp; !args.validationFailed) editUserDialog.hide()" />
-				<p:commandButton value="Cancel" actionListener="#{usersBean.cancelHandle}" immediate="true"
-					 icon="ui-icon-close" >
+				<p:commandButton value="Cancel" actionListener="#{usersBean.cancelHandle}"
+					immediate="true" icon="ui-icon-close" >
 				</p:commandButton>   			
 			</h:panelGrid>
 		</h:form>

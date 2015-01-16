@@ -55,7 +55,7 @@
 		</dependency>
 		
 		
-		<!-- MyFaces Commomns Validators (JSF) -->
+		<!-- MyFaces Commons Validators (JSF) -->
 		<dependency>
 			<groupId>org.apache.myfaces.commons</groupId>
 			<artifactId>myfaces-validators20</artifactId>

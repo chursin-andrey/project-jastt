@@ -65,6 +65,7 @@ public class UsersBean implements Serializable {
 	private String url;
     private Server server;
 	private String username;
+	private String name;
 	private boolean admin = false;
 
 	public User getUser() {
@@ -98,8 +99,6 @@ public class UsersBean implements Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-	private String name;
     
     public String getName() {
 		return name;
@@ -145,8 +144,7 @@ public class UsersBean implements Serializable {
 			userService.addUser(user);
 			User newUser = userService.getUserByLogin(user.getLogin());
 	        issueService.update(newUser);	        
-	        Faces.info("growl", "User successfully updated",
-	        		String.format("User %s has been added.", getUsername(user)));
+	        
 		} catch (JiraClientException jce) {
 			if(jce.getStatusCode() == 401 | jce.getStatusCode() == 403){
 				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
@@ -158,6 +156,34 @@ public class UsersBean implements Serializable {
 				fc.addMessage(null, fm);
 			}		
 		}
+    }
+	
+	public boolean verifyJiraCredentials(User user) {
+    	FacesContext fc = FacesContext.getCurrentInstance();
+    	try {
+			Set<Project> availableProjects = jiraProjectService.getAllProjects(user);
+			userService.addUser(user);
+			user.setPassword(new Sha512Hash(user.getPassword(), user.getLogin(), 1).toHex());
+			User newUser = userService.getUserByLogin(user.getLogin());
+	        issueService.update(newUser);
+	        return true;
+		} catch (JiraClientException jce) {
+			FacesMessage facesMessage;
+			if(jce.getStatusCode() == 401 | jce.getStatusCode() == 403) {
+				String messageSummary = "Authentication error.";
+				String messageDetails = "Wrong Jira username or password!";
+	            facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageSummary, messageDetails);		
+			} else {
+				String messageSummary = "Communication error.";
+				String messageDetails = "Wrong  Jira URL or Jira server is not available.";
+				facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageSummary, messageDetails);
+			}
+			fc.addMessage(null, facesMessage);
+			return false;
+		} finally {
+			resetFields();
+		}
+		
     }
 	
     public void addNewUser() {
@@ -209,6 +235,8 @@ public class UsersBean implements Serializable {
     		user.setUserRole(UserRoleEnum.ADMIN.getMark());
     		user.setPassword(new Sha512Hash(user.getPassword(), user.getLogin(), 1).toHex());
     		userService.addUser(user);
+    		Faces.info("growl", "User successfully updated",
+	        		String.format("User %s has been updated.", getUsername(user)));
     	} else {
     		user.setUserRole(UserRoleEnum.USER.getMark());
     		server = new Server(url);
@@ -218,14 +246,14 @@ public class UsersBean implements Serializable {
     			server = serverService.getServerByUrl(url);
     		}
     		user.setServer(serverService.getServerByUrl(url));
-    		verifyJiraLogin(user);
+    		if(verifyJiraCredentials(user)) {
+    			Faces.info("growl", "User successfully updated",
+    	        		String.format("User %s has been updated.", getUsername(user)));
+            }  	
+    		
     	}
-       
-        Faces.hideDialog(Dialogs.EDIT_USER_DIALOG_WIDGET);
-        Faces.info("growl", "User successfully updated",
-        		String.format("User %s successfully added.", getUsername(user)));
-		resetFields();
-        updateValues();
+    	resetFields();
+    	updateValues();
     }
     
     @PreDestroy
