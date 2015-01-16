@@ -78,4 +78,30 @@
 	border-radius: 5px;
 }
 
+.export-button{
+	position : relative;
+	margin-left: 10px;
+	/*width: 70px;*/	
+}
 
+.export-button:hover{
+	margin-left: 10px;
+	top: -3px;
+	/*width: 70px;*/	
+}
+
+.top-export-buttons-panel{
+	position : absolute;
+	top: 65px;
+	right: 40px;	
+}
+
+.bottom-export-buttons-panel{
+	position : relative;
+	float: right;
+	/right: 5px;
+	top: -19px;	
+}
+
+
+ 
