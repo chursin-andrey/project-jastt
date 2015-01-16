@@ -49,7 +49,7 @@
 
 					<p:commandButton value="Delete" style="margin:5px"
                     	update=":user_form:usersTable"
-                        actionListener="#{usersBean.confirmUserRemoval(user)}" 
+                        actionListener="#{usersBean.confirmUserRemoval(user)}"
                         icon="ui-icon-circle-minus" >
                         <f:setPropertyActionListener target="#{usersBean.user}" value="#{user}" />      
                     </p:commandButton>

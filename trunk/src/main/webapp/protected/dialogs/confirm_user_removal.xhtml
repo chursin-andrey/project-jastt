@@ -8,12 +8,13 @@
 	xmlns:p="http://primefaces.org/ui">
 
 	<ui:composition>
-   		<p:confirmDialog message="Are you sure you want to delete user #{usersBean.username}?"
-    		header="Delete Confirmation"  modal="false" severity="alert" widgetVar="confirmUserRemovalDialog"
-    		hideEffect="explode">
+   		<p:confirmDialog header="Delete Confirmation" modal="true"
+   			message="Are you sure you want to delete user #{usersBean.username}?"
+    		severity="alert" widgetVar="confirmUserRemovalDialog">
         	<div align="center">
-        		<p:commandButton value="Yes" update=":user_form:growl :user_form:usersTable"
-            		actionListener="#{usersBean.deleteUser}">
+        		<p:commandButton value="Yes" update=":user_form:usersTable :user_form:growl "
+            		actionListener="#{usersBean.deleteUser}"
+            		onclick="PF('confirmUserRemovalDialog').hide()">
                 	<f:setPropertyActionListener target="#{usersBean.user}" value="#{user}" />      
             	</p:commandButton>
             	<p:commandButton value="No" type="button" update="confirmUserRemovalDialog"
