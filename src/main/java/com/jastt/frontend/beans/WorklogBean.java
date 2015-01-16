@@ -38,14 +38,18 @@ public class WorklogBean implements Serializable {
 	//items of UI components
 	private List<Project> projectList = new ArrayList<Project>();
 	private List<String> authorList = new ArrayList<String>();
+	private List<String> issueTypeList = new ArrayList<String>();
+	private List<String> issueStatusList = new ArrayList<String>();
 	private List<Worklog> worklogList = new ArrayList<Worklog>();
 	//values of UI components
 	private String currProjectName = "";
 	private List<String> currAuthors = new ArrayList<String>();
+	private String currIssueType = "";
+	private String currIssueStatus = "";
 	
 	@PostConstruct
 	public void init() {
-		Subject subject = SecurityUtils.getSubject();	
+		/*Subject subject = SecurityUtils.getSubject();	
 		User user = (User) subject.getSession().getAttribute("user");
 		if (user == null) return;
 		
@@ -53,30 +57,48 @@ public class WorklogBean implements Serializable {
 		for (Permission prm : userPermissions) {
 			Project tmp = prm.getProject();
 			projectList.add(tmp);
-		}
+		}*/
 		
-//		projectList = projectService.getAllProjects();
+		projectList = projectService.getAllProjects();
 	}
 	
 	public void showButtonClick() {
-		WorklogSearchOptions searchOptions = new WorklogSearchOptions();
-		
+		worklogList.clear();
 		Project currProject = findProjectByName(currProjectName);
-		searchOptions.setProject(currProject);
-		searchOptions.setAuthors(currAuthors);
+		if (currProject != null) {
+			WorklogSearchOptions searchOptions = new WorklogSearchOptions();
+			
+			searchOptions.setProject(currProject);
+			searchOptions.setAuthors(currAuthors);
+			if (!currIssueType.isEmpty()) searchOptions.setIssueType(currIssueType);
+			if (!currIssueStatus.isEmpty()) searchOptions.setIssueStatus(currIssueStatus);
 		
-		worklogList = worklogService.getWorklogs(searchOptions);
+			worklogList = worklogService.getWorklogs(searchOptions);
+		}
 	}
 	
 	public void projectChanged() {
+		resetControls();
 		Project currProject = findProjectByName(currProjectName);
-		currAuthors.clear();
-		authorList = worklogService.getWorklogAuthors(currProject);
 		if (currProject != null) {
+			authorList = worklogService.getWorklogAuthors(currProject);
+			issueTypeList = worklogService.getWorklogIssueTypes(currProject);
+			issueStatusList = worklogService.getWorklogIssueStatuses(currProject);
 			disableMenu = false;
-		} else {
-			disableMenu = true;
 		}
+	}
+	
+	private void resetControls() {
+		currAuthors.clear();
+		authorList.clear();
+		
+		currIssueType = "";
+		issueTypeList.clear();
+		
+		currIssueStatus = "";
+		issueStatusList.clear();
+		
+		disableMenu = true;
 	}
 	
 	private Project findProjectByName(String projectName) {
@@ -133,5 +155,37 @@ public class WorklogBean implements Serializable {
 
 	public void setDisableMenu(boolean disableMenu) {
 		this.disableMenu = disableMenu;
+	}
+
+	public List<String> getIssueTypeList() {
+		return issueTypeList;
+	}
+
+	public void setIssueTypeList(List<String> issueTypeList) {
+		this.issueTypeList = issueTypeList;
+	}
+
+	public List<String> getIssueStatusList() {
+		return issueStatusList;
+	}
+
+	public void setIssueStatusList(List<String> issueStatusList) {
+		this.issueStatusList = issueStatusList;
+	}
+
+	public String getCurrIssueType() {
+		return currIssueType;
+	}
+
+	public void setCurrIssueType(String currIssueType) {
+		this.currIssueType = currIssueType;
+	}
+
+	public String getCurrIssueStatus() {
+		return currIssueStatus;
+	}
+
+	public void setCurrIssueStatus(String currIssueStatus) {
+		this.currIssueStatus = currIssueStatus;
 	}
 }

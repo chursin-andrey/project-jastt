@@ -36,41 +36,7 @@ public class JiraIssueServiceStub implements JiraIssueService, Serializable {
 	private Set<Issue> issueSet = new LinkedHashSet<Issue>();
 	
 	public JiraIssueServiceStub() {
-//		generateIssues();
 		generateIssuesWithWorklog();
-	}
-	
-	private void generateIssues() {
-		for (String assigneeName : assigneeNameList) {
-			Assignee assignee = new Assignee(assigneeName, assigneeName + "@mail.com");
-			assigneeList.add(assignee);
-		}
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.set(2014, Calendar.JULY, 1);
-		for (int i = 1; i <= ISSUE_COUNT; i++) {
-			Issue issue = new Issue();
-			issue.setKey(PROJECT_KEY + "-" + i);
-			issue.setSummary("This is Issue" + i + " in " + PROJECT_NAME);
-			
-			issue.setIssueType(issueTypeList.get(i % issueTypeList.size()));
-			issue.setStatus(statusList.get(i % statusList.size()));
-			issue.setPriority(priorityList.get(i % priorityList.size()));
-			
-			calendar.add(Calendar.HOUR_OF_DAY, 1);
-			issue.setCreated(calendar.getTime());
-			
-			int timeSpent = timeIntervals[i % timeIntervals.length];
-			issue.setTimeSpent(timeSpent);
-			
-			calendar.add(Calendar.MINUTE, timeSpent);
-			issue.setUpdated(calendar.getTime());
-			
-			issue.setAssignee(assigneeList.get(i % assigneeList.size()));
-			
-			issueSet.add(issue);
-		}
 	}
 	
 	private void generateIssuesWithWorklog() {

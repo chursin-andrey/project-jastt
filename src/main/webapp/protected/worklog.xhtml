@@ -11,19 +11,37 @@
 	
 		<h:form>
 		
-			<h:panelGrid styleClass="top-control-panels" columns="1" columnClasses="top-left-panel panel">
+			<h:panelGrid styleClass="top-control-panels" columns="2" columnClasses="top-left-panel panel, top-center-panel panel">
 				<h:panelGroup>
 					<p:outputLabel value="Project:"/><br/>
 					<p:selectOneMenu id="project" value="#{worklogBean.currProjectName}" styleClass="item">
 						<f:selectItem itemLabel="Select a project" itemValue=""/>
 						<f:selectItems value="#{worklogBean.projectList}" var="project" itemLabel="#{project.name}" itemValue="#{project.name}"/>
-						<p:ajax update="members" listener="#{worklogBean.projectChanged}"/>
+						<p:ajax update="members iss_type iss_status" listener="#{worklogBean.projectChanged}"/>
 					</p:selectOneMenu>
 					<br/>
 					<p:outputLabel value="Members:"/><br />
 					<p:selectCheckboxMenu id="members" label="Members" value="#{worklogBean.currAuthors}" disabled="#{worklogBean.disableMenu}" filter="true" filterMatchMode="startsWith" styleClass="item">
 						<f:selectItems value="#{worklogBean.authorList}"/>
 					</p:selectCheckboxMenu>
+				</h:panelGroup>
+				
+				<h:panelGroup>
+					
+					<p:outputLabel value="Issue type:"/><br/>
+					<p:selectOneMenu id="iss_type" value="#{worklogBean.currIssueType}" disabled="#{worklogBean.disableMenu}" styleClass="item">
+						<f:selectItem itemLabel="All" itemValue=""/>
+						<f:selectItems value="#{worklogBean.issueTypeList}"/>
+					</p:selectOneMenu>
+					
+					<br/>
+					
+					<p:outputLabel value="Issue status:"/><br/>
+					<p:selectOneMenu id="iss_status" value="#{worklogBean.currIssueStatus}" disabled="#{worklogBean.disableMenu}" styleClass="item">
+						<f:selectItem itemLabel="All" itemValue=""/>
+						<f:selectItems value="#{worklogBean.issueStatusList}"/>
+					</p:selectOneMenu>
+					
 				</h:panelGroup>
 			</h:panelGrid>
 			
@@ -45,7 +63,7 @@
 				</p:column>
 				<p:column headerText="Date">
 					<h:outputText value="#{worklog.started}">
-					<f:convertDateTime pattern="dd/MM/yyyy"/>
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
 					</h:outputText>
 				</p:column>
 				<p:column headerText="Member">
@@ -56,8 +74,9 @@
 				</p:column>				
 				
 				<p:column headerText="Issue">
-					<h:outputFormat value="{0}: {1}">
+					<h:outputFormat value="{0} [{1}]: {2}">
 						<f:param value="#{worklog.issue.issueType}"/>
+						<f:param value="#{worklog.issue.status}"/>
 						<f:param value="#{worklog.issue.summary}"/>
 					</h:outputFormat>
 				</p:column>

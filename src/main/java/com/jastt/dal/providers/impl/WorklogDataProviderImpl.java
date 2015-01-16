@@ -34,14 +34,16 @@ public class WorklogDataProviderImpl extends
 	private static final Logger LOG = LoggerFactory.getLogger(WorklogDataProviderImpl.class);
 	
 	private Criteria buildCriteria(Session session, WorklogSearchOptions options) {
-		Criteria cr = session.createCriteria(WorklogEntity.class);
+		Criteria cr = session.createCriteria(WorklogEntity.class)
+				.createAlias("issueEntity", "issue");
 		
 		Project project = options.getProject();
 		List<String> authors = options.getAuthors();
+		String issueType = options.getIssueType();
+		String issueStatus = options.getIssueStatus();
 		
 		if (project != null && project.getId() != null) 
-			cr.createAlias("issueEntity", "issue")
-			.add(Restrictions.eq("issue.projectEntity.id", project.getId()));
+			cr.add(Restrictions.eq("issue.projectEntity.id", project.getId()));
 		
 		if (authors != null && !authors.isEmpty()) {
 			Criterion[] criterions = new Criterion[authors.size()];
@@ -52,6 +54,9 @@ public class WorklogDataProviderImpl extends
 			
 			cr.add(Restrictions.or(criterions));
 		}
+		
+		if (issueType != null) cr.add(Restrictions.eq("issue.issueType", issueType));
+		if (issueStatus != null) cr.add(Restrictions.eq("issue.status", issueStatus));
 		
 		return cr;
 	}
@@ -179,6 +184,50 @@ public class WorklogDataProviderImpl extends
         	throw new DaoException(ex);
 		}
 		return authorList;
+	}
+
+	@Transactional
+	@Override
+	public List<String> getWorklogIssueTypes(Project project) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		List<String> issueTypeList = new ArrayList<String>();
+		try {
+			Criteria cr = session.createCriteria(WorklogEntity.class)
+					.createAlias("issueEntity", "issue")
+					.add(Restrictions.eq("issue.projectEntity.id", project.getId()))
+					.setProjection(Projections.distinct(Projections.property("issue.issueType")));
+			issueTypeList = cr.list();
+		} catch (HibernateException ex) {
+			LOG.error("Hibernate error while loading worklog issue types", ex.getMessage());
+        	throw new DaoException(ex);
+		} catch (Exception ex) {
+			LOG.error("Unknown error occured while loading worklog issue types", ex.getMessage());
+        	throw new DaoException(ex);
+		}		
+		return issueTypeList;
+	}
+
+	@Transactional
+	@Override
+	public List<String> getWorklogIssueStatuses(Project project) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		List<String> issueStatusList = new ArrayList<String>();
+		try {
+			Criteria cr = session.createCriteria(WorklogEntity.class)
+					.createAlias("issueEntity", "issue")
+					.add(Restrictions.eq("issue.projectEntity.id", project.getId()))
+					.setProjection(Projections.distinct(Projections.property("issue.status")));
+			issueStatusList = cr.list();
+		} catch (HibernateException ex) {
+			LOG.error("Hibernate error while loading worklog issue statuses", ex.getMessage());
+        	throw new DaoException(ex);
+		} catch (Exception ex) {
+			LOG.error("Unknown error occured while loading worklog issue statuses", ex.getMessage());
+        	throw new DaoException(ex);
+		}		
+		return issueStatusList;
 	}
 
 }
