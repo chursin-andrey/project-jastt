@@ -20,6 +20,7 @@
 				/resources/** = anon	
 				/javax.faces.resource/** = anon
 				/protected/admin.xhtml = authc, roles[admin]
+				/public/** = anon
 				/** = authc			
 			</value>
 		</property>

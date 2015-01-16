@@ -27,10 +27,7 @@ public class WorklogServiceImpl implements WorklogService, Serializable {
 	@Override
 	public List<Worklog> getWorklogs(Issue issue) {
 		List<Worklog> worklogList = new ArrayList<Worklog>();
-		
-		if (issue != null && issue.getId() != null)
-			worklogList = worklogDataProvider.getWorklogs(issue);
-		
+		if (issue != null && issue.getId() != null) worklogList = worklogDataProvider.getWorklogs(issue);
 		return worklogList;
 	}
 
@@ -59,31 +56,36 @@ public class WorklogServiceImpl implements WorklogService, Serializable {
 	@Override
 	public List<Worklog> getWorklogs(Project project) {
 		List<Worklog> worklogList = new ArrayList<Worklog>();
-		
-		if (project != null && project.getId() != null)
-			worklogList = worklogDataProvider.getWorklogs(project);
-		
+		if (project != null && project.getId() != null) worklogList = worklogDataProvider.getWorklogs(project);
 		return worklogList;
 	}
 
 	@Override
 	public List<Worklog> getWorklogs(WorklogSearchOptions options) {
 		List<Worklog> worklogList = new ArrayList<Worklog>();
-		
-		if (options != null && !options.isEmpty()) 
-			worklogList = worklogDataProvider.getWorklogs(options);
-		
+		if (options != null) worklogList = worklogDataProvider.getWorklogs(options);
 		return worklogList;
 	}
 
 	@Override
 	public List<String> getWorklogAuthors(Project project) {
 		List<String> authorList = new ArrayList<String>();
-		
-		if (project != null && project.getId() != null)
-			authorList = worklogDataProvider.getWorklogAuthors(project);
-		
+		if (project != null && project.getId() != null) authorList = worklogDataProvider.getWorklogAuthors(project);
 		return authorList;
+	}
+
+	@Override
+	public List<String> getWorklogIssueTypes(Project project) {
+		List<String> issueTypeList = new ArrayList<String>();
+		if (project != null && project.getId() != null) issueTypeList = worklogDataProvider.getWorklogIssueTypes(project);
+		return issueTypeList;
+	}
+
+	@Override
+	public List<String> getWorklogIssueStatuses(Project project) {
+		List<String> issueStatusList = new ArrayList<String>();
+		if (project != null && project.getId() != null) issueStatusList = worklogDataProvider.getWorklogIssueStatuses(project);
+		return issueStatusList;
 	}
 
 }

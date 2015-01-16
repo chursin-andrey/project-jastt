@@ -18,6 +18,8 @@ public interface WorklogDataProvider extends
 	public List<Worklog> getWorklogs(WorklogSearchOptions options);
 	
 	public List<String> getWorklogAuthors(Project project);
+	public List<String> getWorklogIssueTypes(Project project);
+	public List<String> getWorklogIssueStatuses(Project project);
 	
 	public Worklog getWorklogBySelf(String self);
 }

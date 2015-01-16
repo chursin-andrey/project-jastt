@@ -15,6 +15,8 @@ public interface WorklogService {
 	public List<Worklog> getWorklogs(WorklogSearchOptions options);
 	
 	public List<String> getWorklogAuthors(Project project);
+	public List<String> getWorklogIssueTypes(Project project);
+	public List<String> getWorklogIssueStatuses(Project project);
 	
 	public void addOrUpdateWorklog(Worklog worklog);
 	public void addOrUpdateWorklogs(Set<Worklog> worklogs);
