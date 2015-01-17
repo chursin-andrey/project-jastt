@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -52,6 +56,10 @@ public class ReportBean implements Serializable{
 	private List<Project> projects;
 	private Set<Assignee> assignees;
 	private Set<String> assignees_name;
+	private List<Entry<String, List<Issue> >> entries;
+	private List<Double> as_time;
+	private ArrayList<Assignee> assignees_list;
+	private Map<String, List<Issue>> mapAssigneesIssues = new HashMap<String, List<Issue>>();	
 	private List<Permission> permissions;
 	private String issueType;
 	private String project_name;
@@ -71,10 +79,10 @@ public class ReportBean implements Serializable{
 	private String timespent;
 	private String status;
 	private String predefinedDate;
-	private int hours;
-	private int minuts;
+	private double allTime;
 	
 	private List<Issue> reportIssues;
+	private List<Issue> reportIssues2;
 	private List<Project> reportProjects;
 	private List<Assignee> reportAssignees;
 
@@ -158,25 +166,66 @@ public class ReportBean implements Serializable{
 				reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, dateFrom, dateTo);
 			else
 				reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, PredefinedDateEnum.getType(predefinedDate));
-			addHours(reportIssues);
+
 						
 		} else {
 			reportIssues = issueService.getIssues(project, issueStatus, null, type, dateFrom, dateTo);
-			addHours(reportIssues);
-		}		
+
+		}
+		reportIssues2 = reportIssues;
+		addAssigneesName();
+		sortingIssues(reportIssues);
+		sortingIssues(reportIssues2);
+		showAllTime(reportIssues);
+		showAllTime(reportIssues2);
+		assignees_list = new ArrayList<Assignee>(assignees);
+		addMapIssue(reportIssues2);
+		showAsssigneeTime();
+		
+	}
+	
+	private void addAssigneesName() {
+		for(Assignee as : assignees) {
+			as.getName();
+		 }
+	}
+	
+	private void sortingIssues(List<Issue> report) {
+		
+		Collections.sort(report, new Comparator<Issue>() {
+
+			@Override
+			public int compare(Issue i1, Issue i2) {	
+				return i1.getAssignee().getName().compareTo(i2.getAssignee().getName());
+			}
+		});
+	}
+	
+	private void sortingAssignees(List<Assignee> list) {
+		
+		Collections.sort(list, new Comparator<Assignee>() {
+
+			@Override
+			public int compare(Assignee a1, Assignee a2) {
+				return a1.getName().compareTo(a2.getName());
+			}
+		});
 	}
 	
 	
-	public void addHours(List<Issue> reportIssues) {
+	public void showAllTime(List<Issue> list) {
 
-		int result = 0;
-		for(int i = 0; i < reportIssues.size(); i++) {
+		double result = 0;
+		for(int i = 0; i < list.size(); i++) {
 			
-			 int prom = reportIssues.get(i).getTimeSpent();
-			 result += prom;
-			
+			 int increment = list.get(i).getTimeSpent();
+			 result += increment;
 		}
-		setHours(result);
+		result = result / 60;
+		result = result * 1000;
+		int i = (int) Math.round(result);
+		result = (double)i / 1000;
+		setAllTime(result);;
 	}
 	
 	
@@ -199,8 +248,62 @@ public class ReportBean implements Serializable{
 	}
 	public void cancelAction(){
 		reportIssues.clear();
-		setHours(0);
+		reportIssues2.clear();
+		setAllTime(0);
 	}
+	
+	public void addMapIssue(List<Issue> list) {
+		int startPosition= 0;
+		String tmp = assignees_list.get(0).getName();
+        int nach = 0;
+        int endp = 0;
+        sortingIssues(list);
+        sortingAssignees(assignees_list);
+       
+		for(Assignee as : assignees_list) {
+
+			for(int j = 0; j < list.size(); j++) {
+				
+				if (tmp.equals( list.get(j).getAssignee().getName() )) {
+					endp = j;
+					mapAssigneesIssues.put(tmp, new ArrayList<Issue>(list.subList(nach, ++endp)) );
+		        } else {
+					if(startPosition < assignees_list.size() -1 ) {
+		            	nach = j;
+		            	tmp= assignees_list.get(++startPosition).getName();
+		            }
+				}				 
+			}
+		}
+			            
+		entries = new ArrayList<Entry<String, List<Issue> >>(mapAssigneesIssues.entrySet());        
+					
+	}
+	
+	public void showAsssigneeTime() {
+		
+		double result = 0;
+		assignees_list = new ArrayList<Assignee>(assignees);
+		as_time = new ArrayList<Double>();
+		List<Issue> list = new ArrayList<Issue>();
+	
+		for (int j = 0; j < assignees_list.size() ; j++ ) {
+			list = mapAssigneesIssues.get(assignees_list.get(j).getName());
+			
+			for(int i = 0; i < list.size(); i++) {
+				int increment = list.get(i).getTimeSpent();
+				 result += increment;
+			}
+			result = result / 60;
+			result = result * 1000;
+			int i = (int) Math.round(result);
+			result = (double)i / 1000;
+			as_time.add(result);
+			
+		}
+	}
+	
+	
 	public void exportIssueList(ActionEvent actionEvent) throws JRException, IOException {		
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String reportFormat = params.get("reportFormat");
@@ -407,22 +510,6 @@ public class ReportBean implements Serializable{
 		this.assignees_name = assignees_name;
 	}
 	
-	
-	public int getHours() {
-		return hours;
-	}
-
-	public void setHours(int hours) {
-		this.hours = hours;
-	}
-
-	public int getMinuts() {
-		return minuts;
-	}
-
-	public void setMinuts(int minuts) {
-		this.minuts = minuts;
-	}
 
 	public String getPredefinedDate() {
 		return predefinedDate;
@@ -431,7 +518,59 @@ public class ReportBean implements Serializable{
 	public void setPredefinedDate(String predefinedDate) {
 		this.predefinedDate = predefinedDate;
 	}
+	public List<Double> getAs_time() {
+		return as_time;
+	}
 
+	public void setAs_time(List<Double> as_time) {
+		this.as_time = as_time;
+	}
+
+	public List<Entry<String, List<Issue>>> getEntries() {
+		return entries;
+	}
+
+	public void setEntries(List<Entry<String, List<Issue>>> entries) {
+		this.entries = entries;
+	}
+	
+	public Map<String, List<Issue>> getMapAssigneesIssues() {
+		return mapAssigneesIssues;
+	}
+
+	public ArrayList<Assignee> getAssignees_list() {
+		return assignees_list;
+	}
+
+	public void setAssignees_list(ArrayList<Assignee> assignees_list) {
+		this.assignees_list = assignees_list;
+	}
+	
+	public double getAllTime() {
+		return allTime;
+	}
+
+	public void setAllTime(double allTime) {
+		this.allTime = allTime;
+	}
+	
+	public List<Issue> getReportIssues2() {
+		return reportIssues2;
+	}
+
+	public void setReportIssues2(List<Issue> reportIssues2) {
+		this.reportIssues2 = reportIssues2;
+	}
+
+	private double assigneeTime;
+	
+	public double getAssigneeTime() {
+		return assigneeTime;
+	}
+
+	public void setAssigneeTime(double assigneeTime) {
+		this.assigneeTime = assigneeTime;
+	}
 
 
 }
