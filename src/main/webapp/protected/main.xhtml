@@ -101,9 +101,7 @@
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
                     				<h:outputText value="hours:"/> 
-                    				<h:outputText value="#{reportBean.hours}"/>
-                    				<h:outputText value="	minuts:"/>
-                    				<h:outputText value="#{reportBean.minuts}"/>
+                    				<h:outputText value="#{reportBean.allTime}"/>
                 			</p:outputPanel>            
             			</f:facet>
             			
@@ -133,7 +131,7 @@
 						<p:column headerText="Issue" sortBy="#{details.summary}">
 							<h:outputText  value="#{details.summary}"  />
 						</p:column>
-						<p:column headerText="Hours" sortBy="#{details.timeSpent}" width="80">
+						<p:column headerText="Minutes" sortBy="#{details.timeSpent}" width="80">
 							<h:outputText  value="#{details.timeSpent}"  />
 						</p:column>
 					</p:dataTable>
@@ -141,14 +139,13 @@
 			
 					
         	<p:tab title="Report">
-					<p:dataTable var="report" value="#{reportBean.reportIssues}" id="Report" rowIndexVar="rowIndex" lazy="true">
+					<p:dataTable var="report" value="#{reportBean.entries}" id="Report" rowIndexVar="rowIndex" lazy="true">
 							 <f:facet name="header">Total Elapsed Time       
                 				<p:column datasource="Report" trigger="toggler"/>
                					<p:outputPanel>
                     				<h:outputText value="hours:"/> 
-                    				<h:outputText value="#{reportBean.hours}"/>
-                    				<h:outputText value="	minuts:"/>
-                    				<h:outputText value="#{reportBean.minuts}"/>
+									<h:outputText value="#{reportBean.allTime}"/>
+                    				
                     				
                     				<div class="top-export-buttons-panel">
 										<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/pdf32.png" styleClass="export-button">
@@ -168,31 +165,46 @@
             					<p:rowToggler />
         					</p:column>
         					<p:column headerText="№" style="width:50px">
-            				<h:outputText  value="#{rowIndex+1}"  />
-            			</p:column>
+								<h:outputText  value="#{rowIndex+1}"  />
+							</p:column>
                 			<p:column headerText="Member">
-								<h:outputText  value="#{report.assignee.name}"  />
-               				</p:column>
-                			<p:column headerText="Hours">
-								<h:outputText  value="#{report.timeSpent}"  />
-							</p:column> 	
-                		<p:rowExpansion> 
-                		 <p:panelGrid  columns="8" columnClasses="label,value" style="width:700px">   
-                		 
-                		 	<h:outputText value="Member: " />
-                			<h:outputText value="#{report.assignee.name}" />     			
+								<h:outputText  value="#{report.key}"  />
+							</p:column> 
+                			<p:column headerText="Time">
+								<h:outputText  value="#{reportBean.as_time[rowIndex]} hours"  />
+							</p:column>
 							
-							<h:outputText value="Project: " />
-                			<h:outputText value="#{report.project.name}" /> 
-                			
-                			<h:outputText value="Task: " />
-                			<h:outputText value="#{report.issueType}" /> 
-                			
-                			<h:outputText value="Hours: " />
-                			<h:outputText value="#{report.timeSpent}" /> 
-                			
-							
-							 </p:panelGrid>
+							<p:rowExpansion> 
+                 
+								<p:dataTable var="item" value="#{reportBean.mapAssigneesIssues[report.key]}" rowIndexVar="rowIndex" id="Item">
+						
+									<p:column headerText="№" style="width:50px" id="row">
+										<h:outputText  value="#{rowIndex+1}"  />
+									</p:column>
+									<p:column headerText="Project"  >
+										<h:outputText  value="#{item.project.name}"  />
+									</p:column>
+									<p:column headerText="Task" >
+										<h:outputText  value="#{item.issueType}"  />
+									</p:column>
+									<p:column headerText="Status" >
+										<h:outputText  value="#{item.status}"  />
+									</p:column>
+									<p:column headerText="Key" sortBy="#{details.key}" >
+										<h:outputText  value="#{item.key}"  />
+									</p:column>
+									<p:column headerText="Summary">
+										<h:outputText  value="#{item.summary}"  />
+									</p:column>
+									<p:column headerText="Minutes" >
+										<h:outputText  value="#{item.timeSpent}"  />
+									</p:column>
+               			
+               			
+               			             			
+								</p:dataTable>  
+						
+						
 						</p:rowExpansion> 
 						
 					<f:facet name="footer">
