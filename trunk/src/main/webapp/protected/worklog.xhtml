@@ -84,45 +84,58 @@
 			
 			<h:panelGrid styleClass="main-buttons-panel panel">
 				<h:panelGroup>
-					<p:commandButton value="Show" actionListener="#{worklogBean.showButtonClick}" update="worklogList msgs" styleClass="main-buttons"/>
-					<p:commandButton value="Clear" styleClass="main-buttons"/>
-					<p:commandButton value="Update" styleClass="main-buttons"/>
+					<p:commandButton value="Show" styleClass="main-buttons"
+					actionListener="#{worklogBean.showButtonClick}" update="tabs:worklogList msgs"/>
+					
+					<p:commandButton value="Clear" styleClass="main-buttons"
+					actionListener="#{worklogBean.clearButtonClick}" update="tabs:worklogList msgs"/>
+					
+					<p:commandButton value="Update" styleClass="main-buttons" ajax="false"
+					actionListener="#{worklogBean.updateButtonClick}"/>
 				</h:panelGroup>
 			</h:panelGrid>
 			
-			<p:dataTable id="worklogList" value="#{worklogBean.worklogList}" var="worklog" rowIndexVar="rowIndex" styleClass="tabView">
-				<f:facet name="header">
-					List of Worklogs
-				</f:facet>
+			<p:tabView id="tabs" styleClass="tabView">
+			<p:tab title="Worklogs">
+				<p:dataTable id="worklogList" value="#{worklogBean.worklogList}" var="worklog" rowIndexVar="rowIndex" styleClass="tabView">
+					<f:facet name="header">
+						Total Time Spent
+					</f:facet>
+					
+					<p:column headerText="№">
+						<h:outputText value="#{rowIndex+1}"/>
+					</p:column>
+					<p:column headerText="Date">
+						<h:outputText value="#{worklog.started}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Member">
+						<h:outputText value="#{worklog.author}"/>
+					</p:column>
+					<p:column headerText="Project">
+						<h:outputText value="#{worklog.issue.project.name}"/>
+					</p:column>				
+					
+					<p:column headerText="Issue">
+						<h:outputFormat value="{0} [{1}]: {2}">
+							<f:param value="#{worklog.issue.issueType}"/>
+							<f:param value="#{worklog.issue.status}"/>
+							<f:param value="#{worklog.issue.summary}"/>
+						</h:outputFormat>
+					</p:column>
+					
+					<p:column headerText="Spent (min)" >
+						<h:outputText  value="#{worklog.timeSpent}"  />
+					</p:column>
+				</p:dataTable>
+			</p:tab>
+			
+			<p:tab title="Report">
+				<h:outputText id="testString2" value="Place for report page"/>
+			</p:tab>
+			</p:tabView>
 				
-				<p:column headerText="№">
-					<h:outputText value="#{rowIndex+1}"/>
-				</p:column>
-				<p:column headerText="Date">
-					<h:outputText value="#{worklog.started}">
-					<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
-					</h:outputText>
-				</p:column>
-				<p:column headerText="Member">
-					<h:outputText value="#{worklog.author}"/>
-				</p:column>
-				<p:column headerText="Project">
-					<h:outputText value="#{worklog.issue.project.name}"/>
-				</p:column>				
-				
-				<p:column headerText="Issue">
-					<h:outputFormat value="{0} [{1}]: {2}">
-						<f:param value="#{worklog.issue.issueType}"/>
-						<f:param value="#{worklog.issue.status}"/>
-						<f:param value="#{worklog.issue.summary}"/>
-					</h:outputFormat>
-				</p:column>
-				
-				<p:column headerText="Spent (min)" >
-					<h:outputText  value="#{worklog.timeSpent}"  />
-				</p:column>
-			</p:dataTable>
-		
 		</h:form>
 
 	</ui:define>
