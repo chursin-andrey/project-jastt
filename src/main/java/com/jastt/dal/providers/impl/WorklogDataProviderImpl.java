@@ -1,6 +1,7 @@
 package com.jastt.dal.providers.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -41,6 +42,8 @@ public class WorklogDataProviderImpl extends
 		List<String> authors = options.getAuthors();
 		String issueType = options.getIssueType();
 		String issueStatus = options.getIssueStatus();
+		Date fromDate = options.getFromDate();
+		Date toDate = options.getToDate();
 		
 		if (project != null && project.getId() != null) 
 			cr.add(Restrictions.eq("issue.projectEntity.id", project.getId()));
@@ -57,6 +60,9 @@ public class WorklogDataProviderImpl extends
 		
 		if (issueType != null) cr.add(Restrictions.eq("issue.issueType", issueType));
 		if (issueStatus != null) cr.add(Restrictions.eq("issue.status", issueStatus));
+		
+		if (fromDate != null) cr.add(Restrictions.ge("started", fromDate));
+		if (toDate != null) cr.add(Restrictions.le("started", toDate));
 		
 		return cr;
 	}

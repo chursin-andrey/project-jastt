@@ -9,15 +9,18 @@
 	<ui:define name="content">
 	<h:outputStylesheet name="css/main.css" />
 	
-		<h:form>
-		
-			<h:panelGrid styleClass="top-control-panels" columns="2" columnClasses="top-left-panel panel, top-center-panel panel">
+		<h:form id="wklgForm">
+			
+			<p:growl id="msgs" showDetail="true"/>
+			
+			<h:panelGrid styleClass="top-control-panels" columns="3" columnClasses="top-left-panel panel, top-center-panel panel, top-right-panel panel">
 				<h:panelGroup>
 					<p:outputLabel value="Project:"/><br/>
 					<p:selectOneMenu id="project" value="#{worklogBean.currProjectName}" styleClass="item">
 						<f:selectItem itemLabel="Select a project" itemValue=""/>
 						<f:selectItems value="#{worklogBean.projectList}" var="project" itemLabel="#{project.name}" itemValue="#{project.name}"/>
-						<p:ajax update="members iss_type iss_status" listener="#{worklogBean.projectChanged}"/>
+						<p:ajax update="members issueType issueStatus timeSelection" 
+						listener="#{worklogBean.projectChanged}"/>
 					</p:selectOneMenu>
 					<br/>
 					<p:outputLabel value="Members:"/><br />
@@ -27,27 +30,61 @@
 				</h:panelGroup>
 				
 				<h:panelGroup>
-					
 					<p:outputLabel value="Issue type:"/><br/>
-					<p:selectOneMenu id="iss_type" value="#{worklogBean.currIssueType}" disabled="#{worklogBean.disableMenu}" styleClass="item">
+					<p:selectOneMenu id="issueType" value="#{worklogBean.currIssueType}" disabled="#{worklogBean.disableMenu}" styleClass="item">
 						<f:selectItem itemLabel="All" itemValue=""/>
 						<f:selectItems value="#{worklogBean.issueTypeList}"/>
 					</p:selectOneMenu>
-					
 					<br/>
-					
 					<p:outputLabel value="Issue status:"/><br/>
-					<p:selectOneMenu id="iss_status" value="#{worklogBean.currIssueStatus}" disabled="#{worklogBean.disableMenu}" styleClass="item">
+					<p:selectOneMenu id="issueStatus" value="#{worklogBean.currIssueStatus}" disabled="#{worklogBean.disableMenu}" styleClass="item">
 						<f:selectItem itemLabel="All" itemValue=""/>
 						<f:selectItems value="#{worklogBean.issueStatusList}"/>
 					</p:selectOneMenu>
+				</h:panelGroup>
+				
+				<h:panelGroup>
+				
+					<p:outputLabel value="Time:"/><br/>
 					
+					<p:outputPanel id="timeSelection" styleClass="timeSelection">
+						
+						<p:selectOneRadio id="timeSelector" value="#{worklogBean.currTimeSelector}" 
+						disabled="#{worklogBean.disableMenu}" layout="custom">
+							<f:selectItem itemValue="dateList" itemLabel="DateList"/>
+							<f:selectItem itemValue="dateCalendar" itemLabel="DateCalendar"/>
+							<p:ajax update="predefinedDate fromDate toDate"
+							listener="#{worklogBean.timeSelectorChanged}"/>
+						</p:selectOneRadio>
+						
+						<h:panelGrid columns="2" cellpadding="0" cellspacing="0" columnClasses="calendarTable1,calendarTable1">
+							<p:radioButton for="timeSelector" itemIndex="0"/>
+							<p:selectOneMenu id="predefinedDate" value="#{worklogBean.currPredefinedDate}" 
+							disabled="#{worklogBean.disableDateList or worklogBean.disableMenu}">
+								<f:selectItems value="#{worklogBean.predefinedDateList}"/>
+							</p:selectOneMenu>
+						</h:panelGrid>
+						
+						<p:outputLabel value="SomeText" style="visibility: hidden"/>
+						
+						<h:panelGrid columns="5" cellpadding="0" cellspacing="0" columnClasses="calendarTable1,calendarTable2,calendarTable1,calendarTable2,calendarTable1">
+							<p:radioButton for="timeSelector" itemIndex="1"/>
+							<p:outputLabel value="From:"/>
+							<p:calendar id="fromDate" value="#{worklogBean.calendarFromDate}" size="4" 
+							disabled="#{!worklogBean.disableDateList or worklogBean.disableMenu}"/>
+							<p:outputLabel value="To:"/>
+							<p:calendar id="toDate" value="#{worklogBean.calendarToDate}" size="4" 
+							disabled="#{!worklogBean.disableDateList or worklogBean.disableMenu}"/>
+						</h:panelGrid>
+						
+					</p:outputPanel>
+				
 				</h:panelGroup>
 			</h:panelGrid>
 			
 			<h:panelGrid styleClass="main-buttons-panel panel">
 				<h:panelGroup>
-					<p:commandButton value="Show" actionListener="#{worklogBean.showButtonClick}" update="worklogList" styleClass="main-buttons"/>
+					<p:commandButton value="Show" actionListener="#{worklogBean.showButtonClick}" update="worklogList msgs" styleClass="main-buttons"/>
 					<p:commandButton value="Clear" styleClass="main-buttons"/>
 					<p:commandButton value="Update" styleClass="main-buttons"/>
 				</h:panelGroup>
