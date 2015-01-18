@@ -21,9 +21,11 @@ import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.domain.entities.Worklog;
 import com.jastt.business.enums.PredefinedDateEnum;
+import com.jastt.business.services.IssueService;
 import com.jastt.business.services.PermissionService;
 import com.jastt.business.services.ProjectService;
 import com.jastt.business.services.WorklogService;
+import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.dal.providers.worklog.WorklogSearchOptions;
 
 @Component
@@ -37,6 +39,8 @@ public class WorklogBean implements Serializable {
 	private WorklogService worklogService;
 	@Autowired
 	private PermissionService permissionService;
+	@Autowired
+	private IssueService issueService;
 
 	private boolean disableMenu = true;
 	private boolean disableDateList = false;
@@ -59,6 +63,12 @@ public class WorklogBean implements Serializable {
 	
 	@PostConstruct
 	public void init() {
+		predefinedDateList = new ArrayList<String>();
+		for (PredefinedDateEnum prdDate : PredefinedDateEnum.values()) {
+			predefinedDateList.add(prdDate.getDescription());
+		}
+		
+		projectList = new ArrayList<Project>();
 		Subject subject = SecurityUtils.getSubject();	
 		User user = (User) subject.getSession().getAttribute("user");
 		if (user == null) return;
@@ -67,10 +77,6 @@ public class WorklogBean implements Serializable {
 		for (Permission prm : userPermissions) {
 			Project tmp = prm.getProject();
 			projectList.add(tmp);
-		}
-		
-		for (PredefinedDateEnum prdDate : PredefinedDateEnum.values()) {
-			predefinedDateList.add(prdDate.getDescription());
 		}
 		
 //		projectList = projectService.getAllProjects();
@@ -110,6 +116,21 @@ public class WorklogBean implements Serializable {
 		
 			worklogList = worklogService.getWorklogs(searchOptions);
 		}
+	}
+	
+	public void clearButtonClick() {
+		worklogList.clear();
+	}
+	
+	public void updateButtonClick() throws JiraClientException {
+		Subject subject = SecurityUtils.getSubject();	
+		User user = (User) subject.getSession().getAttribute("user");		
+		if (user == null) return;
+		
+		issueService.update(user);
+		currProjectName = "";
+		resetControls(); worklogList.clear();
+		init();
 	}
 	
 	public void projectChanged() {
