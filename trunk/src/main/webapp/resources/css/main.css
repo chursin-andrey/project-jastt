@@ -78,6 +78,19 @@
 	border-radius: 5px;
 }
 
+.timeSelection td{
+	vertical-align: middle;
+}
+
+.calendarTable1{
+	padding: 10px; 
+}
+
+.calendarTable2{
+	padding-top: 10px;
+	padding-bottom: 10px; 
+}
+
 .export-button{
 	position : relative;
 	margin-left: 10px;
