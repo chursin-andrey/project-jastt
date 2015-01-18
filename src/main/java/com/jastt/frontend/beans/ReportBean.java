@@ -162,16 +162,17 @@ public class ReportBean implements Serializable{
 			for(String assign : assignees_name) {
 				reportAssignees.add(assigneeService.getAssigneeByName(assign));	
 			}
-			if(timespent == "date")
-				reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, dateFrom, dateTo);
-			else
-				reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, PredefinedDateEnum.getType(predefinedDate));
-
-						
 		} else {
-			reportIssues = issueService.getIssues(project, issueStatus, null, type, dateFrom, dateTo);
+			reportAssignees = null;
 
 		}
+		if(timespent == "date")
+			reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, dateFrom, dateTo);
+		else
+			reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, PredefinedDateEnum.getType(predefinedDate));
+
+						
+	
 		reportIssues2 = reportIssues;
 		addAssigneesName();
 		sortingIssues(reportIssues);
@@ -290,6 +291,7 @@ public class ReportBean implements Serializable{
 		for (int j = 0; j < assignees_list.size() ; j++ ) {
 			list = mapAssigneesIssues.get(assignees_list.get(j).getName());
 			
+			if (list != null)
 			for(int i = 0; i < list.size(); i++) {
 				int increment = list.get(i).getTimeSpent();
 				 result += increment;
