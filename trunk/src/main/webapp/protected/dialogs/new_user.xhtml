@@ -16,43 +16,45 @@
 	    	draggable="false" resizable="false" modal="true" closable="false">
 	    	<h:form id="new_user_form">				
 				<p:messages id="error" for="" showSummary="true" showDetail="false"/>
-        		<h:panelGrid id="matchGrid" columns="2" style="margin-bottom:10px" cellpadding="5">
-        			<p:outputLabel for="addName" value="Name:" />
-					<p:inputText id="addName" value="#{userBean.user.name}" />
+        		<h:panelGrid id="newUserGrid" columns="2" style="margin-bottom:10px" cellpadding="5">
+        			<p:outputLabel for="newUserName" value="Name:" />
+					<p:inputText id="newUserName" value="#{userBean.user.name}" />
 					
-					<p:outputLabel id="addLblLogin" for="addLogin" value="Login:"/>
-					<p:inputText id="addLogin" value="#{userBean.user.login}" required="true"
+					<p:outputLabel for="newUserLogin" value="Login:"/>
+					<p:inputText id="newUserLogin" value="#{userBean.user.login}" required="true"
 						requiredMessage="Login is required" validator="#{userBean.validateLogin}"
 						autocomplete="false">
 					</p:inputText>
 						
-					<p:outputLabel for="addEmail" value="E-mail:" />
-					<p:inputText id="addEmail" value="#{userBean.user.email}" validator="#{userBean.validateEmail}"
+					<p:outputLabel for="newUserEmail" value="E-mail:" />
+					<p:inputText id="newUserEmail" value="#{userBean.user.email}"
+						validator="#{userBean.validateEmail}"
 						autocomplete="false">
 					</p:inputText>
 					
-					<p:outputLabel for="addIsAdmin" value="Admin:" />
-        			<p:selectBooleanCheckbox id="addIsAdmin" value="#{userBean.admin}" >
-        				<p:ajax update="addLabelUrl, addUrl, addLabelPwd1,
-        					addPwd1, addLabelPwd2, addPwd2, buttonSave" />
+					<p:outputLabel for="newUserIsAdmin" value="Admin:" />
+        			<p:selectBooleanCheckbox id="newUserIsAdmin" value="#{userBean.admin}" >
+        				<p:ajax update="lblNewUserURL, newUserURL" />
         			</p:selectBooleanCheckbox>	
         			
-        			<p:outputLabel id="addLabelUrl" for="addUrl" value="URL:" />
-					<p:inputText id="addUrl" value="#{userBean.url}"
+        			<p:outputLabel id="lblNewUserURL" for="newUserURL" value="JIRA Server URL:" />
+					<p:inputText id="newUserURL" value="#{userBean.url}"
 						required="#{!userBean.admin}" disabled="#{userBean.admin}"
 						requiredMessage="URL is required.">
 						<mcv:validateUrl />
 					</p:inputText>
 					
-					<p:outputLabel id="addLabelPwd1" for="addPwd1" value="Password:" />
-        			<p:password id="addPwd1" value="#{userBean.user.password}"
-        			 	match="addPwd2" required="true"
-        				requiredMessage="Password is required." />	
+					<p:outputLabel for="newUserPwd1" value="Password:" />
+        			<p:password id="newUserPwd1" value="#{userBean.user.password}"
+        			 	match="newUserPwd2" required="true"
+        				requiredMessage="Password is required!"
+        				validator="#{userBean.validatePassword}"
+        				autocomplete="false"/>	
         				
- 					<p:outputLabel id="addLabelPwd2" for="addPwd2" value="Password confirmation:" />
-        			<p:password id="addPwd2" value="{userBean.user.password}" 
-        				requiredMessage="Password must be confirmed."
-        				required="true"/>        			   			
+ 					<p:outputLabel for="newUserPwd2" value="Password confirmation:" />
+        			<p:password id="newUserPwd2" value="{userBean.user.password}" 
+        				required="true" requiredMessage="Password must be confirmed!"
+        				autocomplete="false"/>        			   			
 				</h:panelGrid>
 				
 				<h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
@@ -61,8 +63,10 @@
 							actionListener="{userBean.verifyJiraCredentials}" />
 						 -->
 						<p:commandButton id="buttonSave" value="Save" actionListener="#{userBean.createUser}"
-							update=":user_form:usersTable :user_form:growl" icon="ui-icon-check"
-							oncomplete="if (args &amp;&amp; !args.validationFailed) newUserDialog.hide()" />
+							update="newUserGrid, :user_form:usersTable, :user_form:growl"
+							oncomplete="if (args &amp;&amp; !args.validationFailed) newUserDialog.hide()"
+							onstart="statusDialogForAdding.show();" onsuccess="statusDialogForAdding.hide();"
+							icon="ui-icon-check" />
 						<p:commandButton value="Cancel" actionListener="#{userBean.cancelHandle}" immediate="true"
 							icon="ui-icon-close">
 						</p:commandButton>	
@@ -70,6 +74,12 @@
 				
 			</h:form>
 		</p:dialog>
+		
+		<p:dialog id="loadStatusForAdding" widgetVar="statusDialogForAdding" modal="true" draggable="false" closable="false" 
+			resizable="false" showHeader="false"  style="background-color: transparent; box-shadow: none; border: none;"  >
+				<p:graphicImage  value="/resources/img/loading.gif" />	
+		</p:dialog>
+		
 		</ui:composition>
 	</h:body>
 </html>
