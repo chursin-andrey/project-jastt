@@ -49,6 +49,7 @@ public class WorklogBean implements Serializable {
 	private List<String> issueTypeList = new ArrayList<String>();
 	private List<String> issueStatusList = new ArrayList<String>();
 	private List<Worklog> worklogList = new ArrayList<Worklog>();
+	private List<WorklogReportItem> worklogReportList = new ArrayList<WorklogReportItem>();
 	private List<String> predefinedDateList = new ArrayList<String>();
 	//values of UI components
 	private String currProjectName = "";
@@ -83,7 +84,7 @@ public class WorklogBean implements Serializable {
 	}
 	
 	public void showButtonClick() {
-		worklogList.clear();
+		worklogList.clear(); worklogReportList.clear();
 		Project currProject = findProjectByName(currProjectName);
 		if (currProject != null) {
 			WorklogSearchOptions searchOptions = new WorklogSearchOptions();
@@ -105,6 +106,7 @@ public class WorklogBean implements Serializable {
 				fromDate = calendarFromDate;
 				toDate = calendarToDate;
 				if (toDate != null) {
+					//this is to make toDate included to time interval
 					Calendar cal = Calendar.getInstance();
 					cal.setTime(toDate);
 					cal.add(Calendar.DATE, 1);
@@ -115,11 +117,13 @@ public class WorklogBean implements Serializable {
 			searchOptions.setToDate(toDate);
 		
 			worklogList = worklogService.getWorklogs(searchOptions);
+			generateWorklogReport();
 		}
 	}
 	
 	public void clearButtonClick() {
-		worklogList.clear();
+		worklogList.clear(); 
+		worklogReportList.clear();
 	}
 	
 	public void updateButtonClick() throws JiraClientException {
@@ -129,7 +133,7 @@ public class WorklogBean implements Serializable {
 		
 		issueService.update(user);
 		currProjectName = "";
-		resetControls(); worklogList.clear();
+		resetControls(); worklogList.clear(); worklogReportList.clear();
 		init();
 	}
 	
@@ -146,6 +150,22 @@ public class WorklogBean implements Serializable {
 	
 	public void timeSelectorChanged() {
 		disableDateList = currTimeSelector.equals("dateCalendar");
+	}
+	
+	private void generateWorklogReport() {
+		worklogReportList = new ArrayList<WorklogReportItem>();
+		
+		Map<String, List<Worklog>> authorWorklogsMap = new LinkedHashMap<String, List<Worklog>>();
+		for (Worklog worklog : worklogList) {
+			String author = worklog.getAuthor();
+			if (!authorWorklogsMap.containsKey(author)) authorWorklogsMap.put(author, new ArrayList<Worklog>());
+			authorWorklogsMap.get(author).add(worklog);
+		}
+		
+		for (String author : authorWorklogsMap.keySet()) {
+			WorklogReportItem reportItem = new WorklogReportItem(author, authorWorklogsMap.get(author));
+			worklogReportList.add(reportItem);
+		}
 	}
 	
 	private void resetControls() {
@@ -303,23 +323,13 @@ public class WorklogBean implements Serializable {
 		this.disableDateList = disableDateList;
 	}
 	
-	public List<WorklogReportItem> getReportList() {
-		List<WorklogReportItem> worklogReportList = new ArrayList<WorklogReportItem>();
-		
-		Map<String, List<Worklog>> authorWorklogsMap = new LinkedHashMap<String, List<Worklog>>();
-		for (Worklog worklog : worklogList) {
-			String author = worklog.getAuthor();
-			if (!authorWorklogsMap.containsKey(author)) authorWorklogsMap.put(author, new ArrayList<Worklog>());
-			authorWorklogsMap.get(author).add(worklog);
-		}
-		
-		for (String author : authorWorklogsMap.keySet()) {
-			WorklogReportItem reportItem = new WorklogReportItem(author, authorWorklogsMap.get(author));
-			worklogReportList.add(reportItem);
-		}
-		
+	public List<WorklogReportItem> getWorklogReportList() {
 		return worklogReportList;
 	}
+
+	/*public void setWorklogReportList(List<WorklogReportItem> worklogReportList) {
+		this.worklogReportList = worklogReportList;
+	}*/
 	
 	public int getTotalTimeSpent() {
 		int total = 0;
@@ -328,4 +338,5 @@ public class WorklogBean implements Serializable {
 		}
 		return total;
 	}
+	
 }

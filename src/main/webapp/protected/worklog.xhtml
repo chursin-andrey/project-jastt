@@ -136,7 +136,7 @@
 			
 			<p:tab title="Report">
 				
-				<p:dataTable id="reportList" value="#{worklogBean.reportList}" var="report" rowIndexVar="rowIndex">
+				<p:dataTable id="reportList" value="#{worklogBean.worklogReportList}" var="report" rowIndexVar="rowIndex">
 					<f:facet name="header">
 						<h:outputText value="Total Time Spent (h:mm)"/><br/>
 						<h:outputText value="#{worklogBean.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
