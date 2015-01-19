@@ -1,4 +1,4 @@
-package com.jastt.frontend.beans;
+package com.jastt.frontend.beans.worklog;
 
 import java.util.List;
 

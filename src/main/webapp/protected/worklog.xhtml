@@ -100,7 +100,8 @@
 				
 				<p:dataTable id="worklogList" value="#{worklogBean.worklogList}" var="worklog" rowIndexVar="rowIndex">
 					<f:facet name="header">
-						Total Time Spent
+						<h:outputText value="Total Time Spent (hh:mm)"/><br/>
+						<h:outputText value="#{worklogBean.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 					</f:facet>
 					
 					<p:column headerText="№">
@@ -108,7 +109,7 @@
 					</p:column>
 					<p:column headerText="Date">
 						<h:outputText value="#{worklog.started}">
-						<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
 						</h:outputText>
 					</p:column>
 					<p:column headerText="Member">
@@ -126,8 +127,8 @@
 						</h:outputFormat>
 					</p:column>
 					
-					<p:column headerText="Spent (min)" >
-						<h:outputText  value="#{worklog.timeSpent}"  />
+					<p:column headerText="Spent (hh:mm)" >
+						<h:outputText  value="#{worklog.timeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 					</p:column>
 				</p:dataTable>
 			
@@ -137,7 +138,8 @@
 				
 				<p:dataTable id="reportList" value="#{worklogBean.reportList}" var="report" rowIndexVar="rowIndex">
 					<f:facet name="header">
-						Total Time Spent
+						<h:outputText value="Total Time Spent (hh:mm)"/><br/>
+						<h:outputText value="#{worklogBean.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 					</f:facet>
 					
 					<p:column>
@@ -149,8 +151,8 @@
 					<p:column headerText="Member">
 						<h:outputText value="#{report.author}"/>
 					</p:column>
-					<p:column headerText="Spent (min)" >
-						<h:outputText  value="#{report.totalTimeSpent}"  />
+					<p:column headerText="Spent (hh:mm)" >
+						<h:outputText  value="#{report.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 					</p:column>
 					
 					<p:rowExpansion>
@@ -161,7 +163,7 @@
 							</p:column>
 							<p:column headerText="Date">
 								<h:outputText value="#{worklog.started}">
-								<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
 								</h:outputText>
 							</p:column>
 							<p:column headerText="Project">
@@ -174,8 +176,8 @@
 									<f:param value="#{worklog.issue.summary}"/>
 								</h:outputFormat>
 							</p:column>
-							<p:column headerText="Spent (min)" >
-								<h:outputText  value="#{worklog.timeSpent}"  />
+							<p:column headerText="Spent (hh:mm)" >
+								<h:outputText  value="#{worklog.timeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 							</p:column>
 						</p:dataTable>
 						
