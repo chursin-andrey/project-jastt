@@ -97,11 +97,10 @@
 		<p:tabView activeIndex="0" id="tabs" styleClass="tabView">
 			<p:tab title="Issues">
 					<p:dataTable var="details" value="#{reportBean.reportIssues}" id="Details" rowIndexVar="rowIndex" >
-						<f:facet name="header">Total Elapsed Time              
+						<f:facet name="header">Total Time Spent (h:mm)              
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
-                    				<h:outputText value="hours:"/> 
-                    				<h:outputText value="#{reportBean.allTime}"/>
+                    				<h:outputText value="#{reportBean.allTime}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
                 			</p:outputPanel>            
             			</f:facet>
             			
@@ -125,14 +124,14 @@
 						<p:column headerText="Status" sortBy="#{details.status}">
 						 <h:outputText  value="#{details.status}"  />
 						</p:column>
-						<p:column headerText="Key" sortBy="#{details.key}" >					
-							<p:commandLink value="#{details.key}" />
+						<p:column headerText="Key" sortBy="#{details.key}" >
+							<h:outputText  value="#{details.key}"  />
 						</p:column>
 						<p:column headerText="Issue" sortBy="#{details.summary}">
-							<p:commandLink value="#{details.summary}" />
+							<h:outputText  value="#{details.summary}"  />
 						</p:column>
-						<p:column headerText="Minutes" sortBy="#{details.timeSpent}" width="100">
-							<h:outputText  value="#{details.timeSpent}"  />
+						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="150">
+							<h:outputText  value="#{details.timeSpent}"  converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 						</p:column>
 					</p:dataTable>
 			</p:tab>
@@ -140,11 +139,10 @@
 					
         	<p:tab title="Report">
 					<p:dataTable var="report" value="#{reportBean.entries}" id="Report" rowIndexVar="rowIndex" lazy="true">
-							 <f:facet name="header">Total Elapsed Time       
+							 <f:facet name="header">Total Time Spent (h:mm)       
                 				<p:column datasource="Report" trigger="toggler"/>
                					<p:outputPanel>
-                    				<h:outputText value="hours:"/> 
-									<h:outputText value="#{reportBean.allTime}"/>
+									<h:outputText value="#{reportBean.allTime}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
                     				
                     				
                     				<div class="top-export-buttons-panel">
@@ -170,8 +168,8 @@
                 			<p:column headerText="Member">
 								<h:outputText  value="#{report.key}"  />
 							</p:column> 
-                			<p:column headerText="Time">
-								<h:outputText  value="#{reportBean.as_time[rowIndex]} hours"  />
+                			<p:column headerText="Spent (h:mm)">
+								<h:outputText  value="#{reportBean.as_time[rowIndex]}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 							</p:column>
 							
 							<p:rowExpansion> 
@@ -191,15 +189,17 @@
 										<h:outputText  value="#{item.status}"  />
 									</p:column>
 									<p:column headerText="Key" sortBy="#{details.key}" >
-										<p:commandLink value="#{item.key}" />
+										<h:outputText  value="#{item.key}"  />
 									</p:column>
-									<p:column headerText="Issue">
-										<p:commandLink value="#{item.summary}"  />
+									<p:column headerText="Summary">
+										<h:outputText  value="#{item.summary}"  />
 									</p:column>
-									<p:column headerText="Minutes" >
-										<h:outputText  value="#{item.timeSpent}"  />
+									<p:column headerText="Spent (h:mm)" >
+										<h:outputText  value="#{item.timeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 									</p:column>
-               			         			             			
+               			
+               			
+               			             			
 								</p:dataTable>  
 						
 						
