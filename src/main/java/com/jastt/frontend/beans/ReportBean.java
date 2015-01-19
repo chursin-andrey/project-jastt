@@ -57,7 +57,7 @@ public class ReportBean implements Serializable{
 	private Set<Assignee> assignees;
 	private Set<String> assignees_name;
 	private List<Entry<String, List<Issue> >> entries;
-	private List<Double> as_time;
+	private List<Integer> as_time;
 	private ArrayList<Assignee> assignees_list;
 	private Map<String, List<Issue>> mapAssigneesIssues = new HashMap<String, List<Issue>>();	
 	private List<Permission> permissions;
@@ -79,7 +79,7 @@ public class ReportBean implements Serializable{
 	private String timespent;
 	private String status;
 	private String predefinedDate;
-	private double allTime;
+	private int allTime;
 	
 	private List<Issue> reportIssues;
 	private List<Issue> reportIssues2;
@@ -214,19 +214,18 @@ public class ReportBean implements Serializable{
 	}
 	
 	
-	public void showAllTime(List<Issue> list) {
+	public int showAllTime(List<Issue> list) {
 
-		double result = 0;
+		int result = 0;
 		for(int i = 0; i < list.size(); i++) {
 			
 			 int increment = list.get(i).getTimeSpent();
 			 result += increment;
 		}
-		result = result / 60;
-		result = result * 1000;
-		int i = (int) Math.round(result);
-		result = (double)i / 1000;
-		setAllTime(result);;
+
+		setAllTime(result);
+		
+		return result;
 	}
 	
 	
@@ -251,6 +250,9 @@ public class ReportBean implements Serializable{
 		reportIssues.clear();
 		reportIssues2.clear();
 		setAllTime(0);
+		as_time.clear();
+		mapAssigneesIssues.clear();
+		entries.clear();
 	}
 	
 	public void addMapIssue(List<Issue> list) {
@@ -283,9 +285,9 @@ public class ReportBean implements Serializable{
 	
 	public void showAsssigneeTime() {
 		
-		double result = 0;
+		int result = 0;
 		assignees_list = new ArrayList<Assignee>(assignees);
-		as_time = new ArrayList<Double>();
+		as_time = new ArrayList<Integer>();
 		List<Issue> list = new ArrayList<Issue>();
 	
 		for (int j = 0; j < assignees_list.size() ; j++ ) {
@@ -296,10 +298,7 @@ public class ReportBean implements Serializable{
 				int increment = list.get(i).getTimeSpent();
 				 result += increment;
 			}
-			result = result / 60;
-			result = result * 1000;
-			int i = (int) Math.round(result);
-			result = (double)i / 1000;
+			
 			as_time.add(result);
 			
 		}
@@ -520,11 +519,11 @@ public class ReportBean implements Serializable{
 	public void setPredefinedDate(String predefinedDate) {
 		this.predefinedDate = predefinedDate;
 	}
-	public List<Double> getAs_time() {
+	public List<Integer> getAs_time() {
 		return as_time;
 	}
 
-	public void setAs_time(List<Double> as_time) {
+	public void setAs_time(List<Integer> as_time) {
 		this.as_time = as_time;
 	}
 
@@ -548,11 +547,11 @@ public class ReportBean implements Serializable{
 		this.assignees_list = assignees_list;
 	}
 	
-	public double getAllTime() {
+	public int getAllTime() {
 		return allTime;
 	}
 
-	public void setAllTime(double allTime) {
+	public void setAllTime(int allTime) {
 		this.allTime = allTime;
 	}
 	
@@ -564,13 +563,13 @@ public class ReportBean implements Serializable{
 		this.reportIssues2 = reportIssues2;
 	}
 
-	private double assigneeTime;
+	private int assigneeTime;
 	
-	public double getAssigneeTime() {
+	public int getAssigneeTime() {
 		return assigneeTime;
 	}
 
-	public void setAssigneeTime(double assigneeTime) {
+	public void setAssigneeTime(int assigneeTime) {
 		this.assigneeTime = assigneeTime;
 	}
 
