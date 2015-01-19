@@ -1,4 +1,4 @@
-package com.jastt.frontend.beans;
+package com.jastt.frontend.beans.worklog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.faces.event.ValueChangeEvent;
-
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +68,7 @@ public class WorklogBean implements Serializable {
 		}
 		
 		projectList = new ArrayList<Project>();
+		
 		Subject subject = SecurityUtils.getSubject();	
 		User user = (User) subject.getSession().getAttribute("user");
 		if (user == null) return;
@@ -321,5 +319,13 @@ public class WorklogBean implements Serializable {
 		}
 		
 		return worklogReportList;
+	}
+	
+	public int getTotalTimeSpent() {
+		int total = 0;
+		for (Worklog worklog : worklogList) {
+			total += worklog.getTimeSpent();
+		}
+		return total;
 	}
 }
