@@ -85,10 +85,10 @@
 			<h:panelGrid styleClass="main-buttons-panel panel">
 				<h:panelGroup>
 					<p:commandButton value="Show" styleClass="main-buttons"
-					actionListener="#{worklogBean.showButtonClick}" update="tabs:worklogList msgs"/>
+					actionListener="#{worklogBean.showButtonClick}" update="tabs:worklogList tabs:reportList msgs"/>
 					
 					<p:commandButton value="Clear" styleClass="main-buttons"
-					actionListener="#{worklogBean.clearButtonClick}" update="tabs:worklogList msgs"/>
+					actionListener="#{worklogBean.clearButtonClick}" update="tabs:worklogList tabs:reportList msgs"/>
 					
 					<p:commandButton value="Update" styleClass="main-buttons" ajax="false"
 					actionListener="#{worklogBean.updateButtonClick}"/>
@@ -97,7 +97,8 @@
 			
 			<p:tabView id="tabs" styleClass="tabView">
 			<p:tab title="Worklogs">
-				<p:dataTable id="worklogList" value="#{worklogBean.worklogList}" var="worklog" rowIndexVar="rowIndex" styleClass="tabView">
+				
+				<p:dataTable id="worklogList" value="#{worklogBean.worklogList}" var="worklog" rowIndexVar="rowIndex">
 					<f:facet name="header">
 						Total Time Spent
 					</f:facet>
@@ -129,10 +130,59 @@
 						<h:outputText  value="#{worklog.timeSpent}"  />
 					</p:column>
 				</p:dataTable>
+			
 			</p:tab>
 			
 			<p:tab title="Report">
-				<h:outputText id="testString2" value="Place for report page"/>
+				
+				<p:dataTable id="reportList" value="#{worklogBean.reportList}" var="report" rowIndexVar="rowIndex">
+					<f:facet name="header">
+						Total Time Spent
+					</f:facet>
+					
+					<p:column>
+       					<p:rowToggler />
+   					</p:column>
+   					<p:column headerText="№">
+						<h:outputText value="#{rowIndex+1}"/>
+					</p:column>
+					<p:column headerText="Member">
+						<h:outputText value="#{report.author}"/>
+					</p:column>
+					<p:column headerText="Spent (min)" >
+						<h:outputText  value="#{report.totalTimeSpent}"  />
+					</p:column>
+					
+					<p:rowExpansion>
+						
+						<p:dataTable value="#{report.worklogs}" var="worklog" rowIndexVar="rowIndex">
+							<p:column headerText="№">
+								<h:outputText value="#{rowIndex+1}"/>
+							</p:column>
+							<p:column headerText="Date">
+								<h:outputText value="#{worklog.started}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Project">
+								<h:outputText value="#{worklog.issue.project.name}"/>
+							</p:column>	
+							<p:column headerText="Issue">
+								<h:outputFormat value="{0} [{1}]: {2}">
+									<f:param value="#{worklog.issue.issueType}"/>
+									<f:param value="#{worklog.issue.status}"/>
+									<f:param value="#{worklog.issue.summary}"/>
+								</h:outputFormat>
+							</p:column>
+							<p:column headerText="Spent (min)" >
+								<h:outputText  value="#{worklog.timeSpent}"  />
+							</p:column>
+						</p:dataTable>
+						
+					</p:rowExpansion>
+					
+				</p:dataTable>
+				
 			</p:tab>
 			</p:tabView>
 				

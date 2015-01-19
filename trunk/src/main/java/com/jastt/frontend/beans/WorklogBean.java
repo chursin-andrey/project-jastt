@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.event.ValueChangeEvent;
 
-import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -301,5 +303,23 @@ public class WorklogBean implements Serializable {
 
 	public void setDisableDateList(boolean disableDateList) {
 		this.disableDateList = disableDateList;
+	}
+	
+	public List<WorklogReportItem> getReportList() {
+		List<WorklogReportItem> worklogReportList = new ArrayList<WorklogReportItem>();
+		
+		Map<String, List<Worklog>> authorWorklogsMap = new LinkedHashMap<String, List<Worklog>>();
+		for (Worklog worklog : worklogList) {
+			String author = worklog.getAuthor();
+			if (!authorWorklogsMap.containsKey(author)) authorWorklogsMap.put(author, new ArrayList<Worklog>());
+			authorWorklogsMap.get(author).add(worklog);
+		}
+		
+		for (String author : authorWorklogsMap.keySet()) {
+			WorklogReportItem reportItem = new WorklogReportItem(author, authorWorklogsMap.get(author));
+			worklogReportList.add(reportItem);
+		}
+		
+		return worklogReportList;
 	}
 }
