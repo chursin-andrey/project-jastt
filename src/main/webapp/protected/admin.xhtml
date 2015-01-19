@@ -42,14 +42,15 @@
     				
     			<p:column headerText="Options">
         			<p:commandButton value="Edit" style="margin:5px"
-        				actionListener="#{usersBean.editUser(user)}"
-        				oncomplete="editUserDialog.show()" update=":edit_form" 
+        				actionListener="#{usersBean.editButtonClick(user)}"
+        				oncomplete="editUserDialog.show()" update=":edit_form"
         				icon="ui-icon-refresh">
+        				<f:setPropertyActionListener target="#{usersBean.user}" value="#{user}" />
         			 </p:commandButton>
 
 					<p:commandButton value="Delete" style="margin:5px"
                     	update=":user_form:usersTable"
-                        actionListener="#{usersBean.confirmUserRemoval(user)}"
+                        actionListener="#{usersBean.deleteButtonClick(user)}"
                         icon="ui-icon-circle-minus" >
                         <f:setPropertyActionListener target="#{usersBean.user}" value="#{user}" />      
                     </p:commandButton>

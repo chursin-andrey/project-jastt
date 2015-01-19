@@ -39,7 +39,7 @@ import com.jastt.frontend.utils.Dialogs;
 import com.jastt.frontend.utils.Faces;
 
 @Component(value="userBean")
-@Scope("request")
+@Scope("session")
 public class UserBean implements Serializable {
 	
 	private static final long serialVersionUID = 2819227216048472445L;
@@ -50,6 +50,8 @@ public class UserBean implements Serializable {
             "@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	
 	private static final String LOGIN_PATTERN = "^[A-Za-z0-9_-]{4,16}$";
+	
+	private static final String PASSWORD_PATTERN = "^[a-zA-z0-9]{8,16}$";
 	
 	@Autowired
 	private UsersBean usersBean;
@@ -88,8 +90,8 @@ public class UserBean implements Serializable {
 	private String login;
 	private String url;
 	private String username;
-	private boolean admin = false;
-	private boolean disableSaveButton = true;
+	private boolean admin;
+	private boolean disableSaveButton;
 	
 	public boolean isDisableButton() {
 		return disableSaveButton;
@@ -175,11 +177,11 @@ public class UserBean implements Serializable {
             String messageDetails = "Login must contain letters, digits, dash, underscore. Length must be greater or equals than allowable minimum of '4' and less than allowable maximum of '16'.";
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageSummary, messageDetails);
             throw new ValidatorException(facesMessage);
-        }       
-    	resetFields();   
+        }          
     }
     
-    public void validateEmail(FacesContext facesContext, UIComponent componentToValid, Object value) throws ValidatorException{
+    public void validateEmail(FacesContext facesContext, UIComponent componentToValid, Object value)
+    		throws ValidatorException {
         String email = value.toString();
         if(!email.matches(EMAIL_PATTERN)) {
         	String messageSummary = "Wrong email format.";
@@ -187,15 +189,28 @@ public class UserBean implements Serializable {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageSummary, messageString);
             throw new ValidatorException(facesMessage);
         }
-        resetFields();
     }
     
-    @PreDestroy
+    public void validatePassword(FacesContext facesContext, UIComponent componentToValid, Object value)
+    		throws ValidatorException {
+    	if (isAdmin()) {
+    		String password = value.toString();
+            if(!password.matches(PASSWORD_PATTERN)) {
+            	String messageSummary = "Password has invalid symbols.";
+                String messageString = "The password must contain uppercase and lowercase Latin letters, numbers. Mininmum length is 8. Maximumum lenght is 16.";
+                FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageSummary, messageString);
+                throw new ValidatorException(facesMessage);
+            }
+    	}   
+    }
+    
     public void resetFields() {
-    	name = null;
-    	login = null;
-    	url = null;
+    	user = new User();
+    	server = new Server();
     	admin = false;
+    	name = "";
+    	login = "";
+    	url = "";
     }
     
     public void verifyJiraCredentials() {
@@ -234,8 +249,6 @@ public class UserBean implements Serializable {
 			}
 			fc.addMessage(null, facesMessage);
 			disableSaveButton = true;
-		} finally {
-			resetFields();
 		}
 		
     }
@@ -263,8 +276,6 @@ public class UserBean implements Serializable {
 			}
 			fc.addMessage(null, facesMessage);
 			return false;
-		} finally {
-			resetFields();
 		}
 		
     }
@@ -299,7 +310,6 @@ public class UserBean implements Serializable {
     	}
 		resetFields();
 		usersBean.updateValues();
-		
     }
     
     public String getUsername(User user) {

@@ -15,7 +15,7 @@
         		<p:commandButton value="Yes" update=":user_form:usersTable :user_form:growl "
             		actionListener="#{usersBean.deleteUser}"
             		onclick="PF('confirmUserRemovalDialog').hide()">
-                	<f:setPropertyActionListener target="#{usersBean.user}" value="#{user}" />      
+                	<!-- <f:setPropertyActionListener target="{usersBean.user}" value="{user}" /> -->      
             	</p:commandButton>
             	<p:commandButton value="No" type="button" update="confirmUserRemovalDialog"
             		onclick="PF('confirmUserRemovalDialog').hide()" />

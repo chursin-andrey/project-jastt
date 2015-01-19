@@ -20,49 +20,57 @@
 		<p:messages id="errors" for="" showDetail="false" showSummary="true" autoUpdate="true"
 			closable="false" />
         		
-        	<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-        		<p:outputLabel for="editName" value="Name:" />
-				<p:inputText id="editName" value="#{usersBean.user.name}" />
+        	<h:panelGrid id="editUserGrid" columns="2" style="margin-bottom:10px" cellpadding="5">
+        		<p:outputLabel for="editUsername" value="Name:" />
+				<p:inputText id="editUsername" value="#{usersBean.user.name}" />
 					
-				<p:outputLabel for="editLogin" value="Login:"/>
-				<p:inputText id="editLogin" value="#{usersBean.user.login}"
+				<p:outputLabel for="editUserLogin" value="Login:"/>
+				<p:inputText id="editUserLogin" value="#{usersBean.user.login}"
 					required="true"	readonly="true"
-					requiredMessage="Login is required" />
+					requiredMessage="Login is required!" />
 						
-				<p:outputLabel for="editEmail" value="E-mail:" />
-				<p:inputText id="editEmail" value="#{usersBean.user.email}" validator="#{userBean.validateEmail}"
-						autocomplete="false">
+				<p:outputLabel for="editUserEmail" value="E-mail:" />
+				<p:inputText id="editUserEmail" value="#{usersBean.user.email}"
+					validator="#{userBean.validateEmail}"
+					autocomplete="false">
 				</p:inputText>
 					
-				<p:outputLabel for="editIsAdmin" value="Admin:" />
-        		<p:selectBooleanCheckbox id="editIsAdmin" value="#{usersBean.admin}" >
-        			<p:ajax update="editLabelUrl, editUrl, editLabelPwd1, editPwd1, editLabelPwd2, editPwd2" />
+				<p:outputLabel for="editUserIsAdmin" value="Admin:" />
+        		<p:selectBooleanCheckbox id="editUserIsAdmin" value="#{usersBean.admin}" >
+        			<p:ajax update="lblEditUserURL, editUserURL" />
         		</p:selectBooleanCheckbox>	
         		
-        		<p:outputLabel id="editLabelUrl" for="editUrl" value="URL:"/>
-				<p:inputText id="editUrl" value="#{usersBean.url}"
+        		<p:outputLabel id="lblEditUserURL" for="editUserURL" value="JIRA Server URL:"/>
+				<p:inputText id="editUserURL" value="#{usersBean.url}"
 					required="#{!usersBean.admin}" requiredMessage="URL is required."
 					readonly="#{usersBean.admin}">
 					<mcv:validateUrl />
 				</p:inputText>
 			
-				<p:outputLabel id="editLabelPwd1" for="editPwd1" value="Password:" />
-        		<p:password id="editPwd1" match="editPwd2" value="#{usersBean.user.password}" 
-   					required="true" requiredMessage="Password is required." />
+				<p:outputLabel for="editUserPwd1" value="Password:" />
+        		<p:password id="editUserPwd1" match="editUserPwd2" value="#{usersBean.user.password}" 
+   					required="true" requiredMessage="Password is required."
+   					validator="#{usersBean.validatePassword}" />
  					
- 				<p:outputLabel id="editLabelPwd2" for="editPwd2" value="Password confirmation:" />
-        		<p:password id="editPwd2" value="#{usersBean.user.password}"
+ 				<p:outputLabel for="editUserPwd2" value="Password confirmation:" />
+        		<p:password id="editUserPwd2" value="#{usersBean.user.password}"
         			requiredMessage="Password must be confirmed."
         			required="true"/>							
 					
 				<p:commandButton value="Apply" actionListener="#{usersBean.saveUser}"
-					update=":user_form:usersTable :user_form:growl" icon="ui-icon-check"
-					oncomplete="if (args &amp;&amp; !args.validationFailed) editUserDialog.hide()" />
+					update="editUserGrid, :user_form:usersTable, :user_form:growl" icon="ui-icon-check"
+					oncomplete="if (args &amp;&amp; !args.validationFailed) editUserDialog.hide()"
+					onstart="statusDialogForEdit.show();" onsuccess="statusDialogForEdit.hide();" />
 				<p:commandButton value="Cancel" actionListener="#{usersBean.cancelHandle}"
 					immediate="true" icon="ui-icon-close" >
 				</p:commandButton>   			
 			</h:panelGrid>
 		</h:form>
+		</p:dialog>
+		
+		<p:dialog id="loadStatusForEdit" widgetVar="statusDialogForEdit" modal="true" draggable="false" closable="false" 
+			resizable="false" showHeader="false"  style="background-color: transparent; box-shadow: none; border: none;"  >
+				<p:graphicImage  value="/resources/img/loading.gif" />	
 		</p:dialog>	
 	</ui:composition>
 </h:body>

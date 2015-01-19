@@ -7,8 +7,10 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.validator.ValidatorException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,8 @@ public class UsersBean implements Serializable {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UsersBean.class);
 	
+	private static final String PASSWORD_PATTERN = "^[a-zA-z0-9]{8,16}$";
+	
     @Autowired
     private UserService userService;
     
@@ -65,9 +69,6 @@ public class UsersBean implements Serializable {
 	@Autowired
 	private CurrentUserService currentUserService;
 	
-	@Autowired
-	private LoginBean loginBean;
-	
     private User user;
     private User currentUser;
     private List<User> users;
@@ -79,53 +80,7 @@ public class UsersBean implements Serializable {
 	private String name;
 	private boolean admin = false;
 
-	public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-    
-	public LazyDataModel<User> getUserDataModel() {
-        return userDataModel;
-    }
-
-    public void setUserDataModel(LazyDataModel<User> userDataModel) {
-        this.userDataModel = userDataModel;
-    }
-    
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-    
-    public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 	
-    public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
 	
 	@PostConstruct
     public void init() {
@@ -151,6 +106,19 @@ public class UsersBean implements Serializable {
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
 	}
+	
+    public void validatePassword(FacesContext facesContext, UIComponent componentToValid, Object value)
+    		throws ValidatorException {
+    	if (isAdmin()) {
+    		String password = value.toString();
+            if(!password.matches(PASSWORD_PATTERN)) {
+            	String messageSummary = "Password has invalid symbols.";
+                String messageString = "The password must contain uppercase and lowercase latin letters, numbers. Mininmum length is 8. Maximumum lenght is 16.";
+                FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageSummary, messageString);
+                throw new ValidatorException(facesMessage);
+            }
+    	}   
+    }
 	
 	public void verifyJiraLogin(User user) {
     	FacesContext fc = FacesContext.getCurrentInstance();
@@ -206,22 +174,22 @@ public class UsersBean implements Serializable {
         Faces.showDialog(Dialogs.NEW_USER_DIALOG_WIDGET);
     }
 	
-    public void editUser(User user) {
+    public void editButtonClick(User editUser) {
     	Faces.updateElements(Dialogs.EDIT_USER_DIALOG_ID);
-        Faces.showDialog(Dialogs.EDIT_USER_DIALOG_WIDGET);
+    	Faces.showDialog(Dialogs.EDIT_USER_DIALOG_WIDGET);
     	resetFields();
-    	this.user = user;
-    	if (this.user.getUserRole().equalsIgnoreCase(UserRoleEnum.ADMIN.getMark())) {
+    	user = userService.getUserByLogin(editUser.getLogin());
+    	if (editUser.getUserRole().equalsIgnoreCase(UserRoleEnum.ADMIN.getMark())) {
     		setAdmin(true);
     	} else {
     		setAdmin(false);
     	}
-    	if (this.user.getServer().getUrl() != null) {
-    		url = this.user.getServer().getUrl();
+    	if (user.getServer() != null && !user.getServer().getUrl().equals("")) {
+    		url = user.getServer().getUrl();
     	}
     }
     
-    public void confirmUserRemoval(User user) {
+    public void deleteButtonClick(User user) {
     	getUsername(user);
         Faces.showDialog(Dialogs.CONFIRM_USER_REMOVAL_DIALOG_WIDGET);
     }
@@ -229,7 +197,6 @@ public class UsersBean implements Serializable {
 	public void deleteUser() {
 		permissionService.deletePermissionsByUser(user);
 		if (currentUser.getLogin().equals(user.getLogin()) && currentUserService.currentUserIsAdmin(currentUser)) {
-			//loginBean.doLogout();
 			SecurityUtils.getSubject().logout();
 			userService.deleteUser(user.getLogin());
 			try {
@@ -284,11 +251,10 @@ public class UsersBean implements Serializable {
     	updateValues();
     }
     
-    @PreDestroy
     public void resetFields() {
-    	name = null;
-    	login = null;
-    	url = null;
+    	name = "";
+    	login = "";
+    	url = "";
     	admin = false;
     }
     	
@@ -306,5 +272,53 @@ public class UsersBean implements Serializable {
     	}		
     	updateValues();
     }
+    
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+    
+	public LazyDataModel<User> getUserDataModel() {
+        return userDataModel;
+    }
+
+    public void setUserDataModel(LazyDataModel<User> userDataModel) {
+        this.userDataModel = userDataModel;
+    }
+    
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+    
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+    public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
 
 }
