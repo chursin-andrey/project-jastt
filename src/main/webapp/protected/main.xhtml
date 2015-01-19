@@ -125,13 +125,13 @@
 						<p:column headerText="Status" sortBy="#{details.status}">
 						 <h:outputText  value="#{details.status}"  />
 						</p:column>
-						<p:column headerText="Key" sortBy="#{details.key}" >
-							<h:outputText  value="#{details.key}"  />
+						<p:column headerText="Key" sortBy="#{details.key}" >					
+							<p:commandLink value="#{details.key}" />
 						</p:column>
 						<p:column headerText="Issue" sortBy="#{details.summary}">
-							<h:outputText  value="#{details.summary}"  />
+							<p:commandLink value="#{details.summary}" />
 						</p:column>
-						<p:column headerText="Minutes" sortBy="#{details.timeSpent}" width="80">
+						<p:column headerText="Minutes" sortBy="#{details.timeSpent}" width="100">
 							<h:outputText  value="#{details.timeSpent}"  />
 						</p:column>
 					</p:dataTable>
@@ -191,17 +191,15 @@
 										<h:outputText  value="#{item.status}"  />
 									</p:column>
 									<p:column headerText="Key" sortBy="#{details.key}" >
-										<h:outputText  value="#{item.key}"  />
+										<p:commandLink value="#{item.key}" />
 									</p:column>
-									<p:column headerText="Summary">
-										<h:outputText  value="#{item.summary}"  />
+									<p:column headerText="Issue">
+										<p:commandLink value="#{item.summary}"  />
 									</p:column>
 									<p:column headerText="Minutes" >
 										<h:outputText  value="#{item.timeSpent}"  />
 									</p:column>
-               			
-               			
-               			             			
+               			         			             			
 								</p:dataTable>  
 						
 						
