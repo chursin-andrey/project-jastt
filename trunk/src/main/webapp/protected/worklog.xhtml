@@ -100,7 +100,7 @@
 				
 				<p:dataTable id="worklogList" value="#{worklogBean.worklogList}" var="worklog" rowIndexVar="rowIndex">
 					<f:facet name="header">
-						<h:outputText value="Total Time Spent (hh:mm)"/><br/>
+						<h:outputText value="Total Time Spent (h:mm)"/><br/>
 						<h:outputText value="#{worklogBean.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 					</f:facet>
 					
@@ -127,7 +127,7 @@
 						</h:outputFormat>
 					</p:column>
 					
-					<p:column headerText="Spent (hh:mm)" >
+					<p:column headerText="Spent (h:mm)" >
 						<h:outputText  value="#{worklog.timeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 					</p:column>
 				</p:dataTable>
@@ -138,7 +138,7 @@
 				
 				<p:dataTable id="reportList" value="#{worklogBean.reportList}" var="report" rowIndexVar="rowIndex">
 					<f:facet name="header">
-						<h:outputText value="Total Time Spent (hh:mm)"/><br/>
+						<h:outputText value="Total Time Spent (h:mm)"/><br/>
 						<h:outputText value="#{worklogBean.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 					</f:facet>
 					
@@ -151,7 +151,7 @@
 					<p:column headerText="Member">
 						<h:outputText value="#{report.author}"/>
 					</p:column>
-					<p:column headerText="Spent (hh:mm)" >
+					<p:column headerText="Spent (h:mm)" >
 						<h:outputText  value="#{report.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 					</p:column>
 					
@@ -176,7 +176,7 @@
 									<f:param value="#{worklog.issue.summary}"/>
 								</h:outputFormat>
 							</p:column>
-							<p:column headerText="Spent (hh:mm)" >
+							<p:column headerText="Spent (h:mm)" >
 								<h:outputText  value="#{worklog.timeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 							</p:column>
 						</p:dataTable>
