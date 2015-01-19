@@ -4,6 +4,7 @@
      color: #14305f;
 }
 
+
 .ui-widget{
 	font: 12pt sans-serif;
    /* color: #14305f !important;*/
@@ -54,6 +55,11 @@
 .ui-datatable .ui-datatable-data{
 	height: 100%  !important;
 
+}
+
+.ui-datatable  .ui-commandlink{
+	 color: #14305f !important;
+	 text-decoration: none; 
 }
 
 
