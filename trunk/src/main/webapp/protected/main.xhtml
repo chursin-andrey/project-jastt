@@ -115,19 +115,19 @@
 						<p:column headerText="Member" sortBy="#{details.assignee.name}" width="130">
 							<h:outputText  value="#{details.assignee.name}"  />
                			</p:column>
-						<p:column headerText="Project"  sortBy="#{details.project.name}">
+						<p:column headerText="Project"  sortBy="#{details.project.name}" >
 							<h:outputText  value="#{details.project.name}"  />
 						</p:column>
 						<p:column headerText="Task" sortBy="#{details.issueType}">
 							<h:outputText  value="#{details.issueType}"  />
 						</p:column>
-						<p:column headerText="Status" sortBy="#{details.status}">
+						<p:column headerText="Status" sortBy="#{details.status}" width="90">
 						 <h:outputText  value="#{details.status}"  />
 						</p:column>
 						<p:column headerText="Key" sortBy="#{details.key}" >
 							<h:outputText  value="#{details.key}"  />
 						</p:column>
-						<p:column headerText="Issue" sortBy="#{details.summary}">
+						<p:column headerText="Issue" sortBy="#{details.summary}" >
 							<h:outputText  value="#{details.summary}"  />
 						</p:column>
 						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="150">
