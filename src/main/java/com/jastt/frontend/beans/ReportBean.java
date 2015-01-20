@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -104,6 +105,7 @@ public class ReportBean implements Serializable{
 		User user = (User)subject.getSession().getAttribute("user");
 		disableMenu = true;  disableSelectDate = true;
 		projects = new ArrayList<Project>();
+		assignees = new HashSet<Assignee>();
 		
 		timespent = "allTime";
 		//Server serv = new Server("http://localhost:8083");
@@ -150,7 +152,7 @@ public class ReportBean implements Serializable{
 	}
 	
 	public void showReport() {
-		reportAssignees = new ArrayList<Assignee>();
+		if(project == null) return;
 		IssueTypeEnum type = null;
 		IssueStatusEnum issueStatus = null;
 		if(reportIssues != null) reportIssues.clear();
@@ -158,21 +160,20 @@ public class ReportBean implements Serializable{
 		if(issueType != null) type = IssueTypeEnum.getType(issueType); 
 		if(status != null) issueStatus = IssueStatusEnum.getType(status); 
 		reportIssues = new ArrayList<Issue>();
+		
+		if(assignees_name != null)
 		if(assignees_name.size() != 0) {
 			for(String assign : assignees_name) {
 				reportAssignees.add(assigneeService.getAssigneeByName(assign));	
 			}
-		} else {
-			reportAssignees = null;
-
-		}
+		} 
 		if(timespent == "date")
 			reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, dateFrom, dateTo);
 		else
 			reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, PredefinedDateEnum.getType(predefinedDate));
 
 						
-	
+		
 		reportIssues2 = reportIssues;
 		addAssigneesName();
 		sortingIssues(reportIssues);
@@ -257,6 +258,7 @@ public class ReportBean implements Serializable{
 	
 	public void addMapIssue(List<Issue> list) {
 		int startPosition= 0;
+		if (assignees_list.size() == 0) return;
 		String tmp = assignees_list.get(0).getName();
         int nach = 0;
         int endp = 0;
