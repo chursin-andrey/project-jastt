@@ -1,4 +1,4 @@
-package com.jastt.business.services.jira.impl.client;
+package com.jastt.business.services.jira.impl;
 
 import java.io.IOException;
 import java.net.URI;

@@ -11,7 +11,6 @@ import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.User;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraProjectService;
-import com.jastt.business.services.jira.impl.client.JiraClient;
 
 //@Service("jiraProjectService")
 public class JiraProjectServiceImpl implements JiraProjectService {

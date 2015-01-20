@@ -1,4 +1,4 @@
-package com.jastt.business.services.jira.impl.client;
+package com.jastt.business.services.jira.impl;
 
 import static org.junit.Assert.*;
 
@@ -16,6 +16,7 @@ import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.ServerInfo;
 import com.jastt.business.services.jira.JiraClientException;
+import com.jastt.business.services.jira.impl.JiraClient;
 
 public class JiraClientTest {
 
