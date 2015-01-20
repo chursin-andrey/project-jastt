@@ -124,11 +124,11 @@
 						<p:column headerText="Status" sortBy="#{details.status}" width="90">
 						 <h:outputText  value="#{details.status}"  />
 						</p:column>
-						<p:column headerText="Key" sortBy="#{details.key}" >
-							<h:outputText  value="#{details.key}"  />
+						<p:column headerText="Key" sortBy="#{details.key}" >			
+							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}" styleClass="out-link">#{details.key}</h:outputLink>
 						</p:column>
-						<p:column headerText="Issue" sortBy="#{details.summary}" >
-							<h:outputText  value="#{details.summary}"  />
+						<p:column headerText="Summary" sortBy="#{details.summary}" >
+							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}" styleClass="out-link">#{details.summary}</h:outputLink>
 						</p:column>
 						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="150">
 							<h:outputText  value="#{details.timeSpent}"  converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
@@ -188,11 +188,11 @@
 									<p:column headerText="Status" >
 										<h:outputText  value="#{item.status}"  />
 									</p:column>
-									<p:column headerText="Key" sortBy="#{details.key}" >
-										<h:outputText  value="#{item.key}"  />
+									<p:column headerText="Key" sortBy="#{details.key}" >			
+										<h:outputLink value="#{item.project.server.url}/browse/#{item.key}" styleClass="out-link">#{item.key}</h:outputLink>
 									</p:column>
 									<p:column headerText="Summary">
-										<h:outputText  value="#{item.summary}"  />
+										<h:outputLink value="#{item.project.server.url}/browse/#{item.key}" styleClass="out-link">#{item.summary}</h:outputLink>
 									</p:column>
 									<p:column headerText="Spent (h:mm)" >
 										<h:outputText  value="#{item.timeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
