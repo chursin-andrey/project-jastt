@@ -13,8 +13,7 @@ import com.jastt.business.domain.entities.User;
 
 @Repository
 public interface ProjectDataProvider extends PageableDataProvider<ProjectEntity, Project, Integer>, Serializable {
-
-	Project getProjectByName(String name);
-	Project getProjectByKey(String key);
-	List<Project> getAvailableProjectsForUser(User currentUser);
+	public Project getProjectByName(String name);
+	public Project getProjectByKey(String key);
+	public List<Project> getAvailableProjectsForUser(User currentUser);
 }
