@@ -15,7 +15,6 @@ import com.jastt.business.domain.entities.User;
 import com.jastt.business.domain.entities.Worklog;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraIssueService;
-import com.jastt.business.services.jira.impl.client.JiraClient;
 
 //@Service("jiraIssueService")
 public class JiraIssueServiceImpl implements JiraIssueService {
@@ -23,7 +22,7 @@ public class JiraIssueServiceImpl implements JiraIssueService {
 	
 	@Override
 	public Set<Issue> getAllIssuesForProject(User user, Project project) throws JiraClientException {
-		String jql = String.format("project = \"%s\" and timeSpent > 0 and assignee is not null", 
+		String jql = String.format("project = \"%s\" and timeSpent > 0", 
 				project.getKey());
 		Set<Issue> issueSet = new LinkedHashSet<Issue>();
 		
@@ -43,7 +42,7 @@ public class JiraIssueServiceImpl implements JiraIssueService {
 	@Override
 	public Set<Issue> getAllIssuesForProject(User user, Project project,
 			DateTime fromDate) throws JiraClientException {
-		String jql = String.format("project = \"%s\" and timeSpent > 0 and assignee is not null "
+		String jql = String.format("project = \"%s\" and timeSpent > 0 "
 				+ "and updated > %d", 
 				project.getKey(), fromDate.getMillis());
 		Set<Issue> issueSet = new LinkedHashSet<Issue>();
@@ -76,14 +75,16 @@ public class JiraIssueServiceImpl implements JiraIssueService {
 			if (jiraIssue.getTimeTracking().getTimeSpentMinutes() != null) {
 				issue.setTimeSpent(jiraIssue.getTimeTracking().getTimeSpentMinutes());
 			}
+		
+		Assignee assignee = new Assignee();
 		if (jiraIssue.getAssignee() != null) {
-			Assignee assignee = new Assignee();
-			
 			assignee.setName(jiraIssue.getAssignee().getDisplayName());
 			assignee.setEmail(jiraIssue.getAssignee().getEmailAddress());
-			
-			issue.setAssignee(assignee);
+		} else {
+			assignee.setName("ABSENT");
+			assignee.setEmail("NoEmail");
 		}
+		issue.setAssignee(assignee);
 		// version field is null for the present
 		
 		Set<Worklog> worklogSet = new LinkedHashSet<Worklog>();

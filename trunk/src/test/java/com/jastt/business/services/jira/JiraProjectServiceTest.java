@@ -19,8 +19,8 @@ import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
+import com.jastt.business.services.jira.impl.JiraClient;
 import com.jastt.business.services.jira.impl.JiraProjectServiceImpl;
-import com.jastt.business.services.jira.impl.client.JiraClient;
 
 public class JiraProjectServiceTest {
 

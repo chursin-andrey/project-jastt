@@ -24,9 +24,9 @@ import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
 import com.jastt.business.domain.entities.Server;
 import com.jastt.business.domain.entities.User;
+import com.jastt.business.services.jira.impl.JiraClient;
 import com.jastt.business.services.jira.impl.JiraIssueServiceImpl;
 import com.jastt.business.services.jira.impl.JiraProjectServiceImpl;
-import com.jastt.business.services.jira.impl.client.JiraClient;
 
 public class JiraIssueServiceTest {
 
@@ -68,7 +68,7 @@ public class JiraIssueServiceTest {
 		final String password = user.getPassword();
 		
 		JiraClient jiraClient = new JiraClient(serverUrl, username, password);		
-		String jql = String.format("project = %s and timeSpent is not null and assignee is not null", 
+		String jql = String.format("project = \"%s\" and timeSpent > 0", 
 				projectFound.getKey());
 		Set<com.atlassian.jira.rest.client.api.domain.Issue> jiraIssueSet =
 				jiraClient.getAllIssuesByQuery(jql);
@@ -133,7 +133,7 @@ public class JiraIssueServiceTest {
 		JiraProjectService jiraProjectService = new JiraProjectServiceImpl();
 		Set<Project> projectSet = jiraProjectService.getAllProjects(user);
 		
-		LOG.info("Search for a project having issues with assignee and timespent not null");
+		LOG.info("Search for a project having issues with timespent > 0");
 		for (Project project : projectSet) {
 			LOG.trace("Test project: " + project.getKey());
 			Set<Issue> issueSet = jiraIssueService.getAllIssuesForProject(user, project);
@@ -158,8 +158,14 @@ public class JiraIssueServiceTest {
 		assertEquals(jiraIssue.getCreationDate().toDate(), issue.getCreated());
 		assertEquals(jiraIssue.getUpdateDate().toDate(), issue.getUpdated());
 		//Optional fields
-		assertEquals(jiraIssue.getAssignee().getDisplayName(), issue.getAssignee().getName());
-		assertEquals(jiraIssue.getAssignee().getEmailAddress(), issue.getAssignee().getEmail());
+		if (jiraIssue.getAssignee() != null) {
+			assertEquals(jiraIssue.getAssignee().getDisplayName(), issue.getAssignee().getName());
+			assertEquals(jiraIssue.getAssignee().getEmailAddress(), issue.getAssignee().getEmail());
+		} else {
+//			LOG.info("Issue {} has no ASSIGNEE", issue.getKey());
+			assertEquals("ABSENT", issue.getAssignee().getName());
+			assertEquals("NoEmail", issue.getAssignee().getEmail());
+		}
 		
 		assertEquals(jiraIssue.getTimeTracking().getTimeSpentMinutes().intValue(), issue.getTimeSpent());
 		
