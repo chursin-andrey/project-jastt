@@ -46,6 +46,7 @@ import com.jastt.business.services.ReportingService;
 import com.jastt.business.services.impl.IssueServiceImpl;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.enums.PredefinedDateEnum;
+import com.jastt.utils.AlphanumComparator;
 
 @Component
 @Scope("session")
@@ -53,6 +54,7 @@ public class ReportBean implements Serializable{
 
 	private static final long serialVersionUID = 7688215600325304973L;
 	
+	private Comparator alphanumComparator = new AlphanumComparator();
 	private List<Issue> issues;
 	private List<Project> projects;
 	private Set<Assignee> assignees;
@@ -306,6 +308,9 @@ public class ReportBean implements Serializable{
 		}
 	}
 	
+	public int sortInNaturalOrder(Object key1, Object key2) {
+		return alphanumComparator.compare(key1, key2);
+	}
 	
 	public void exportIssueList(ActionEvent actionEvent) throws JRException, IOException {		
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();

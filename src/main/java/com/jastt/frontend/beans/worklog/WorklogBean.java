@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -36,6 +37,7 @@ import com.jastt.business.services.ReportingService;
 import com.jastt.business.services.WorklogService;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.dal.providers.worklog.WorklogSearchOptions;
+import com.jastt.utils.AlphanumComparator;
 
 @Component
 @Scope("session")
@@ -53,6 +55,8 @@ public class WorklogBean implements Serializable {
 	@Autowired
 	private ReportingService reportingService;
 
+	private Comparator alphanumComparator = new AlphanumComparator();
+	
 	private boolean disableMenu = true;
 	private boolean disableDateList = false;
 	//items of UI components
@@ -93,6 +97,10 @@ public class WorklogBean implements Serializable {
 		}
 		
 //		projectList = projectService.getAllProjects();
+	}
+	
+	public int sortInNaturalOrder(Object key1, Object key2) {
+		return alphanumComparator.compare(key1, key2);
 	}
 	
 	public void showButtonClick() {

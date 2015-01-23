@@ -136,10 +136,10 @@
 						<p:column headerText="Status" sortBy="#{details.status}" width="90">
 						 <h:outputText  value="#{details.status}"  />
 						</p:column>
-						<p:column headerText="Key" sortBy="#{details.key}" >			
+						<p:column headerText="Key" sortBy="#{details.key}" sortFunction="#{reportBean.sortInNaturalOrder}">			
 							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}" styleClass="out-link">#{details.key}</h:outputLink>
 						</p:column>
-						<p:column headerText="Summary" sortBy="#{details.summary}" >
+						<p:column headerText="Summary" sortBy="#{details.summary}" sortFunction="#{reportBean.sortInNaturalOrder}">
 							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}" styleClass="out-link">#{details.summary}</h:outputLink>
 						</p:column>
 						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="150">
