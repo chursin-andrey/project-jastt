@@ -198,7 +198,7 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 				if(status != null) isuCriteria.add(Restrictions.eq("status", status.getDescription() ) );
 				if(assignee != null) isuCriteria.add(Restrictions.eq("assigneeEntity.id", assignee.getId() ) );
 				if(issueType != null) isuCriteria.add(Restrictions.eq("issueType", issueType.getDescription()) );
-				if((fromDate != null)&&(toDate != null)) isuCriteria.add(Restrictions.between("updated", fromDate, toDate ) ); 
+				if((fromDate != null)&&(toDate != null)) isuCriteria.add(Restrictions.between("created", fromDate, toDate ) ); 
 				/*Criterion criterion = null;
 				criterion = Restrictions.or( criterion,
 				         Restrictions.eq( "assigneeEntity.id",  assignee.getId() ) );
