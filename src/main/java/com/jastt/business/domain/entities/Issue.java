@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Project;
-import com.jastt.dal.entities.WorklogEntity;
 
 public class Issue extends PersistentEntity<Integer>{
 	

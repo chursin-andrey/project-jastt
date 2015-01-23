@@ -315,25 +315,56 @@ public class ReportBean implements Serializable{
 		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();		
 		ServletOutputStream outputStream = response.getOutputStream();
 		
+		Map<String, Object> reportParams = fillReportParamsMap();
+		
 		switch (reportFormat) {
-		case "pdf":
-			response.addHeader("Content-disposition","attachment; filename=issueReport.pdf");
-			reportingService.exportToPdf(reportIssues, outputStream);
-			break;
-		case "xls":
-			response.addHeader("Content-disposition","attachment; filename=issueReport.xls");
-			reportingService.exportToXls(reportIssues, outputStream);
-			break;
-		case "xlsx":
-			response.addHeader("Content-disposition","attachment; filename=issueReport.xlsx");
-			reportingService.exportToXlsx(reportIssues, outputStream);
-		default: 
-			break;
+			case "pdf":
+				response.addHeader("Content-disposition","attachment; filename=issueReport.pdf");
+				reportingService.exportToPdf("/pdfIssueReport.jasper", outputStream, reportParams, reportIssues);
+				break;
+			case "xls":
+				response.addHeader("Content-disposition","attachment; filename=issueReport.xls");
+				reportingService.exportToXls("/xlsIssueReport.jasper", outputStream, reportParams, reportIssues);
+				break;
+			case "xlsx":
+				response.addHeader("Content-disposition","attachment; filename=issueReport.xlsx");
+				reportingService.exportToXlsx("/xlsIssueReport.jasper", outputStream, reportParams, reportIssues);
+			default: 
+				break;
 		}
 		
 		outputStream.flush();
 		outputStream.close();
 		FacesContext.getCurrentInstance().responseComplete();
+	}
+
+	private Map<String, Object> fillReportParamsMap() {
+		Map<String, Object> reportParams= new HashMap<String, Object>();
+		if (project_name != null && !project_name.isEmpty()) reportParams.put("project", project_name);
+		if (assignees_name != null && !assignees_name.isEmpty()) {
+			reportParams.put("assignees", assignees_name.toString());
+		}
+		if (issueType != null && !issueType.isEmpty()) reportParams.put("issueType", issueType);
+		if (status != null && !status.isEmpty()) reportParams.put("status", status);
+		reportParams.put("totalTimeSpent", allTime);
+		
+		switch (timespent) {
+			case "allTime":
+				reportParams.put("predefinedTimePeriod", predefinedDate);
+				break;
+			case "date":
+				if (dateFrom != null || dateTo != null) {
+					reportParams.put("fromDate", dateFrom);
+					reportParams.put("toDate", dateTo);
+				} else {
+					reportParams.put("predefinedTimePeriod", PredefinedDateEnum.ALL_TIME.getDescription());
+				}
+				break;
+			default: 
+				break;
+		}
+		
+		return reportParams;
 	}
 
 	public List<Permission> getPermissions() {

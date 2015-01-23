@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -26,7 +23,6 @@ import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 
 import org.springframework.stereotype.Service;
 
-import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.services.ReportingService;
 
 @Service("reportingService")
@@ -35,26 +31,17 @@ public class ReportingServiceImpl implements ReportingService, Serializable {
 
 //	private static final Logger LOG = LoggerFactory.getLogger(ReportingServiceImpl.class);
 	
-	private JRDataSource buildIssueDataSource(List<Issue> issues) {
-		if (issues == null || issues.isEmpty()) return new JREmptyDataSource();
-		
-		List<IssueReportBean> issueReportBeanList = new ArrayList<IssueReportBean>();
-		for (Issue issue : issues) {
-			issueReportBeanList.add(new IssueReportBean(issue));
-		}
-		return new JRBeanCollectionDataSource(issueReportBeanList);
-	}
-	
 	@Override
-	public void exportToPdf(List<Issue> issueList, OutputStream outStream) throws JRException, IOException {
-		InputStream reportStream = getClass().getResourceAsStream("/pdfIssueReport.jasper");
+	public void exportToPdf(String reportFileName, OutputStream outStream, Map<String, Object> reportParams, 
+			Collection<?> beanCollection) throws JRException, IOException {
+		InputStream reportStream = getClass().getResourceAsStream(reportFileName);
 		if (reportStream == null) return;
 		//TODO: place try/catch to handle errors internally
-		JRDataSource ds = buildIssueDataSource(issueList);
-		Map<String, Object> params= new HashMap<String, Object>();
-		params.put("currDate", new Date());
-		
-		JasperPrint jasperPrint = JasperFillManager.fillReport(reportStream, params, ds);
+		JRDataSource ds = null;
+		if (beanCollection == null || beanCollection.isEmpty()) ds = new JREmptyDataSource();
+		else ds = new JRBeanCollectionDataSource(beanCollection);
+
+		JasperPrint jasperPrint = JasperFillManager.fillReport(reportStream, reportParams, ds);
 		
 		JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
 		
@@ -62,15 +49,16 @@ public class ReportingServiceImpl implements ReportingService, Serializable {
 	}
 
 	@Override
-	public void exportToXlsx(List<Issue> issueList, OutputStream outStream) throws JRException, IOException {
-		InputStream reportStream = getClass().getResourceAsStream("/xlsIssueReport.jasper");
+	public void exportToXlsx(String reportFileName, OutputStream outStream, Map<String, Object> reportParams, 
+			Collection<?> beanCollection) throws JRException, IOException {
+		InputStream reportStream = getClass().getResourceAsStream(reportFileName);
 		if (reportStream == null) return;
 		//TODO: place try/catch to handle errors internally
-		JRDataSource ds = buildIssueDataSource(issueList);
-		Map<String, Object> params= new HashMap<String, Object>();
-		params.put("currDate", new Date());
-		
-		JasperPrint jasperPrint = JasperFillManager.fillReport(reportStream, params, ds);
+		JRDataSource ds = null;
+		if (beanCollection == null || beanCollection.isEmpty()) ds = new JREmptyDataSource();
+		else ds = new JRBeanCollectionDataSource(beanCollection);
+
+		JasperPrint jasperPrint = JasperFillManager.fillReport(reportStream, reportParams, ds);
 		
 		JRXlsxExporter exporter = new JRXlsxExporter();
 		exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
@@ -83,15 +71,16 @@ public class ReportingServiceImpl implements ReportingService, Serializable {
 	}
 
 	@Override
-	public void exportToXls(List<Issue> issueList, OutputStream outStream) throws JRException, IOException {
-		InputStream reportStream = getClass().getResourceAsStream("/xlsIssueReport.jasper");
+	public void exportToXls(String reportFileName, OutputStream outStream, Map<String, Object> reportParams, 
+			Collection<?> beanCollection) throws JRException, IOException {
+		InputStream reportStream = getClass().getResourceAsStream(reportFileName);
 		if (reportStream == null) return;
 		//TODO: place try/catch to handle errors internally
-		JRDataSource ds = buildIssueDataSource(issueList);
-		Map<String, Object> params= new HashMap<String, Object>();
-		params.put("currDate", new Date());
-		
-		JasperPrint jasperPrint = JasperFillManager.fillReport(reportStream, params, ds);
+		JRDataSource ds = null;
+		if (beanCollection == null || beanCollection.isEmpty()) ds = new JREmptyDataSource();
+		else ds = new JRBeanCollectionDataSource(beanCollection);
+
+		JasperPrint jasperPrint = JasperFillManager.fillReport(reportStream, reportParams, ds);
 		
 		JRXlsExporter exporter = new JRXlsExporter();
 		exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
