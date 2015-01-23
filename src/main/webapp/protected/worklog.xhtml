@@ -129,7 +129,7 @@
 						<h:outputText value="#{worklog.issue.status}"/>
 					</p:column>
 					
-					<p:column headerText="Issue Summary" sortBy="#{worklog.issue.summary}" sortFunction="#{reportBean.sortInNaturalOrder}">
+					<p:column headerText="Issue Summary" sortBy="#{worklog.issue.summary}">
 						<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}" styleClass="out-link">
 							#{worklog.issue.summary}
 						</h:outputLink>
@@ -169,10 +169,10 @@
    					<p:column headerText="№">
 						<h:outputText value="#{rowIndex+1}"/>
 					</p:column>
-					<p:column headerText="Member">
+					<p:column headerText="Member" sortBy="#{report.author}">
 						<h:outputText value="#{report.author}"/>
 					</p:column>
-					<p:column headerText="Spent (h:mm)" >
+					<p:column headerText="Spent (h:mm)" sortBy="#{report.totalTimeSpent}">
 						<h:outputText  value="#{report.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 					</p:column>
 					
@@ -182,22 +182,32 @@
 							<p:column headerText="№">
 								<h:outputText value="#{rowIndex+1}"/>
 							</p:column>
-							<p:column headerText="Date">
+							<p:column headerText="Date" sortBy="#{worklog.started}">
 								<h:outputText value="#{worklog.started}">
 									<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
 								</h:outputText>
-							</p:column>
-							<p:column headerText="Project">
-								<h:outputText value="#{worklog.issue.project.name}"/>
 							</p:column>	
-							<p:column headerText="Issue">
-								<h:outputFormat value="{0} [{1}]: {2}">
-									<f:param value="#{worklog.issue.issueType}"/>
-									<f:param value="#{worklog.issue.status}"/>
-									<f:param value="#{worklog.issue.summary}"/>
-								</h:outputFormat>
+							
+							<p:column headerText="Issue Key" sortBy="#{worklog.issue.key}" sortFunction="#{reportBean.sortInNaturalOrder}">
+								<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}" styleClass="out-link">
+									#{worklog.issue.key}
+								</h:outputLink>
 							</p:column>
-							<p:column headerText="Spent (h:mm)" >
+							
+							<p:column headerText="Issue Type" sortBy="#{worklog.issue.issueType}">
+								<h:outputText value="#{worklog.issue.issueType}"/>
+							</p:column>
+							<p:column headerText="Issue Status" sortBy="#{worklog.issue.status}">
+								<h:outputText value="#{worklog.issue.status}"/>
+							</p:column>
+							
+							<p:column headerText="Issue Summary" sortBy="#{worklog.issue.summary}">
+								<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}" styleClass="out-link">
+									#{worklog.issue.summary}
+								</h:outputLink>
+							</p:column>
+							
+							<p:column headerText="Spent (h:mm)" sortBy="#{worklog.timeSpent}">
 								<h:outputText  value="#{worklog.timeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 							</p:column>
 						</p:dataTable>

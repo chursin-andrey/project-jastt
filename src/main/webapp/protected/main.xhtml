@@ -139,7 +139,7 @@
 						<p:column headerText="Key" sortBy="#{details.key}" sortFunction="#{reportBean.sortInNaturalOrder}">			
 							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}" styleClass="out-link">#{details.key}</h:outputLink>
 						</p:column>
-						<p:column headerText="Summary" sortBy="#{details.summary}" sortFunction="#{reportBean.sortInNaturalOrder}">
+						<p:column headerText="Summary" sortBy="#{details.summary}">
 							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}" styleClass="out-link">#{details.summary}</h:outputLink>
 						</p:column>
 						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="150">
