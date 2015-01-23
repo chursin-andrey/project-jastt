@@ -1,14 +1,23 @@
 package com.jastt.frontend.beans.worklog;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRException;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +32,7 @@ import com.jastt.business.enums.PredefinedDateEnum;
 import com.jastt.business.services.IssueService;
 import com.jastt.business.services.PermissionService;
 import com.jastt.business.services.ProjectService;
+import com.jastt.business.services.ReportingService;
 import com.jastt.business.services.WorklogService;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.dal.providers.worklog.WorklogSearchOptions;
@@ -40,6 +50,8 @@ public class WorklogBean implements Serializable {
 	private PermissionService permissionService;
 	@Autowired
 	private IssueService issueService;
+	@Autowired
+	private ReportingService reportingService;
 
 	private boolean disableMenu = true;
 	private boolean disableDateList = false;
@@ -87,38 +99,42 @@ public class WorklogBean implements Serializable {
 		worklogList.clear(); worklogReportList.clear();
 		Project currProject = findProjectByName(currProjectName);
 		if (currProject != null) {
-			WorklogSearchOptions searchOptions = new WorklogSearchOptions();
-			
-			searchOptions.setProject(currProject);
-			searchOptions.setAuthors(currAuthors);
-			
-			if (!currIssueType.isEmpty()) searchOptions.setIssueType(currIssueType);
-			if (!currIssueStatus.isEmpty()) searchOptions.setIssueStatus(currIssueStatus);
-			
-			Date fromDate = null, toDate = null;
-			if (currTimeSelector.equals("dateList")) {
-				PredefinedDateEnum prd = PredefinedDateEnum.getType(currPredefinedDate);
-				if (prd != null) {
-					fromDate = prd.getPeriod().getLeft(); 
-					toDate = prd.getPeriod().getRight();
-				}
-			} else if (currTimeSelector.equals("dateCalendar")) {
-				fromDate = calendarFromDate;
-				toDate = calendarToDate;
-				if (toDate != null) {
-					//this is to make toDate included to time interval
-					Calendar cal = Calendar.getInstance();
-					cal.setTime(toDate);
-					cal.add(Calendar.DATE, 1);
-					toDate = cal.getTime();
-				}
-			}
-			searchOptions.setFromDate(fromDate);
-			searchOptions.setToDate(toDate);
-		
+			WorklogSearchOptions searchOptions = fillSearchOptions(currProject);
 			worklogList = worklogService.getWorklogs(searchOptions);
 			generateWorklogReport();
 		}
+	}
+
+	private WorklogSearchOptions fillSearchOptions(Project currProject) {
+		WorklogSearchOptions searchOptions = new WorklogSearchOptions();
+		
+		searchOptions.setProject(currProject);
+		searchOptions.setAuthors(currAuthors);
+		
+		if (!currIssueType.isEmpty()) searchOptions.setIssueType(currIssueType);
+		if (!currIssueStatus.isEmpty()) searchOptions.setIssueStatus(currIssueStatus);
+		
+		Date fromDate = null, toDate = null;
+		if (currTimeSelector.equals("dateList")) {
+			PredefinedDateEnum prd = PredefinedDateEnum.getType(currPredefinedDate);
+			if (prd != null) {
+				fromDate = prd.getPeriod().getLeft(); 
+				toDate = prd.getPeriod().getRight();
+			}
+		} else if (currTimeSelector.equals("dateCalendar")) {
+			fromDate = calendarFromDate;
+			toDate = calendarToDate;
+			if (toDate != null) {
+				//this is to make "toDate" date included to time interval
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(toDate);
+				cal.add(Calendar.DATE, 1);
+				toDate = cal.getTime();
+			}
+		}
+		searchOptions.setFromDate(fromDate);
+		searchOptions.setToDate(toDate);
+		return searchOptions;
 	}
 	
 	public void clearButtonClick() {
@@ -150,6 +166,66 @@ public class WorklogBean implements Serializable {
 	
 	public void timeSelectorChanged() {
 		disableDateList = currTimeSelector.equals("dateCalendar");
+	}
+	
+	public void exportWorklogReport() throws JRException, IOException {		
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String reportFormat = params.get("reportFormat");
+		if (!Arrays.asList("pdf", "xls", "xlsx").contains(reportFormat)) return;
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();		
+		ServletOutputStream outputStream = response.getOutputStream();
+		
+		Map<String, Object> reportParams = fillReportParamsMap();
+		
+		switch (reportFormat) {
+			case "pdf":
+				response.addHeader("Content-disposition","attachment; filename=worklogReport.pdf");
+				reportingService.exportToPdf("/pdfWorklogReport.jasper", outputStream, reportParams, worklogReportList);
+				break;
+			case "xls":
+				response.addHeader("Content-disposition","attachment; filename=worklogReport.xls");
+				reportingService.exportToXls("/xlsWorklogReport.jasper", outputStream, reportParams, worklogReportList);
+				break;
+			case "xlsx":
+				response.addHeader("Content-disposition","attachment; filename=worklogReport.xlsx");
+				reportingService.exportToXlsx("/xlsWorklogReport.jasper", outputStream, reportParams, worklogReportList);
+			default: 
+				break;
+		}
+		
+		outputStream.flush();
+		outputStream.close();
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+	
+	private Map<String, Object> fillReportParamsMap() {
+		Map<String, Object> reportParams= new HashMap<String, Object>();
+		if (!currProjectName.isEmpty()) reportParams.put("project", currProjectName);
+		if (!currAuthors.isEmpty()) {
+			reportParams.put("assignees", currAuthors.toString());
+		}
+		if (!currIssueType.isEmpty()) reportParams.put("issueType", currIssueType);
+		if (!currIssueStatus.isEmpty()) reportParams.put("status", currIssueStatus);
+		reportParams.put("totalTimeSpent", getTotalTimeSpent());
+		
+		switch (currTimeSelector) {
+			case "dateList":
+				reportParams.put("predefinedTimePeriod", currPredefinedDate);
+				break;
+			case "dateCalendar":
+				if (calendarFromDate != null || calendarToDate != null) {
+					reportParams.put("fromDate", calendarFromDate);
+					reportParams.put("toDate", calendarToDate);
+				} else {
+					reportParams.put("predefinedTimePeriod", PredefinedDateEnum.ALL_TIME.getDescription());
+				}
+				break;
+			default: 
+				break;
+		}
+		
+		return reportParams;
 	}
 	
 	private void generateWorklogReport() {

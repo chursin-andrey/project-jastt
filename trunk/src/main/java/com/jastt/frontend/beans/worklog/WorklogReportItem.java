@@ -1,11 +1,13 @@
 package com.jastt.frontend.beans.worklog;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.jastt.business.domain.entities.Worklog;
 
-public class WorklogReportItem {
-
+public class WorklogReportItem implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private String author;
 	private int totalTimeSpent;
 	private List<Worklog> worklogs;
@@ -34,7 +36,12 @@ public class WorklogReportItem {
 	/*public void setTotalTimeSpent(int totalTimeSpent) {
 		this.totalTimeSpent = totalTimeSpent;
 	}*/
-
+	
+	public int getNumberOfWorklogs() {
+		if (worklogs == null) return 0;
+		else return worklogs.size();
+	}
+	
 	public List<Worklog> getWorklogs() {
 		return worklogs;
 	}

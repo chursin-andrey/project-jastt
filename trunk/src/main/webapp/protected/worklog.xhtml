@@ -140,6 +140,19 @@
 					<f:facet name="header">
 						<h:outputText value="Total Time Spent (h:mm)"/><br/>
 						<h:outputText value="#{worklogBean.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+						
+						<div class="top-export-buttons-panel">
+							<h:commandButton  actionListener="#{worklogBean.exportWorklogReport}"  image="/resources/img/pdf32.png" styleClass="export-button">
+								<f:param name="reportFormat" value="pdf"/>
+							</h:commandButton>
+							<h:commandButton  actionListener="#{worklogBean.exportWorklogReport}"  image="/resources/img/xls32.png" styleClass="export-button">
+								<f:param name="reportFormat" value="xls"/>
+							</h:commandButton>
+							<h:commandButton actionListener="#{worklogBean.exportWorklogReport}" image="/resources/img/xlsx32.png" styleClass="export-button">
+								<f:param name="reportFormat" value="xlsx"/>
+							</h:commandButton>
+						</div>
+						
 					</f:facet>
 					
 					<p:column>
@@ -183,6 +196,21 @@
 						
 					</p:rowExpansion>
 					
+					<f:facet name="footer">
+						<h:outputText value="&#160;" /><br/><h:outputText value="&#160;" />
+						
+						<div class="bottom-export-buttons-panel">
+							<h:commandButton  actionListener="#{worklogBean.exportWorklogReport}"  image="/resources/img/pdf32.png" styleClass="export-button">
+								<f:param name="reportFormat" value="pdf"/>
+							</h:commandButton>
+							<h:commandButton  actionListener="#{worklogBean.exportWorklogReport}"  image="/resources/img/xls32.png" styleClass="export-button">
+								<f:param name="reportFormat" value="xls"/>
+							</h:commandButton>
+							<h:commandButton actionListener="#{worklogBean.exportWorklogReport}" image="/resources/img/xlsx32.png" styleClass="export-button">
+								<f:param name="reportFormat" value="xlsx"/>
+							</h:commandButton>
+						</div>
+					</f:facet>
 				</p:dataTable>
 				
 			</p:tab>
