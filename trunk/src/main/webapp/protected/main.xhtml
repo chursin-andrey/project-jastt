@@ -100,7 +100,19 @@
 						<f:facet name="header">Total Time Spent (h:mm)              
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
-                    				<h:outputText value="#{reportBean.allTime}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+                    			<h:outputText value="#{reportBean.allTime}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+               					
+               					<div class="top-export-buttons-panel">
+									<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/pdf32.png" styleClass="export-button">
+										<f:param name="reportFormat" value="pdf"/>
+									</h:commandButton>
+									<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/xls32.png" styleClass="export-button">
+										<f:param name="reportFormat" value="xls"/>
+									</h:commandButton>
+									<h:commandButton actionListener="#{reportBean.exportIssueList}" image="/resources/img/xlsx32.png" styleClass="export-button">
+										<f:param name="reportFormat" value="xlsx"/>
+									</h:commandButton>
+								</div>
                 			</p:outputPanel>            
             			</f:facet>
             			
@@ -133,6 +145,23 @@
 						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="150">
 							<h:outputText  value="#{details.timeSpent}"  converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 						</p:column>
+						
+						<f:facet name="footer">
+							<h:outputText value="&#160;" /><br/><h:outputText value="&#160;" />
+							
+								
+							<div class="bottom-export-buttons-panel">
+								<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/pdf32.png" styleClass="export-button">
+									<f:param name="reportFormat" value="pdf"/>
+								</h:commandButton>
+								<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/xls32.png" styleClass="export-button">
+									<f:param name="reportFormat" value="xls"/>
+								</h:commandButton>
+								<h:commandButton actionListener="#{reportBean.exportIssueList}" image="/resources/img/xlsx32.png" styleClass="export-button">
+									<f:param name="reportFormat" value="xlsx"/>
+								</h:commandButton>
+							</div>
+						</f:facet>
 					</p:dataTable>
 			</p:tab>
 			
