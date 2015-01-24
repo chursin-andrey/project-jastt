@@ -109,7 +109,6 @@ public class ReportBean implements Serializable{
 		projects = new ArrayList<Project>();
 		assignees = new HashSet<Assignee>();
 		
-		timespent = "allTime";
 		//Server serv = new Server("http://localhost:8083");
 		//projects = projectService.getAllProjects();
 		permissions = permissionService.getPermissionsByUser(user);
@@ -165,11 +164,12 @@ public class ReportBean implements Serializable{
 		
 		if(assignees_name != null)
 		if(assignees_name.size() != 0) {
+			reportAssignees = new ArrayList<Assignee>();
 			for(String assign : assignees_name) {
 				reportAssignees.add(assigneeService.getAssigneeByName(assign));	
 			}
 		} 
-		if(timespent == "date")
+		if(timespent.equals("date"))
 			reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, dateFrom, dateTo);
 		else
 			reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, PredefinedDateEnum.getType(predefinedDate));
