@@ -38,7 +38,7 @@
 			
 			<br />
 			<p:outputLabel value="Status:"/><br />
-			<p:selectOneMenu id="status"  value="#{reportBean.status}" onchange="submit" immediate="true" disabled="#{reportBean.disableMenu}" styleClass="item">
+			<p:selectOneMenu id="status"  value="#{reportBean.status}"  disabled="#{reportBean.disableMenu}" styleClass="item">
 				<f:selectItem itemLabel="All " noSelectionOption="true" />
 				<f:selectItem itemValue="Open" itemLabel="Open" />
 				<f:selectItem itemValue="In progress" itemLabel="In progress" />

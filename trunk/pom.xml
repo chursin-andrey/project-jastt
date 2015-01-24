@@ -173,6 +173,12 @@
 			<version>${shiro.version}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>2.7.2</version>
+		</dependency>
+		
 		<!-- JIRA java client -->
 		<dependency>
 			<groupId>com.atlassian.jira</groupId>
