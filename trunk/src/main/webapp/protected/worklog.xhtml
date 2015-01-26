@@ -130,7 +130,7 @@
 					</p:column>
 					
 					<p:column headerText="Issue Summary" sortBy="#{worklog.issue.summary}">
-						<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}" styleClass="out-link">
+						<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}"  target="blank" styleClass="out-link">
 							#{worklog.issue.summary}
 						</h:outputLink>
 					</p:column>
@@ -202,7 +202,7 @@
 							</p:column>
 							
 							<p:column headerText="Issue Summary" sortBy="#{worklog.issue.summary}">
-								<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}" styleClass="out-link">
+								<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}"  target="blank" styleClass="out-link">
 									#{worklog.issue.summary}
 								</h:outputLink>
 							</p:column>

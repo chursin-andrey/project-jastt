@@ -67,3 +67,8 @@
 	 text-decoration: none; 
 }
 
+.out-link:hover{
+	 color: #1e90ff !important;
+	 text-decoration: underline; 
+}
+
