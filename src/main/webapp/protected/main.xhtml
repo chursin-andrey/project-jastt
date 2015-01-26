@@ -137,10 +137,10 @@
 						 <h:outputText  value="#{details.status}"  />
 						</p:column>
 						<p:column headerText="Key" sortBy="#{details.key}" sortFunction="#{reportBean.sortInNaturalOrder}">			
-							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}" styleClass="out-link">#{details.key}</h:outputLink>
+							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}"  target="blank" styleClass="out-link">#{details.key}</h:outputLink>
 						</p:column>
 						<p:column headerText="Summary" sortBy="#{details.summary}">
-							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}" styleClass="out-link">#{details.summary}</h:outputLink>
+							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}" target="blank" styleClass="out-link">#{details.summary}</h:outputLink>
 						</p:column>
 						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="150">
 							<h:outputText  value="#{details.timeSpent}"  converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
