@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -185,19 +186,21 @@ public class WorklogBean implements Serializable {
 		ServletOutputStream outputStream = response.getOutputStream();
 		
 		Map<String, Object> reportParams = fillReportParamsMap();
+		List<Worklog> worklogExportList = new ArrayList<Worklog>(worklogList);
+		Collections.sort(worklogExportList, new WorklogComparator());
 		
 		switch (reportFormat) {
 			case "pdf":
 				response.addHeader("Content-disposition","attachment; filename=worklogReport.pdf");
-				reportingService.exportToPdf("/pdfWorklogReport.jasper", outputStream, reportParams, worklogReportList);
+				reportingService.exportToPdf("/pdfWorklogReport.jasper", outputStream, reportParams, worklogExportList);
 				break;
 			case "xls":
 				response.addHeader("Content-disposition","attachment; filename=worklogReport.xls");
-				reportingService.exportToXls("/xlsWorklogReport.jasper", outputStream, reportParams, worklogReportList);
+				reportingService.exportToXls("/xlsWorklogReport.jasper", outputStream, reportParams, worklogExportList);
 				break;
 			case "xlsx":
 				response.addHeader("Content-disposition","attachment; filename=worklogReport.xlsx");
-				reportingService.exportToXlsx("/xlsWorklogReport.jasper", outputStream, reportParams, worklogReportList);
+				reportingService.exportToXlsx("/xlsWorklogReport.jasper", outputStream, reportParams, worklogExportList);
 			default: 
 				break;
 		}

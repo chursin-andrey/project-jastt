@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="issueReport" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="2c77a599-0c3b-4248-a0f6-f908d4c1d5dc">
+	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.cell.background" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.column.width.ratio" value="1.25f"/>
+	<style name="style1">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[($V{REPORT_COUNT} % 2) == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#C0C0C0"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="project" class="java.lang.String">
+		<defaultValueExpression><![CDATA["None"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="assignees" class="java.lang.String">
+		<defaultValueExpression><![CDATA["All"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="issueType" class="java.lang.String">
+		<defaultValueExpression><![CDATA["All"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="status" class="java.lang.String">
+		<defaultValueExpression><![CDATA["All"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="predefinedTimePeriod" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fromDate" class="java.util.Date"/>
+	<parameter name="toDate" class="java.util.Date"/>
+	<parameter name="totalTimeSpent" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="created" class="java.util.Date">
+		<fieldDescription><![CDATA[created]]></fieldDescription>
+	</field>
+	<field name="issueType" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="key" class="java.lang.String"/>
+	<field name="summary" class="java.lang.String"/>
+	<field name="timeSpent" class="java.lang.Integer"/>
+	<field name="assignee.name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="96" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="63" uuid="45cc6f95-c064-473a-91c4-52db4c1dc4b6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true" isItalic="true" pdfFontName="Helvetica-BoldOblique"/>
+				</textElement>
+				<text><![CDATA[Issue Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="160" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="40" width="100" height="20" uuid="f55a78a4-57e2-44e8-9c19-932e07ed723d"/>
+				<textElement>
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Project:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="60" width="100" height="20" uuid="107e1727-143b-4318-806b-bb389d62face"/>
+				<textElement>
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Assignees:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="100" y="40" width="329" height="20" uuid="aeea5754-3861-4561-ac59-2677d18304f9"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{project}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="100" y="60" width="329" height="20" uuid="2af10b66-e0cd-4f09-8735-b0e594619d57"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{assignees}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="80" width="100" height="20" uuid="46bdb035-ba23-4807-9230-be3f96040557"/>
+				<textElement>
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Issue Type:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="100" width="100" height="20" uuid="cb2e6d39-bb52-4158-aeda-38c51b2f6d62"/>
+				<textElement>
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Issue Status:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="120" width="100" height="20" isRemoveLineWhenBlank="true" uuid="8c558300-1b44-408e-ab7e-105f03f08dd2">
+					<printWhenExpression><![CDATA[$P{predefinedTimePeriod} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Time period:]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="100" y="80" width="329" height="20" uuid="1819e908-1f5e-41d7-b92e-1a302f913a59"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{issueType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="100" y="100" width="329" height="20" uuid="1cdec3bb-86d2-45e2-b9f0-8605f0539b52"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{status}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" x="100" y="120" width="329" height="20" isRemoveLineWhenBlank="true" uuid="5f5caab5-cf24-4d73-b140-dd48cf5b6130"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{predefinedTimePeriod}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="100" y="140" width="36" height="20" isRemoveLineWhenBlank="true" uuid="957cf1a2-70c5-4a16-b3ec-86ffd0cd8917">
+					<printWhenExpression><![CDATA[($P{fromDate} != null) || ($P{toDate} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[From]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="211" y="140" width="22" height="20" isRemoveLineWhenBlank="true" uuid="321edba9-88a3-4d22-856d-abd6d7c11007">
+					<printWhenExpression><![CDATA[($P{fromDate} != null) || ($P{toDate} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[To]]></text>
+			</staticText>
+			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" x="136" y="140" width="75" height="20" isRemoveLineWhenBlank="true" uuid="2ae6caa7-df77-47d5-82b1-fc119a7bf806"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true">
+				<reportElement positionType="FixRelativeToBottom" x="233" y="140" width="90" height="20" isRemoveLineWhenBlank="true" uuid="830a798a-7de7-43f4-80dc-99957ac84911"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{toDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="140" width="100" height="20" isRemoveLineWhenBlank="true" uuid="935fd247-4697-44da-bc2e-26cdc3cdbc74">
+					<printWhenExpression><![CDATA[($P{fromDate} != null) || ($P{toDate} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Time period:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="115" height="20" uuid="c9a0599d-1485-458f-acfa-ef366405e903"/>
+				<textElement>
+					<font size="12" isBold="false" isItalic="true" pdfFontName="Helvetica-Oblique"/>
+				</textElement>
+				<text><![CDATA[Report generated at]]></text>
+			</staticText>
+			<textField pattern="dd.MM.yyyy HH:mm">
+				<reportElement x="115" y="0" width="100" height="20" uuid="0ed753a0-c261-4696-982d-eae99eb92f58"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="55" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="17" width="70" height="38" uuid="35733d2c-a7a9-4502-80ba-7bbc48ef5b11"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Created]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="17" width="85" height="38" uuid="267e3efc-4bf5-4c20-8a2d-bfead9ff9e2a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Assignee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="155" y="17" width="55" height="38" uuid="a8825fda-6416-47e6-88d5-a1e87e1696b8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Key]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="17" width="301" height="38" uuid="ca6741af-dc85-4104-ab3c-55367a048871"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Summary]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="511" y="17" width="44" height="38" uuid="d3c97cd1-05e3-40ed-abf1-d7ff3bcfc15a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Spent (h:mm)]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="70" height="20" uuid="d2317d9d-d622-4e6a-a6b0-18b603bc27d5"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{created}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="70" y="0" width="85" height="20" uuid="2a500fe3-c595-460d-8c6f-499eeff8b66c"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{assignee.name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="155" y="0" width="55" height="20" uuid="d55e1ff9-5f00-4c5b-9569-de974ecec8f6"/>
+				<textElement textAlignment="Left">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{key}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="210" y="0" width="301" height="20" uuid="582d405d-8a2c-41d4-953a-c0c9e61a024b">
+					<printWhenExpression><![CDATA[$F{key} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format("%s [%s]: %s", $F{issueType}, $F{status}, $F{summary})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="511" y="0" width="44" height="20" uuid="a2d4f03c-0c94-4fe2-a7f8-dbc0afe711ec">
+					<property name="net.sf.jasperreports.export.xls.pattern" value="[h]:mm"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(double)$F{timeSpent}/(24*60)]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="22" width="511" height="20" uuid="6a9d0d9c-ceb7-4b8f-bcd9-d55c2fe9b022"/>
+				<textElement>
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Total Time Spent (h:mm):]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="511" y="22" width="44" height="20" uuid="fe7cc364-9c0f-4a32-9f09-a04a2c75c21e">
+					<property name="net.sf.jasperreports.export.xls.pattern" value="[h]:mm"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(double)$P{totalTimeSpent}/(24*60)]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
