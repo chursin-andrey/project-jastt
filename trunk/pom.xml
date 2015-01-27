@@ -123,7 +123,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.2-1003-jdbc4</version>
+			<version>9.3-1102-jdbc41</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-dbcp</groupId>
@@ -337,15 +337,15 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>postgres</id>
+			<id>local_postgre</id>
 			<properties>
 				<jdbc.driver.class.name>org.postgresql.Driver</jdbc.driver.class.name>
 				<jdbc.url>jdbc:postgresql://localhost:5432/jasttdb</jdbc.url>
-				<jdbc.username>user</jdbc.username>
-				<jdbc.password>user</jdbc.password>
+				<jdbc.username>postgres</jdbc.username>
+				<jdbc.password>admin</jdbc.password>
 				<hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
 			</properties>
-		</profile>
+		</profile>		
 	</profiles>
 
 </project>
