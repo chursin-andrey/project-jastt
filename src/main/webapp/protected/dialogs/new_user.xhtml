@@ -15,7 +15,6 @@
 	    <p:dialog id="new_user_dialog" widgetVar="newUserDialog" header="Create new user account"
 	    	draggable="false" resizable="false" modal="true" closable="false">
 	    	<h:form id="new_user_form">				
-				<p:messages id="error" for="" showSummary="true" showDetail="false"/>
         		<h:panelGrid id="newUserGrid" columns="2" style="margin-bottom:10px" cellpadding="5">
         			<p:outputLabel for="newUserName" value="Name:" />
 					<p:inputText id="newUserName" value="#{userBean.user.name}" />
@@ -58,20 +57,16 @@
 				</h:panelGrid>
 				
 				<h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
-					    <!-- 
-					    <p:commandButton id="buttonVerify" value="Verify" disabled="{userBean.admin}"
-							actionListener="{userBean.verifyJiraCredentials}" />
-						 -->
 						<p:commandButton id="buttonSave" value="Save" actionListener="#{userBean.createUser}"
 							update="newUserGrid, :user_form:usersTable, :user_form:growl"
-							oncomplete="if (args &amp;&amp; !args.validationFailed) newUserDialog.hide()"
-							onstart="statusDialogForAdding.show();" onsuccess="statusDialogForAdding.hide();"
+							oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newUserDialog').hide();"
+							onstart="PF('statusDialogForAdding').show();" onsuccess="PF('statusDialogForAdding').hide();"
 							icon="ui-icon-check" />
-						<p:commandButton value="Cancel" actionListener="#{userBean.cancelHandle}" immediate="true"
-							icon="ui-icon-close">
+						<p:commandButton value="Cancel" actionListener="#{userBean.cancelHandle}"
+							immediate="true" oncomplete="PF('newUserDialog').hide();"
+							icon="ui-icon-close" update="@form">
 						</p:commandButton>	
 				</h:panelGrid>
-				
 			</h:form>
 		</p:dialog>
 		
