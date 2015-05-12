@@ -16,6 +16,7 @@
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<war.name>project-jastt</war.name>
 	</properties>
 
 	<dependencies>
@@ -296,6 +297,17 @@
 		          </excludes>
 		        </configuration>
       		</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+ 					<!-- <url>http://localhost:8080/manager</url>
+ 					<warFile>${project.build.directory}/${war.name}.war</warFile>
+					<path>/${war.name}</path> -->
+ 					<server>myserver</server>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
