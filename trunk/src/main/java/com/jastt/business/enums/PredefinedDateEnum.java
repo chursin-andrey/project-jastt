@@ -17,6 +17,7 @@ public enum PredefinedDateEnum {
 	THIS_WEEK ("This week"), 
 	LAST_WEEK ("Last week"), 
 	LAST_SEVEN_DAYS ("Last seven days"), 
+	LAST_FOUR_WEEKS ("Last four weeks"), 
 	THIS_MONTH ("This month"), 
 	LAST_MONTH ("Last month"), 
 	LAST_THIRTY_DAYS ("Last thirty days"), 
@@ -86,6 +87,11 @@ public enum PredefinedDateEnum {
 			}
 			case LAST_SEVEN_DAYS:{
 				baseDate.add(Calendar.DATE, -7);
+				pairOfDates.setLeft(baseDate.getTime());
+				break;
+			}
+			case LAST_FOUR_WEEKS:{
+				baseDate.add(Calendar.DATE, - 28);
 				pairOfDates.setLeft(baseDate.getTime());
 				break;
 			}

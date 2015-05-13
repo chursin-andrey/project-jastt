@@ -110,4 +110,9 @@ public class Worklog extends PersistentEntity<Integer> {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return issue + " - " + timeSpent;
+	}
 }

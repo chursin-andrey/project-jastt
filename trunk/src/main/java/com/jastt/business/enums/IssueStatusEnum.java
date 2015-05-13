@@ -1,5 +1,7 @@
 package com.jastt.business.enums;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +43,14 @@ public enum IssueStatusEnum {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public static Collection<String> getDescriptions(Collection<IssueStatusEnum> status) {
+		Collection<String> result = new ArrayList<String>();
+		for (IssueStatusEnum e : status) {
+			result.add(e.getDescription());
+		}
+		return result;
 	}
 	
 }

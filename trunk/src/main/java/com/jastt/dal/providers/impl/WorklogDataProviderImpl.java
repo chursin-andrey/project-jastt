@@ -3,6 +3,7 @@ package com.jastt.dal.providers.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -40,8 +41,8 @@ public class WorklogDataProviderImpl extends
 		
 		Project project = options.getProject();
 		List<String> authors = options.getAuthors();
-		String issueType = options.getIssueType();
-		String issueStatus = options.getIssueStatus();
+		Set<String> issueType = options.getIssueType();
+		Set<String> issueStatus = options.getIssueStatus();
 		Date fromDate = options.getFromDate();
 		Date toDate = options.getToDate();
 		
@@ -58,8 +59,8 @@ public class WorklogDataProviderImpl extends
 			cr.add(Restrictions.or(criterions));
 		}
 		
-		if (issueType != null) cr.add(Restrictions.eq("issue.issueType", issueType));
-		if (issueStatus != null) cr.add(Restrictions.eq("issue.status", issueStatus));
+		if (issueType != null && !issueType.isEmpty()) cr.add(Restrictions.in("issue.issueType", issueType));
+		if (issueStatus != null && !issueStatus.isEmpty()) cr.add(Restrictions.in("issue.status", issueStatus));
 		
 		if (fromDate != null) cr.add(Restrictions.ge("started", fromDate));
 		if (toDate != null) cr.add(Restrictions.le("started", toDate));
@@ -84,10 +85,10 @@ public class WorklogDataProviderImpl extends
 			}
 			
 		} catch (HibernateException ex) {
-			LOG.error("Hibernate error while loading worklog for issue", ex.getMessage());
+			LOG.error("Hibernate error while loading worklog for issue", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while loading worklog for issue", ex.getMessage());
+			LOG.error("Unknown error occured while loading worklog for issue", ex);
         	throw new DaoException(ex);
 		}
 		return worklogList;
@@ -109,10 +110,10 @@ public class WorklogDataProviderImpl extends
 			}
 			
 		} catch (HibernateException ex) {
-			LOG.error("Hibernate error while loading worklog by self", ex.getMessage());
+			LOG.error("Hibernate error while loading worklog by self", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while loading worklog by self", ex.getMessage());
+			LOG.error("Unknown error occured while loading worklog by self", ex);
         	throw new DaoException(ex);
 		}
 		return worklog;
@@ -136,10 +137,10 @@ public class WorklogDataProviderImpl extends
 				worklogList.add(worklog);
 			}
 		} catch (HibernateException ex) {
-			LOG.error("Hibernate error while loading worklog for project", ex.getMessage());
+			LOG.error("Hibernate error while loading worklog for project", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while loading worklog for project", ex.getMessage());
+			LOG.error("Unknown error occured while loading worklog for project", ex);
         	throw new DaoException(ex);
 		}
 		return worklogList;
@@ -161,10 +162,10 @@ public class WorklogDataProviderImpl extends
 				worklogList.add(worklog);
 			}
 		} catch (HibernateException ex) {
-			LOG.error("Hibernate error while loading worklog for SearchOptions", ex.getMessage());
+			LOG.error("Hibernate error while loading worklog for SearchOptions", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while loading worklog for SearchOptions", ex.getMessage());
+			LOG.error("Unknown error occured while loading worklog for SearchOptions", ex);
         	throw new DaoException(ex);
 		}
 		return worklogList;
@@ -183,10 +184,10 @@ public class WorklogDataProviderImpl extends
 					.setProjection(Projections.distinct(Projections.property("author")));
 			authorList = cr.list();
 		} catch (HibernateException ex) {
-			LOG.error("Hibernate error while loading worklog authors", ex.getMessage());
+			LOG.error("Hibernate error while loading worklog authors", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while loading worklog authors", ex.getMessage());
+			LOG.error("Unknown error occured while loading worklog authors", ex);
         	throw new DaoException(ex);
 		}
 		return authorList;
@@ -205,10 +206,10 @@ public class WorklogDataProviderImpl extends
 					.setProjection(Projections.distinct(Projections.property("issue.issueType")));
 			issueTypeList = cr.list();
 		} catch (HibernateException ex) {
-			LOG.error("Hibernate error while loading worklog issue types", ex.getMessage());
+			LOG.error("Hibernate error while loading worklog issue types", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while loading worklog issue types", ex.getMessage());
+			LOG.error("Unknown error occured while loading worklog issue types", ex);
         	throw new DaoException(ex);
 		}		
 		return issueTypeList;
@@ -227,10 +228,10 @@ public class WorklogDataProviderImpl extends
 					.setProjection(Projections.distinct(Projections.property("issue.status")));
 			issueStatusList = cr.list();
 		} catch (HibernateException ex) {
-			LOG.error("Hibernate error while loading worklog issue statuses", ex.getMessage());
+			LOG.error("Hibernate error while loading worklog issue statuses", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while loading worklog issue statuses", ex.getMessage());
+			LOG.error("Unknown error occured while loading worklog issue statuses", ex);
         	throw new DaoException(ex);
 		}		
 		return issueStatusList;

@@ -27,11 +27,11 @@
 	<!-- Jira Services -->
 	
 	<!-- Real services -->
-	<!-- <bean id="jiraProjectService" class="com.jastt.business.services.jira.impl.JiraProjectServiceImpl"/>
-	<bean id="jiraIssueService" class="com.jastt.business.services.jira.impl.JiraIssueServiceImpl"/> -->
+	<bean id="jiraProjectService" class="com.jastt.business.services.jira.impl.JiraProjectServiceImpl"/>
+	<bean id="jiraIssueService" class="com.jastt.business.services.jira.impl.JiraIssueServiceImpl"/>
 	
 	<!-- Fake services -->
-	<bean id="jiraProjectService" class="com.jastt.business.services.jira.stub.JiraProjectServiceStub"/>
-	<bean id="jiraIssueService" class="com.jastt.business.services.jira.stub.JiraIssueServiceStub"/>
+	<!-- <bean id="jiraProjectService" class="com.jastt.business.services.jira.stub.JiraProjectServiceStub"/>
+	<bean id="jiraIssueService" class="com.jastt.business.services.jira.stub.JiraIssueServiceStub"/> -->
 	
 </beans>

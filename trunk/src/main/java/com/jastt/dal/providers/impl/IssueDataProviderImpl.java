@@ -1,6 +1,7 @@
 package com.jastt.dal.providers.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -125,10 +126,10 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 			issue = issList.get(issList.size()-1);
 			
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while getting latest Issue", ex.getMessage());	
+        	LOG.error("Hibernate error occured while getting latest Issue", ex);	
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Exception error occured while getting latest Issue", ex.getMessage());
+			LOG.error("Exception error occured while getting latest Issue", ex);
 			throw new DaoException(ex);
 		}
 		return issue;
@@ -151,10 +152,10 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 			IssueEntity is = (IssueEntity)cr.uniqueResult();
 			issue = mappingService.map(is, Issue.class);
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while getting latest Issue", ex.getMessage());	
+        	LOG.error("Hibernate error occured while getting latest Issue", ex);	
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Hibernate error occured while getting latest Issue", ex.getMessage());
+			LOG.error("Hibernate error occured while getting latest Issue", ex);
 			throw new DaoException(ex);
 		}
 		return issue;
@@ -173,10 +174,10 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 			session.save(issues);
 			
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while save Issue", ex.getMessage());	
+        	LOG.error("Hibernate error occured while save Issue", ex);	
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Hibernate error occured while save Issue", ex.getMessage());
+			LOG.error("Hibernate error occured while save Issue", ex);
 			throw new DaoException(ex);
 		}
 		
@@ -184,20 +185,19 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 
 	@Transactional
 	@Override
-	public List<Issue> getIssues(Project project, IssueStatusEnum status,
-			Assignee assignee, IssueTypeEnum issueType, Date fromDate,
+	public List<Issue> getIssues(Project project, Collection<IssueStatusEnum> status,
+			Assignee assignee, Collection<IssueTypeEnum> issueType, Date fromDate,
 			Date toDate) {
 				
-		Assignee ass1 = new Assignee("Bob", "mail");
 		List<Issue> resultList = new ArrayList<>();
 		List<IssueEntity> entityList = new ArrayList<>();
 		try{
 			Session session = sessionFactory.getCurrentSession();
 			Criteria isuCriteria = session.createCriteria(IssueEntity.class);
 				if(project != null) isuCriteria.add(Restrictions.eq("projectEntity.id", project.getId() ) );
-				if(status != null) isuCriteria.add(Restrictions.eq("status", status.getDescription() ) );
+				if(status != null && !status.isEmpty()) isuCriteria.add(Restrictions.in("status", IssueStatusEnum.getDescriptions(status) ) );
 				if(assignee != null) isuCriteria.add(Restrictions.eq("assigneeEntity.id", assignee.getId() ) );
-				if(issueType != null) isuCriteria.add(Restrictions.eq("issueType", issueType.getDescription()) );
+				if(issueType != null && !issueType.isEmpty()) isuCriteria.add(Restrictions.in("issueType", IssueTypeEnum.getDescriptions(issueType)) );
 				if((fromDate != null)&&(toDate != null)) isuCriteria.add(Restrictions.between("created", fromDate, toDate ) ); 
 				/*Criterion criterion = null;
 				criterion = Restrictions.or( criterion,
@@ -210,10 +210,10 @@ public class IssueDataProviderImpl extends BaseDataProviderImpl<IssueEntity, Iss
 				resultList.add(isue);
 			}
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while getIssues many parametrs", ex.getMessage());
+        	LOG.error("Hibernate error occured while getIssues many parametrs", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Hibernate error occured while getIssues many parametrs", ex.getMessage());
+			LOG.error("Hibernate error occured while getIssues many parametrs", ex);
 			throw new DaoException(ex);
 		}
 		return resultList;

@@ -15,8 +15,9 @@ public interface IssueService {
 	public Issue getIssueById(Integer id);
 	public List<Issue> getIssuesByProject(Project project);
 	public List<Issue> getAllIssues();
-	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees, IssueTypeEnum issueType, Date fromDate, Date toDate);
-	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees, IssueTypeEnum issueType, PredefinedDateEnum period);
+	public List<Issue> getIssues(Project project, Collection<IssueStatusEnum> status, List<Assignee> assignees, Collection<IssueTypeEnum> issueType, Date fromDate, Date toDate);
+	public List<Issue> getIssues(Project project, Collection<IssueStatusEnum> status, List<Assignee> assignees, Collection<IssueTypeEnum> issueType, PredefinedDateEnum period);
+	// FIXME probably out of contract
 	public void update(User user) throws JiraClientException;
 	
 	

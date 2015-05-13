@@ -203,7 +203,7 @@ public class UsersBean implements Serializable {
 				FacesContext fc = FacesContext.getCurrentInstance();
 				fc.getExternalContext().redirect("/project-jastt/protected/login.xhtml");
 			} catch(Exception e) {
-				LOG.error("Exception happened during execution of deleteUser() method. ", e.getMessage());
+				LOG.error("Exception happened during execution of deleteUser() method. ", e);
 			}
 		} else {
 			userService.deleteUser(user.getLogin());

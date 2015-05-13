@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Project;
 
@@ -19,6 +22,8 @@ public class Issue extends PersistentEntity<Integer>{
 	private String status;
 	private Date created;
 	private Date updated;
+	private Date due;
+	private Date resolved;
 	private String priority;
 	private String summary;
 	private int timeSpent;
@@ -111,6 +116,26 @@ public class Issue extends PersistentEntity<Integer>{
 		this.updated = updated;
 	}
 	
+	public Date getDue() {
+		return due;
+	}
+
+
+	public void setDue(Date due) {
+		this.due = due;
+	}
+
+
+	public Date getResolved() {
+		return resolved;
+	}
+
+
+	public void setResolved(Date resolved) {
+		this.resolved = resolved;
+	}
+
+
 	public String getPriority() {
 		return priority;
 	}
@@ -127,6 +152,20 @@ public class Issue extends PersistentEntity<Integer>{
 		this.timeSpent = timeSpent;
 	}
 
+
+	public Integer getActuality() {
+		if (due == null || (resolved == null && updated == null)) {
+			return 0;
+		}
+		int daysUntilDue = Days.daysBetween(
+				new DateTime(created).withTimeAtStartOfDay(),
+				new DateTime(due).withTimeAtStartOfDay()).getDays();
+		int daysUntilResolved = Days.daysBetween(
+				new DateTime(created).withTimeAtStartOfDay(),
+				new DateTime(resolved != null ? resolved : updated)
+						.withTimeAtStartOfDay()).getDays();
+		return (((1 + daysUntilDue) * 100) / (1 + daysUntilResolved));
+	}
 
 	public String getSummary() {
 		return summary;
@@ -178,4 +217,15 @@ public class Issue extends PersistentEntity<Integer>{
 		return true;
 	}
 	
+	@Override
+	public String toString() {
+		return key + " " + summary;
+	}
+
+
+	public String getUrl() {
+		String serverUrl = project.getServer().getUrl();
+		return serverUrl + (serverUrl.endsWith("/") ? "" : "/") + "browse/"
+				+ key;
+	}
 }

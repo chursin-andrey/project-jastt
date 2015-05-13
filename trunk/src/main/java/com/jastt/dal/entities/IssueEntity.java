@@ -30,6 +30,8 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 	private String status;
 	private Date created;
 	private Date updated;
+	private Date due;
+	private Date resolved;
 	private String priority;
 	private String summary;
 	private int timeSpent;
@@ -40,8 +42,8 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 
 	public IssueEntity(AssigneeEntity assigneeEntity,
 			ProjectEntity projectEntity, String key, String issueType,
-			String status, Date created, Date updated, String summary,
-			int timeSpent) {
+			String status, Date created, Date updated, Date due,
+			Date resolved, String summary, int timeSpent) {
 		this.assigneeEntity = assigneeEntity;
 		this.projectEntity = projectEntity;
 		this.key = key;
@@ -49,14 +51,16 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 		this.status = status;
 		this.created = created;
 		this.updated = updated;
+		this.due = due;
+		this.resolved = resolved;
 		this.summary = summary;
 		this.timeSpent = timeSpent;
 	}
 
 	public IssueEntity(AssigneeEntity assigneeEntity,
 			ProjectEntity projectEntity, String key, String issueType,
-			String status, Date created, Date updated, String priority,
-			String summary, int timeSpent, Set<WorklogEntity> worklogEntities) {
+			String status, Date created, Date updated, Date due,
+			Date resolved, String priority, String summary, int timeSpent, Set<WorklogEntity> worklogEntities) {
 		this.assigneeEntity = assigneeEntity;
 		this.projectEntity = projectEntity;
 		this.key = key;
@@ -64,6 +68,8 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 		this.status = status;
 		this.created = created;
 		this.updated = updated;
+		this.due = due;
+		this.resolved = resolved;
 		this.priority = priority;
 		this.summary = summary;
 		this.timeSpent = timeSpent;
@@ -144,6 +150,26 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "DUE", nullable = true, length = 10)
+	public Date getDue() {
+		return due;
+	}
+
+	public void setDue(Date due) {
+		this.due = due;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "RESOLVED", nullable = true, length = 10)
+	public Date getResolved() {
+		return resolved;
+	}
+
+	public void setResolved(Date resolved) {
+		this.resolved = resolved;
 	}
 
 	@Column(name = "PRIORITY", length = 50)

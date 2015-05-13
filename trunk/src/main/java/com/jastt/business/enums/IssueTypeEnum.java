@@ -1,5 +1,7 @@
 package com.jastt.business.enums;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +42,22 @@ public enum IssueTypeEnum {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public static Collection<IssueTypeEnum> getTypes(Collection<String> issueType) {
+		Collection<IssueTypeEnum> result = new ArrayList<IssueTypeEnum>(issueType.size());
+		for (String i : issueType) {
+			result.add(getType(i));
+		}
+		return result;
+	}
+
+	public static Collection<String> getDescriptions(Collection<IssueTypeEnum> issueType) {
+		Collection<String> result = new ArrayList<String>();
+		for (IssueTypeEnum e : issueType) {
+			result.add(e.getDescription());
+		}
+		return result;
 	}
 	
 }

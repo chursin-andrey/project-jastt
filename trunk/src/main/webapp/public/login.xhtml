@@ -10,11 +10,11 @@
 	<ui:define name="content">
 	<h:outputStylesheet name="css/login.css" />
    		#{loginBean.checkState()}
-		<h:form id="loginForm" class="login" style="margin : 10px" >
+		<h:form id="loginForm" class="login" style="margin : 10px" autocomplete="on">
 			<h:panelGrid id="grid" columns="3" styleClass="form" >
 			
 				<p:outputLabel for="username" value="Username:"/>
-				<p:inputText id="username" value="#{loginBean.login}" required="true" styleClass="input" />
+				<p:inputText id="username" value="#{loginBean.login}" required="true" styleClass="input" autocomplete="on" />
 			    <!-- <p:message for="username" /> -->
 				    
 				<p:outputLabel for="password" value="Password:"/>
@@ -22,7 +22,7 @@
 				<!-- <p:message for="password" /> -->
 				
 				<p:outputLabel for="url" value="Jira URL:"/>
-				<p:inputText id="url"  value="#{loginBean.url}" required="true" disabled="#{loginBean.adminSwitch}" styleClass="input"/>
+				<p:inputText id="url"  value="#{loginBean.url}" required="true" disabled="#{loginBean.adminSwitch}" styleClass="input" autocomplete="on"/>
 				<!-- <p:message for="url" /> -->
 						
 				<p:outputLabel for="isAdmin" value="Is Admin"/>

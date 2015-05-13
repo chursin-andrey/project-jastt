@@ -1,5 +1,7 @@
 package com.jastt.business.domain.entities;
 
+import java.util.Comparator;
+
 
 public class Assignee extends PersistentEntity<Integer>{
 	
@@ -64,5 +66,29 @@ public class Assignee extends PersistentEntity<Integer>{
 		return true;
 	}
 	
-			
+	@Override
+	public String toString() {
+		return name + " ["+ email +"]";
+	}		
+
+	public static Comparator<Assignee> getAssigneeNameComparator() {
+		return new AssigneeNameComparator();
+	}
+
+	private static final class AssigneeNameComparator implements Comparator<Assignee> {
+		@Override
+		public int compare(Assignee a1, Assignee a2) {
+			if (a1 == a2) {
+				return 0;
+			}
+			if (a1 == null || a1.getName() == null) {
+				return -1;
+			}
+			if (a2 == null || a2.getName() == null) {
+				return 1;
+			}
+			return a1.getName().compareTo(a2.getName());
+		}
+	}
 }
+

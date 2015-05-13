@@ -86,10 +86,10 @@ public class ProjectDataProviderImpl extends BaseDataProviderImpl<ProjectEntity,
 				resultList.add(prjt);
 			}
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while getting Project", ex.getMessage());
+        	LOG.error("Hibernate error occured while getting Project", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Hibernate error occured while getting Project", ex.getMessage());
+			LOG.error("Hibernate error occured while getting Project", ex);
 			throw new DaoException(ex);
 		}
 		return resultList;

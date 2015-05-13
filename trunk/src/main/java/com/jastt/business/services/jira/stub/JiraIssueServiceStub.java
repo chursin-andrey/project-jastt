@@ -61,6 +61,8 @@ public class JiraIssueServiceStub implements JiraIssueService, Serializable {
 			calendar.add(Calendar.HOUR_OF_DAY, 1);
 			issue.setCreated(calendar.getTime());
 			issue.setUpdated(issue.getCreated());
+			issue.setDue(issue.getDue());
+			issue.setResolved(issue.getResolved());
 			issue.setTimeSpent(0);		
 			
 			generateWorklog(issue);
