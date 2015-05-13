@@ -48,4 +48,8 @@ public class Server extends PersistentEntity<Integer>{
 		return true;
 	}		
 	
+	@Override
+	public String toString() {
+		return url;
+	}
 }

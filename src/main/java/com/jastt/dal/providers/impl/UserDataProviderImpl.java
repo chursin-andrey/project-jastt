@@ -112,10 +112,10 @@ public class UserDataProviderImpl extends BaseDataProviderImpl<UserEntity, User,
 			session.delete(login);
 			
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while edit user", ex.getMessage());	
+        	LOG.error("Hibernate error occured while edit user", ex);	
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while edit user", ex.getMessage());
+			LOG.error("Unknown error occured while edit user", ex);
 			throw new DaoException(ex);
 		}
 		

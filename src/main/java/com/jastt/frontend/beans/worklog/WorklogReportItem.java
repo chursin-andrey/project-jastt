@@ -1,8 +1,10 @@
 package com.jastt.frontend.beans.worklog;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 
+import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Worklog;
 
 public class WorklogReportItem implements Serializable {
@@ -53,5 +55,18 @@ public class WorklogReportItem implements Serializable {
 		for (Worklog worklog : worklogs) {
 			totalTimeSpent += worklog.getTimeSpent();
 		}
+	}
+
+	public String getActuality() {
+		HashSet<Issue> issues = new HashSet<Issue>();
+		for (Worklog worklog : worklogs) {
+			issues.add(worklog.getIssue());
+		}
+		long sumOfActualities = 0;
+		for (Issue issue : issues) {
+		    Integer actuality = issue.getActuality();
+		    if (actuality!=null) sumOfActualities+=actuality;
+		}
+		return (sumOfActualities / issues.size()) + "%";
 	}
 }

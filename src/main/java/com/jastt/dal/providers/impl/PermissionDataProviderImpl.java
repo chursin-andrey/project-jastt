@@ -72,7 +72,7 @@ public class PermissionDataProviderImpl extends BaseDataProviderImpl<PermissionE
 			
 			
 		} catch (Exception ex) {
-			LOG.error(String.format("Error getPermission by user=%s ", user), ex.getMessage());
+			LOG.error(String.format("Error getPermission by user=%s ", user), ex);
 			throw new DaoException(ex);
 		}
 		

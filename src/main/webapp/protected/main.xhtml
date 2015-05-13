@@ -27,25 +27,25 @@
 			
 		<p:column>
 			<p:outputLabel value="Type:"/><br />
-			<p:selectOneMenu id="issue"  value="#{reportBean.issueType}" disabled="#{reportBean.disableMenu}" styleClass="item">
-				<f:selectItem itemLabel="All " noSelectionOption="true" />
+			<p:selectCheckboxMenu id="issue"  value="#{reportBean.issueType}" disabled="#{reportBean.disableMenu}" styleClass="item">
+				<!-- <f:selectItem itemLabel="All " noSelectionOption="true" /> -->
    				<f:selectItem itemValue="Bug" itemLabel="Bug" />
    				<f:selectItem itemValue="Improvement" itemLabel="Improvement" />
    				<f:selectItem itemValue="New feature" itemLabel="New feature" />
    				<f:selectItem itemValue="Task" itemLabel="Task" />
 				<f:ajax listener="#{reportBean.changeIssue}" />
-			</p:selectOneMenu>
+			</p:selectCheckboxMenu>
 			
 			<br />
 			<p:outputLabel value="Status:"/><br />
-			<p:selectOneMenu id="status"  value="#{reportBean.status}"  disabled="#{reportBean.disableMenu}" styleClass="item">
-				<f:selectItem itemLabel="All " noSelectionOption="true" />
-				<f:selectItem itemValue="Open" itemLabel="Open" />
-				<f:selectItem itemValue="In progress" itemLabel="In progress" />
-				<f:selectItem itemValue="Resolved" itemLabel="Resolved" />
-				<f:selectItem itemValue="Reopened" itemLabel="Reopened" />
+			<p:selectCheckboxMenu id="status"  value="#{reportBean.status}"  disabled="#{reportBean.disableMenu}" styleClass="item">
+				<!-- <f:selectItem itemLabel="All " noSelectionOption="true" /> -->
 				<f:selectItem itemValue="Closed" itemLabel="Closed" />
-			</p:selectOneMenu>	
+				<f:selectItem itemValue="In progress" itemLabel="In progress" />
+				<f:selectItem itemValue="Open" itemLabel="Open" />
+				<!-- <f:selectItem itemValue="Reopened" itemLabel="Reopened" /> -->
+				<f:selectItem itemValue="Resolved" itemLabel="Resolved" />
+			</p:selectCheckboxMenu>	
 			
 		</p:column>
 		
@@ -66,6 +66,7 @@
    					<f:selectItem itemValue="This week" itemLabel="This week" noSelectionOption="true" />
    					<f:selectItem itemValue="Last week" itemLabel="Last week" noSelectionOption="true" />
    					<f:selectItem itemValue="Last seven days" itemLabel="Last seven days" noSelectionOption="true" />
+   					<f:selectItem itemValue="Last four weeks" itemLabel="Last four weeks" noSelectionOption="true" />
    					<f:selectItem itemValue="This month" itemLabel="This month" noSelectionOption="true" />
    					<f:selectItem itemValue="Last month" itemLabel="Last month" noSelectionOption="true" />
    					<f:selectItem itemValue="Last thirty days" itemLabel="Last thirty days" noSelectionOption="true" />
@@ -101,15 +102,24 @@
     						<p:column datasource="Details" trigger="toggler"/>
                 			<p:outputPanel>
                     			<h:outputText value="#{reportBean.allTime}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
-               					
                					<div class="top-export-buttons-panel">
-									<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/pdf32.png" styleClass="export-button">
+									<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/pdf32.png" styleClass="export-button" title="Issue report PDF">
 										<f:param name="reportFormat" value="pdf"/>
 									</h:commandButton>
-									<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/xls32.png" styleClass="export-button">
+									<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/xls32.png" styleClass="export-button" title="Issue report XLS">
 										<f:param name="reportFormat" value="xls"/>
 									</h:commandButton>
-									<h:commandButton actionListener="#{reportBean.exportIssueList}" image="/resources/img/xlsx32.png" styleClass="export-button">
+									<h:commandButton actionListener="#{reportBean.exportIssueList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="Issue report XLSX">
+										<f:param name="reportFormat" value="xlsx"/>
+									</h:commandButton>
+                                    <h:outputText value="&#160;&#160;" />
+									<h:commandButton  actionListener="#{reportBean.buildByUserReport}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By user report PDF">
+										<f:param name="reportFormat" value="pdf"/>
+									</h:commandButton>
+									<h:commandButton  actionListener="#{reportBean.buildByUserReport}"  image="/resources/img/xls32.png" styleClass="export-button" title="By user report XLS">
+										<f:param name="reportFormat" value="xls"/>
+									</h:commandButton>
+									<h:commandButton actionListener="#{reportBean.buildByUserReport}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By user report XLSX">
 										<f:param name="reportFormat" value="xlsx"/>
 									</h:commandButton>
 								</div>
@@ -121,6 +131,16 @@
             			</p:column>
             			<p:column headerText="Created" sortBy="#{details.created}">
             				<h:outputText  value="#{details.created}"  >
+            					<f:convertDateTime pattern="dd.MM.yyyy" />
+            				 </h:outputText>
+            			</p:column>
+            			<p:column headerText="Due Date" sortBy="#{details.due}">
+            				<h:outputText  value="#{details.due}"  >
+            					<f:convertDateTime pattern="dd.MM.yyyy" />
+            				 </h:outputText>
+            			</p:column>
+            			<p:column headerText="Resolved" sortBy="#{details.resolved}">
+            				<h:outputText  value="#{details.resolved}"  >
             					<f:convertDateTime pattern="dd.MM.yyyy" />
             				 </h:outputText>
             			</p:column>
@@ -137,13 +157,16 @@
 						 <h:outputText  value="#{details.status}"  />
 						</p:column>
 						<p:column headerText="Key" sortBy="#{details.key}" sortFunction="#{reportBean.sortInNaturalOrder}">			
-							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}"  target="blank" styleClass="out-link">#{details.key}</h:outputLink>
+							<h:outputLink value="#{details.url}"  target="blank" styleClass="out-link">#{details.key}</h:outputLink>
 						</p:column>
 						<p:column headerText="Summary" sortBy="#{details.summary}">
-							<h:outputLink value="#{details.project.server.url}/browse/#{details.key}" target="blank" styleClass="out-link">#{details.summary}</h:outputLink>
+							<h:outputLink value="#{details.url}" target="blank" styleClass="out-link">#{details.summary}</h:outputLink>
 						</p:column>
-						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="150">
+						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="80">
 							<h:outputText  value="#{details.timeSpent}"  converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+						</p:column>
+						<p:column headerText="Actuality (percent)" sortBy="#{details.actuality}" width="70">
+							<h:outputText  value="#{details.actuality}"/>
 						</p:column>
 						
 						<f:facet name="footer">
@@ -151,13 +174,23 @@
 							
 								
 							<div class="bottom-export-buttons-panel">
-								<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/pdf32.png" styleClass="export-button">
+								<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/pdf32.png" styleClass="export-button" title="Issue report PDF">
 									<f:param name="reportFormat" value="pdf"/>
 								</h:commandButton>
-								<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/xls32.png" styleClass="export-button">
+								<h:commandButton  actionListener="#{reportBean.exportIssueList}"  image="/resources/img/xls32.png" styleClass="export-button" title="Issue report XLS">
 									<f:param name="reportFormat" value="xls"/>
 								</h:commandButton>
-								<h:commandButton actionListener="#{reportBean.exportIssueList}" image="/resources/img/xlsx32.png" styleClass="export-button">
+								<h:commandButton actionListener="#{reportBean.exportIssueList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="Issue report XLSX">
+									<f:param name="reportFormat" value="xlsx"/>
+								</h:commandButton>
+                                <h:outputText value="&#160;&#160;" />
+								<h:commandButton  actionListener="#{reportBean.buildByUserReport}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By user report PDF">
+									<f:param name="reportFormat" value="pdf"/>
+								</h:commandButton>
+								<h:commandButton  actionListener="#{reportBean.buildByUserReport}"  image="/resources/img/xls32.png" styleClass="export-button" title="By user report XLS">
+									<f:param name="reportFormat" value="xls"/>
+								</h:commandButton>
+								<h:commandButton actionListener="#{reportBean.buildByUserReport}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By user report XLSX">
 									<f:param name="reportFormat" value="xlsx"/>
 								</h:commandButton>
 							</div>

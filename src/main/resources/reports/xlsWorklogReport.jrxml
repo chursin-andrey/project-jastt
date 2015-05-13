@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="issueReport" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="2c77a599-0c3b-4248-a0f6-f908d4c1d5dc">
-	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.zoom" value="1.7715610000000015"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
@@ -34,18 +34,33 @@
 	<parameter name="totalTimeSpent" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
 	</parameter>
+	<parameter name="totalActuality" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="timeSpent" class="java.lang.Integer"/>
 	<field name="started" class="java.util.Date"/>
+	<field name="issue.due" class="java.util.Date"/>
+	<field name="issue.resolved" class="java.util.Date"/>
 	<field name="author" class="java.lang.String"/>
 	<field name="issue.key" class="java.lang.String"/>
 	<field name="issue.issueType" class="java.lang.String"/>
 	<field name="issue.status" class="java.lang.String"/>
 	<field name="issue.summary" class="java.lang.String"/>
+	<field name="issue.actuality" class="java.lang.Integer"/>
+	<field name="timeSpent" class="java.lang.Integer"/>
 	<variable name="authorTimeSpent" class="java.lang.Integer" resetType="Group" resetGroup="Author" calculation="Sum">
 		<variableExpression><![CDATA[$F{timeSpent}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="numberOfIssues" class="java.lang.Integer" resetType="Group" resetGroup="Author" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{issue.key}]]></variableExpression>
+	</variable>
+	<variable name="totalAverageActuality" class="java.lang.Integer" calculation="Average">
+		<variableExpression><![CDATA[$F{issue.actuality}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="averageActuality" class="java.lang.Integer" resetType="Group" resetGroup="Author" calculation="Average">
+		<variableExpression><![CDATA[$F{issue.actuality}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<group name="Author">
@@ -53,32 +68,32 @@
 		<groupHeader>
 			<band height="37">
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement stretchType="RelativeToBandHeight" x="59" y="17" width="131" height="20" uuid="397a1851-588e-43ae-90c9-592fd2a21df0"/>
+					<reportElement stretchType="RelativeToBandHeight" x="59" y="17" width="128" height="20" uuid="397a1851-588e-43ae-90c9-592fd2a21df0"/>
 					<textElement textAlignment="Left">
-						<font size="12"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{author}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="17" width="59" height="20" uuid="1b518d61-e979-4b72-8d64-1555683b0775"/>
 					<textElement>
-						<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Member:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement stretchType="RelativeToBandHeight" x="190" y="17" width="127" height="20" uuid="0521124a-6714-4aef-8157-1fa2731ea6af"/>
+					<reportElement stretchType="RelativeToBandHeight" x="187" y="17" width="55" height="20" uuid="0521124a-6714-4aef-8157-1fa2731ea6af"/>
 					<textElement>
-						<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<text><![CDATA[Number of worklogs:]]></text>
+					<text><![CDATA[Worklogs:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="Author">
-					<reportElement stretchType="RelativeToBandHeight" x="317" y="17" width="114" height="20" uuid="998f88bd-baa2-4e35-9e64-a89aa786fe2a">
+					<reportElement stretchType="RelativeToBandHeight" x="242" y="17" width="30" height="20" uuid="998f88bd-baa2-4e35-9e64-a89aa786fe2a">
 						<printWhenExpression><![CDATA[$F{author} != null]]></printWhenExpression>
 					</reportElement>
 					<textElement>
-						<font size="12"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{Author_COUNT}]]></textFieldExpression>
 				</textField>
@@ -87,17 +102,49 @@
 						<property name="net.sf.jasperreports.export.xls.pattern" value="[h]:mm"/>
 					</reportElement>
 					<textElement textAlignment="Center">
-						<font size="12"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[(double)$V{authorTimeSpent}/(24*60)]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement stretchType="RelativeToBandHeight" x="431" y="17" width="74" height="20" uuid="95d67fcb-008d-4fe1-a635-ed86fcfd0932"/>
+					<reportElement stretchType="RelativeToBandHeight" x="454" y="17" width="51" height="20" uuid="95d67fcb-008d-4fe1-a635-ed86fcfd0932"/>
 					<textElement>
-						<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<text><![CDATA[Total Spent:]]></text>
+					<text><![CDATA[Spent:]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="Author">
+					<reportElement stretchType="RelativeToBandHeight" x="312" y="17" width="30" height="20" uuid="c612c8aa-03af-43a7-94b4-1566dbc8d0c8">
+						<printWhenExpression><![CDATA[$F{author} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{numberOfIssues}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="272" y="17" width="40" height="20" uuid="919c5041-7ec8-4e35-af29-c6b0cfa8eb3c"/>
+					<textElement>
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Issues:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="342" y="17" width="50" height="20" uuid="9deac9e3-0d6c-43dd-9e43-224709c78a70"/>
+					<textElement>
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Actuality:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="Author">
+					<reportElement stretchType="RelativeToBandHeight" x="392" y="17" width="62" height="20" uuid="cfa0cf9b-ad05-48a2-ad30-832fa114c552">
+						<printWhenExpression><![CDATA[$F{issue.actuality}!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{averageActuality}+"%"]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupHeader>
 	</group>
@@ -249,58 +296,93 @@
 	<columnHeader>
 		<band height="55" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="17" width="105" height="38" uuid="35733d2c-a7a9-4502-80ba-7bbc48ef5b11"/>
+				<reportElement x="0" y="17" width="55" height="38" uuid="35733d2c-a7a9-4502-80ba-7bbc48ef5b11"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[Date]]></text>
+				<text><![CDATA[Created]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="17" width="85" height="38" uuid="267e3efc-4bf5-4c20-8a2d-bfead9ff9e2a"/>
+				<reportElement x="165" y="17" width="77" height="38" uuid="267e3efc-4bf5-4c20-8a2d-bfead9ff9e2a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Issue Key]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="190" y="17" width="315" height="38" uuid="a8825fda-6416-47e6-88d5-a1e87e1696b8"/>
+				<reportElement x="242" y="17" width="212" height="38" uuid="a8825fda-6416-47e6-88d5-a1e87e1696b8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Issue Summary]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="505" y="17" width="50" height="38" uuid="d3c97cd1-05e3-40ed-abf1-d7ff3bcfc15a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Spent
 (h:mm)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="454" y="17" width="51" height="38" uuid="6d6676f8-edd6-4b3b-a185-f2726ee861c6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Actuality]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="55" y="17" width="55" height="38" uuid="fec305c1-72d5-4de9-b0ca-5514f720726d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Due Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="17" width="55" height="38" uuid="e07a3f89-5e47-4568-b69a-22295c7ae44c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Resolved]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField pattern="dd.MM.yyyy HH:mm" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="105" height="20" uuid="d2317d9d-d622-4e6a-a6b0-18b603bc27d5"/>
+			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="55" height="20" uuid="d2317d9d-d622-4e6a-a6b0-18b603bc27d5"/>
 				<textElement textAlignment="Center">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{started}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="105" y="0" width="85" height="20" uuid="2a500fe3-c595-460d-8c6f-499eeff8b66c"/>
+			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="55" y="0" width="55" height="20" uuid="5c367737-9c49-45b5-aa54-963d30443063"/>
 				<textElement textAlignment="Center">
-					<font size="12"/>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{issue.due}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="110" y="0" width="55" height="20" uuid="e9646098-5e68-4a93-8065-6023ed555480"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{issue.resolved}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="165" y="0" width="77" height="20" uuid="2a500fe3-c595-460d-8c6f-499eeff8b66c"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{issue.key}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="190" y="0" width="315" height="20" uuid="d55e1ff9-5f00-4c5b-9569-de974ecec8f6">
+				<reportElement stretchType="RelativeToBandHeight" x="242" y="0" width="212" height="20" uuid="d55e1ff9-5f00-4c5b-9569-de974ecec8f6">
 					<printWhenExpression><![CDATA[$F{issue.key} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[String.format("%s [%s]: %s", $F{issue.issueType}, $F{issue.status}, $F{issue.summary})]]></textFieldExpression>
 			</textField>
@@ -309,18 +391,28 @@
 					<property name="net.sf.jasperreports.export.xls.pattern" value="[h]:mm"/>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[(double)$F{timeSpent}/(24*60)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="454" y="0" width="51" height="20" uuid="4fba63b5-9e65-4e77-ba3d-421dcadbb9aa">
+					<property name="net.sf.jasperreports.export.xls.pattern" value="[h]:mm"/>
+					<printWhenExpression><![CDATA[$F{issue.actuality}!=0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{issue.actuality}+"%"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<summary>
 		<band height="42" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="22" width="505" height="20" uuid="6a9d0d9c-ceb7-4b8f-bcd9-d55c2fe9b022"/>
+				<reportElement x="377" y="22" width="128" height="20" uuid="6a9d0d9c-ceb7-4b8f-bcd9-d55c2fe9b022"/>
 				<textElement>
-					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Total Time Spent (h:mm):]]></text>
 			</staticText>
@@ -329,10 +421,27 @@
 					<property name="net.sf.jasperreports.export.xls.pattern" value="[h]:mm"/>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[(double)$P{totalTimeSpent}/(24*60)]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="291" y="22" width="51" height="20" uuid="bd0b630c-f538-4435-b9f7-ea06931211cc">
+					<property name="net.sf.jasperreports.export.xls.pattern" value="[h]:mm"/>
+					<printWhenExpression><![CDATA[$V{totalAverageActuality}!=0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalAverageActuality}+"%"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="206" y="22" width="85" height="20" uuid="c26f974e-325a-4e3a-8c58-80dc684b0f48"/>
+				<textElement>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Total Actuality:]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>

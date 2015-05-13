@@ -157,6 +157,7 @@ public class JiraIssueServiceTest {
 		assertEquals(jiraIssue.getStatus().getName(), issue.getStatus());
 		assertEquals(jiraIssue.getCreationDate().toDate(), issue.getCreated());
 		assertEquals(jiraIssue.getUpdateDate().toDate(), issue.getUpdated());
+		assertEquals(jiraIssue.getDueDate().toDate(), issue.getDue());
 		//Optional fields
 		if (jiraIssue.getAssignee() != null) {
 			assertEquals(jiraIssue.getAssignee().getDisplayName(), issue.getAssignee().getName());

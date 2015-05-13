@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="issueReport" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2c77a599-0c3b-4248-a0f6-f908d4c1d5dc">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="byUserReport" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2c77a599-0c3b-4248-a0f6-f908d4c1d5dc">
 	<property name="ireport.zoom" value="1.7715610000000015"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -51,7 +51,67 @@
 	<field name="status" class="java.lang.String"/>
 	<variable name="totalActuality" class="java.lang.Integer" calculation="Average">
 		<variableExpression><![CDATA[$F{actuality}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
+	<variable name="averageActuality" class="java.lang.Integer" resetType="Group" resetGroup="Author" calculation="Average">
+		<variableExpression><![CDATA[$F{actuality}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="authorTimeSpent" class="java.lang.Integer" resetType="Group" resetGroup="Author" calculation="Sum">
+		<variableExpression><![CDATA[$F{timeSpent}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="numberOfIssues" class="java.lang.Integer" resetType="Group" resetGroup="Author" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{key}]]></variableExpression>
+	</variable>
+	<group name="Author">
+		<groupExpression><![CDATA[$F{assignee.name}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="Author" isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="260" height="20" uuid="27686a37-181b-46f6-a0be-cb42fd3ebf83"/>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{assignee.name}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="Author">
+					<reportElement x="260" y="0" width="55" height="20" uuid="9083820c-4dc0-4413-b8e8-9eacdb74abc4">
+						<printWhenExpression><![CDATA[$F{assignee.name} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Author_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="Author">
+					<reportElement x="315" y="0" width="55" height="20" uuid="79825b5a-90d3-4fb4-a604-3d584dea1085">
+						<printWhenExpression><![CDATA[$F{assignee.name} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{numberOfIssues}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="Author">
+					<reportElement x="370" y="0" width="85" height="20" printWhenGroupChanges="Author" uuid="6b021ea4-6623-4068-b810-ec052d3dde36">
+						<printWhenExpression><![CDATA[$V{averageActuality}!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{averageActuality}+"%"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="Author" isBlankWhenNull="true">
+					<reportElement x="455" y="0" width="80" height="20" uuid="f719a634-7f18-4eb7-951e-3d1882388898"/>
+					<textElement textAlignment="Center">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[String.format("%d:%02d", $V{authorTimeSpent}/60, $V{authorTimeSpent}%60)]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -62,7 +122,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="24" isBold="true" isItalic="true" pdfFontName="Helvetica-BoldOblique"/>
 				</textElement>
-				<text><![CDATA[Issue Report]]></text>
+				<text><![CDATA[By User Report]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -189,66 +249,46 @@
 			<frame>
 				<reportElement mode="Opaque" x="0" y="16" width="555" height="38" backcolor="#70A9C6" uuid="f806aa80-dfe5-4492-b4d7-c15487b77142"/>
 				<staticText>
-					<reportElement mode="Transparent" x="0" y="0" width="55" height="38" forecolor="#FFFFFF" uuid="35733d2c-a7a9-4502-80ba-7bbc48ef5b11"/>
+					<reportElement mode="Transparent" x="0" y="0" width="260" height="38" forecolor="#FFFFFF" uuid="35733d2c-a7a9-4502-80ba-7bbc48ef5b11"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<text><![CDATA[Created]]></text>
+					<text><![CDATA[Member]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="165" y="0" width="85" height="38" forecolor="#FFFFFF" uuid="267e3efc-4bf5-4c20-8a2d-bfead9ff9e2a"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
-					</textElement>
-					<text><![CDATA[Assignee]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="250" y="0" width="80" height="38" forecolor="#FFFFFF" uuid="a8825fda-6416-47e6-88d5-a1e87e1696b8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
-					</textElement>
-					<text><![CDATA[Key]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="330" y="0" width="125" height="38" forecolor="#FFFFFF" uuid="ca6741af-dc85-4104-ab3c-55367a048871"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
-					</textElement>
-					<text><![CDATA[Summary]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="510" y="0" width="45" height="38" forecolor="#FFFFFF" uuid="d3c97cd1-05e3-40ed-abf1-d7ff3bcfc15a"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
-					</textElement>
-					<text><![CDATA[Spent (h:mm)]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="455" y="0" width="55" height="38" forecolor="#FFFFFF" uuid="b223c63d-c2cd-41be-b2bb-d65d9b122ce5"/>
+					<reportElement x="370" y="0" width="85" height="38" forecolor="#FFFFFF" uuid="267e3efc-4bf5-4c20-8a2d-bfead9ff9e2a"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
 					<text><![CDATA[Actuality]]></text>
 				</staticText>
+				<staticText>
+					<reportElement x="455" y="0" width="80" height="38" forecolor="#FFFFFF" uuid="a8825fda-6416-47e6-88d5-a1e87e1696b8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Spent]]></text>
+				</staticText>
 			</frame>
 			<staticText>
-				<reportElement mode="Transparent" x="55" y="16" width="55" height="38" forecolor="#FFFFFF" uuid="dd45cd61-71f3-4839-89b1-3506dd37fb7c"/>
+				<reportElement mode="Transparent" x="260" y="16" width="55" height="38" forecolor="#FFFFFF" uuid="dd45cd61-71f3-4839-89b1-3506dd37fb7c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[Due Date]]></text>
+				<text><![CDATA[Worklogs]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="110" y="16" width="55" height="38" forecolor="#FFFFFF" uuid="adb44107-e81d-4ceb-994c-cb68abe8485f"/>
+				<reportElement mode="Transparent" x="315" y="16" width="55" height="38" forecolor="#FFFFFF" uuid="adb44107-e81d-4ceb-994c-cb68abe8485f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[Resolved]]></text>
+				<text><![CDATA[Issues]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
 			<frame>
 				<reportElement style="style1" x="0" y="0" width="555" height="20" uuid="1cc876d7-03e0-4ed2-aa4d-1537eec8173c"/>
 				<textField pattern="dd.MM.yyyy" isBlankWhenNull="true">
@@ -348,7 +388,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[String.format("%d:%02d", $P{totalTimeSpent}/60, $P{totalTimeSpent}%60)]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" evaluationTime="Report">
 				<reportElement x="275" y="22" width="55" height="20" uuid="80fcc4a0-6cf6-444c-9915-5a284c74108d">
 					<printWhenExpression><![CDATA[$V{totalActuality}!=0]]></printWhenExpression>
 				</reportElement>

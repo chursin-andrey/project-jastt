@@ -26,6 +26,11 @@ import com.jastt.business.services.jira.JiraClientException;
 
 public class JiraClient {
 	
+	public static final HashSet<String> SEARCH_REST_FIELDS = new HashSet<String>(
+			Arrays.asList(new String[] { "project", "summary", "issuetype",
+					"status", "created", "updated", "priority", "timetracking",
+					"versions", "assignee", "worklog", "duedate", "resolved", "resolutiondate", "self" }));
+
 	private static final Logger LOG = LoggerFactory.getLogger(JiraClient.class);
 	
 	private URI serverUrl;
@@ -106,11 +111,7 @@ public class JiraClient {
 	}
 	
 	Set<Issue> getAllIssuesByQuery(final String jql, final Integer pageSize) throws JiraClientException {
-		String[] requiredFields = {"project", "summary", "issuetype", "status", "created", "updated", "priority", 
-    			"timetracking", "versions", "assignee", "worklog"};
-    	Set<String> fields = new HashSet<String>(Arrays.asList(requiredFields));
-    	
-    	Set<Issue> issueSet = new LinkedHashSet<Issue>();
+		Set<Issue> issueSet = new LinkedHashSet<Issue>();
     	
     	try {
 			try (JiraRestClient jrc = createJiraRestClient()) {
@@ -118,7 +119,7 @@ public class JiraClient {
 				LOG.trace("Retrieving issues...");
 				int total = 0, startAt = 0;
 	    		do {	    			
-	    			SearchResult results = searchClient.searchJql(jql, pageSize, startAt, fields).claim();
+	    			SearchResult results = searchClient.searchJql(jql, pageSize, startAt, SEARCH_REST_FIELDS).claim();
 		    		total = results.getTotal();
 		    		LOG.trace(String.format("startAt = %d, total = %d", startAt, total));
 		    		Iterable<Issue> issues = results.getIssues();
@@ -141,16 +142,12 @@ public class JiraClient {
 	}
 	
 	public Set<Issue> getSomeIssuesByQuery(final String jql, final Integer maxResults) throws JiraClientException {
-		String[] requiredFields = {"project", "summary", "issuetype", "status", "created", "updated", "priority", 
-    			"timetracking", "versions", "assignee", "worklog"};
-    	Set<String> fields = new HashSet<String>(Arrays.asList(requiredFields));
-    	
-    	Set<Issue> issueSet = new LinkedHashSet<Issue>();    	
+		Set<Issue> issueSet = new LinkedHashSet<Issue>();    	
     	
     	try {
 			try (JiraRestClient jrc = createJiraRestClient()) {
 				SearchRestClient searchClient = jrc.getSearchClient();
-				SearchResult results = searchClient.searchJql(jql, maxResults, 0, fields).claim();
+				SearchResult results = searchClient.searchJql(jql, maxResults, 0, SEARCH_REST_FIELDS).claim();
 				Iterable<Issue> issues = results.getIssues();
 	    		for(Issue issue : issues) issueSet.add(issue);
 			}

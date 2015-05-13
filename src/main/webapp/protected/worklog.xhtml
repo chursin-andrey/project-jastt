@@ -31,16 +31,16 @@
 				
 				<h:panelGroup>
 					<p:outputLabel value="Issue type:"/><br/>
-					<p:selectOneMenu id="issueType" value="#{worklogBean.currIssueType}" disabled="#{worklogBean.disableMenu}" styleClass="item">
-						<f:selectItem itemLabel="All" itemValue=""/>
+					<p:selectCheckboxMenu id="issueType" value="#{worklogBean.currIssueType}" disabled="#{worklogBean.disableMenu}" styleClass="item">
+						<!-- <f:selectItem itemLabel="All" itemValue=""/> -->
 						<f:selectItems value="#{worklogBean.issueTypeList}"/>
-					</p:selectOneMenu>
+					</p:selectCheckboxMenu>
 					<br/>
 					<p:outputLabel value="Issue status:"/><br/>
-					<p:selectOneMenu id="issueStatus" value="#{worklogBean.currIssueStatus}" disabled="#{worklogBean.disableMenu}" styleClass="item">
-						<f:selectItem itemLabel="All" itemValue=""/>
+					<p:selectCheckboxMenu id="issueStatus" value="#{worklogBean.currIssueStatus}" disabled="#{worklogBean.disableMenu}" styleClass="item">
+						<!-- <f:selectItem itemLabel="All" itemValue=""/> -->
 						<f:selectItems value="#{worklogBean.issueStatusList}"/>
-					</p:selectOneMenu>
+					</p:selectCheckboxMenu>
 				</h:panelGroup>
 				
 				<h:panelGroup>
@@ -107,9 +107,19 @@
 					<p:column headerText="№">
 						<h:outputText value="#{rowIndex+1}"/>
 					</p:column>
-					<p:column headerText="Date" sortBy="#{worklog.started}">
+					<p:column headerText="Created" sortBy="#{worklog.started}">
 						<h:outputText value="#{worklog.started}">
-							<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+							<f:convertDateTime pattern="dd.MM.yyyy"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Due Date" sortBy="#{worklog.issue.due}">
+						<h:outputText value="#{worklog.issue.due}">
+							<f:convertDateTime pattern="dd.MM.yyyy"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Resolved" sortBy="#{worklog.issue.resolved}">
+						<h:outputText value="#{worklog.issue.resolved}">
+							<f:convertDateTime pattern="dd.MM.yyyy"/>
 						</h:outputText>
 					</p:column>
 					<p:column headerText="Member" sortBy="#{worklog.author}">
@@ -117,7 +127,7 @@
 					</p:column>		
 					
 					<p:column headerText="Issue Key" sortBy="#{worklog.issue.key}" sortFunction="#{reportBean.sortInNaturalOrder}">
-						<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}" styleClass="out-link">
+						<h:outputLink value="#{worklog.issue.url}" target="blank" styleClass="out-link">
 							#{worklog.issue.key}
 						</h:outputLink>
 					</p:column>
@@ -130,7 +140,7 @@
 					</p:column>
 					
 					<p:column headerText="Issue Summary" sortBy="#{worklog.issue.summary}">
-						<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}"  target="blank" styleClass="out-link">
+						<h:outputLink value="#{worklog.issue.url}" target="blank" styleClass="out-link">
 							#{worklog.issue.summary}
 						</h:outputLink>
 					</p:column>
@@ -150,13 +160,13 @@
 						<h:outputText value="#{worklogBean.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 						
 						<div class="top-export-buttons-panel">
-							<h:commandButton  actionListener="#{worklogBean.exportWorklogReport}"  image="/resources/img/pdf32.png" styleClass="export-button">
+							<h:commandButton  actionListener="#{worklogBean.exportWorklogReport}"  image="/resources/img/pdf32.png" styleClass="export-button" title="Issue report PDF">
 								<f:param name="reportFormat" value="pdf"/>
 							</h:commandButton>
-							<h:commandButton  actionListener="#{worklogBean.exportWorklogReport}"  image="/resources/img/xls32.png" styleClass="export-button">
+							<h:commandButton  actionListener="#{worklogBean.exportWorklogReport}"  image="/resources/img/xls32.png" styleClass="export-button" title="Issue report XLS">
 								<f:param name="reportFormat" value="xls"/>
 							</h:commandButton>
-							<h:commandButton actionListener="#{worklogBean.exportWorklogReport}" image="/resources/img/xlsx32.png" styleClass="export-button">
+							<h:commandButton actionListener="#{worklogBean.exportWorklogReport}" image="/resources/img/xlsx32.png" styleClass="export-button" title="Issue report XLSX">
 								<f:param name="reportFormat" value="xlsx"/>
 							</h:commandButton>
 						</div>
@@ -175,6 +185,9 @@
 					<p:column headerText="Spent (h:mm)" sortBy="#{report.totalTimeSpent}">
 						<h:outputText  value="#{report.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
 					</p:column>
+					<p:column headerText="Actuality (%)" sortBy="#{report.actuality}">
+						<h:outputText  value="#{report.actuality}"/>
+					</p:column>
 					
 					<p:rowExpansion>
 						
@@ -189,7 +202,7 @@
 							</p:column>	
 							
 							<p:column headerText="Issue Key" sortBy="#{worklog.issue.key}" sortFunction="#{reportBean.sortInNaturalOrder}">
-								<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}" styleClass="out-link">
+								<h:outputLink value="#{worklog.issue.url}" target="blank" styleClass="out-link">
 									#{worklog.issue.key}
 								</h:outputLink>
 							</p:column>
@@ -202,7 +215,7 @@
 							</p:column>
 							
 							<p:column headerText="Issue Summary" sortBy="#{worklog.issue.summary}">
-								<h:outputLink value="#{worklog.issue.project.server.url}/browse/#{worklog.issue.key}"  target="blank" styleClass="out-link">
+								<h:outputLink value="#{worklog.issue.url}" target="blank" styleClass="out-link">
 									#{worklog.issue.summary}
 								</h:outputLink>
 							</p:column>

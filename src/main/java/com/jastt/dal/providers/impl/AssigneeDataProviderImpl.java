@@ -47,10 +47,10 @@ public class AssigneeDataProviderImpl extends BaseDataProviderImpl<AssigneeEntit
 				resultList.add(asgn);
 			}
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while getting Assignee", ex.getMessage());
+        	LOG.error("Hibernate error occured while getting Assignee", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Hibernate error occured while getting Assignee", ex.getMessage());
+			LOG.error("Hibernate error occured while getting Assignee", ex);
 			throw new DaoException(ex);
 		}
 		return resultList;

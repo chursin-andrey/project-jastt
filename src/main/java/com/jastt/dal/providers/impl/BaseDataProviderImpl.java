@@ -70,10 +70,10 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
             }
             result.setTotalSize(rowsCount);
         } catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while getting objects", ex.getMessage());
+        	LOG.error("Hibernate error occured while getting objects", ex);
         	throw new DaoException(ex);
         } catch (Exception ex) {
-        	LOG.error("Unknown error occured while getting objects", ex.getMessage());
+        	LOG.error("Unknown error occured while getting objects", ex);
         	throw new DaoException(ex);
         }
 
@@ -90,10 +90,10 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 			session.saveOrUpdate(dataEntity);
 			entity.setId(dataEntity.getId());
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while creating or updating data entity", ex.getMessage());	
+        	LOG.error("Hibernate error occured while creating or updating data entity", ex);	
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while creating or updating data entity", ex.getMessage());
+			LOG.error("Unknown error occured while creating or updating data entity", ex);
 			throw new DaoException(ex);
 		}
 	}
@@ -112,10 +112,10 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 				businessEntity = mappingService.map(dalEntity, domainEntityClass);
 			}
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while loading business entity", ex.getMessage());
+        	LOG.error("Hibernate error occured while loading business entity", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while loading business entity", ex.getMessage());
+			LOG.error("Unknown error occured while loading business entity", ex);
 			throw new DaoException(ex);
 		}
 		return businessEntity;
@@ -130,10 +130,10 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 			T dataEntity = mappingService.map(entity, dalEntityClass);
 			session.merge(dataEntity);
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while creating or updating data entity", ex.getMessage());	
+        	LOG.error("Hibernate error occured while creating or updating data entity", ex);	
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while creating or updating data entity", ex.getMessage());
+			LOG.error("Unknown error occured while creating or updating data entity", ex);
 			throw new DaoException(ex);
 		}
 		
@@ -148,10 +148,10 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 			T dataEntity = mappingService.map(entity, dalEntityClass);
 			session.delete(dataEntity);
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while creating or updating data entity", ex.getMessage());	
+        	LOG.error("Hibernate error occured while creating or updating data entity", ex);	
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while creating or updating data entity", ex.getMessage());
+			LOG.error("Unknown error occured while creating or updating data entity", ex);
 			throw new DaoException(ex);
 		}
 		
@@ -173,10 +173,10 @@ public abstract class BaseDataProviderImpl<T extends GenericDalEntity<ID>,
 				businessEntities.add(businessEntity);
 			}
 		} catch (HibernateException ex) {
-        	LOG.error("Hibernate error occured while loading business entities", ex.getMessage());
+        	LOG.error("Hibernate error occured while loading business entities", ex);
         	throw new DaoException(ex);
 		} catch (Exception ex) {
-			LOG.error("Unknown error occured while loading business entities", ex.getMessage());
+			LOG.error("Unknown error occured while loading business entities", ex);
 			throw new DaoException(ex);
 		}
 		

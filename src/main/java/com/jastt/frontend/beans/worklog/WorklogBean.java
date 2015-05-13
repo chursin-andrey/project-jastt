@@ -9,9 +9,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -71,8 +73,8 @@ public class WorklogBean implements Serializable {
 	//values of UI components
 	private String currProjectName = "";
 	private List<String> currAuthors = new ArrayList<String>();
-	private String currIssueType = "";
-	private String currIssueStatus = "";
+	private Set<String> currIssueType = new HashSet<String>();
+	private Set<String> currIssueStatus = new HashSet<String>();
 	private String currTimeSelector = "dateList";
 	private String currPredefinedDate = PredefinedDateEnum.ALL_TIME.getDescription();
 	private Date calendarFromDate;
@@ -216,10 +218,11 @@ public class WorklogBean implements Serializable {
 		if (!currAuthors.isEmpty()) {
 			reportParams.put("assignees", currAuthors.toString());
 		}
-		if (!currIssueType.isEmpty()) reportParams.put("issueType", currIssueType);
-		if (!currIssueStatus.isEmpty()) reportParams.put("status", currIssueStatus);
+		if (!currIssueType.isEmpty()) reportParams.put("issueType", currIssueType.toString());
+		if (!currIssueStatus.isEmpty()) reportParams.put("status", currIssueStatus.toString());
 		reportParams.put("totalTimeSpent", getTotalTimeSpent());
-		
+
+		if (currTimeSelector !=null)
 		switch (currTimeSelector) {
 			case "dateList":
 				reportParams.put("predefinedTimePeriod", currPredefinedDate);
@@ -259,10 +262,10 @@ public class WorklogBean implements Serializable {
 		currAuthors.clear();
 		authorList.clear();
 		
-		currIssueType = "";
+		currIssueType.clear();;
 		issueTypeList.clear();
 		
-		currIssueStatus = "";
+		currIssueStatus.clear();
 		issueStatusList.clear();
 		
 		currTimeSelector = "dateList";
@@ -346,19 +349,19 @@ public class WorklogBean implements Serializable {
 		this.issueStatusList = issueStatusList;
 	}*/
 
-	public String getCurrIssueType() {
+	public Set<String> getCurrIssueType() {
 		return currIssueType;
 	}
 
-	public void setCurrIssueType(String currIssueType) {
+	public void setCurrIssueType(Set<String> currIssueType) {
 		this.currIssueType = currIssueType;
 	}
 
-	public String getCurrIssueStatus() {
+	public Set<String> getCurrIssueStatus() {
 		return currIssueStatus;
 	}
 
-	public void setCurrIssueStatus(String currIssueStatus) {
+	public void setCurrIssueStatus(Set<String> currIssueStatus) {
 		this.currIssueStatus = currIssueStatus;
 	}
 

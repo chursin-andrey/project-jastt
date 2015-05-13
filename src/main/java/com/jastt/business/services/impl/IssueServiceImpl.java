@@ -4,18 +4,22 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.jws.soap.SOAPBinding.Use;
 import javax.persistence.criteria.From;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Permission;
@@ -85,29 +89,29 @@ public class IssueServiceImpl implements IssueService, Serializable {
 	}
 	
 	@Override
-	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees,
-			IssueTypeEnum issueType, Date fromDate, Date toDate) {
+	public List<Issue> getIssues(Project project, Collection<IssueStatusEnum> status, List<Assignee> assignees,
+			Collection<IssueTypeEnum> issueType, Date fromDate, Date toDate) {
 		
 		List<Issue> issues = new ArrayList<Issue>();
 		if(project == null) return null;
 		try{
-			if(assignees != null){
+			if(assignees != null && !assignees.isEmpty()){
 				for(Assignee asgn : assignees)
 					issues.addAll(issueDataProvider.getIssues(project, status, asgn, issueType, fromDate, toDate));
 			} else
 				issues = issueDataProvider.getIssues(project, status, null, issueType, fromDate, toDate);
 			return issues;	
 		
-		}catch(Exception unknownException){
-			logger.error("Unknown exception happened during execution of getIssues method. ",unknownException.getMessage());
+		}catch(Exception e){
+			logger.error("Unknown exception happened during execution of getIssues method. ",e);
 			return issues;	
 		}	
 	}
 
 	
 	@Override
-	public List<Issue> getIssues(Project project, IssueStatusEnum status, List<Assignee> assignees,
-			IssueTypeEnum issueType, PredefinedDateEnum period) {
+	public List<Issue> getIssues(Project project, Collection<IssueStatusEnum> status, List<Assignee> assignees,
+			Collection<IssueTypeEnum> issueType, PredefinedDateEnum period) {
 		
 		Calendar calendar = Calendar.getInstance();	
 		Date fromDate = calendar.getTime();
@@ -152,6 +156,11 @@ public class IssueServiceImpl implements IssueService, Serializable {
 				fromDate = calendar.getTime();
 				break;
 			}
+			case LAST_FOUR_WEEKS:{
+				calendar.add(Calendar.DATE, - 28);
+				fromDate = calendar.getTime();
+				break;
+			}
 			case THIS_MONTH:{
 				calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
 				fromDate = calendar.getTime();
@@ -181,6 +190,10 @@ public class IssueServiceImpl implements IssueService, Serializable {
 		return getIssues(project, status, assignees, issueType, fromDate, toDate);
 	}
 
+	/**
+	 * Get issues from Jira and store them to DB
+	 * FIXME: two functions - get and store; probably out of contract
+	 */
 	@Override
 	public void update(User user) throws JiraClientException {
 		try{
@@ -239,10 +252,10 @@ public class IssueServiceImpl implements IssueService, Serializable {
 			}
 			
 			
-		} catch(JiraClientException jiraClientException){
-			logger.error("JiraClientException happened during execution of update method. CODE: "+jiraClientException.getStatusCode());
-		}catch(Exception unknownException){
-			logger.error("Unknown exception happened during execution of update method. ",unknownException.getMessage());
+		} catch(JiraClientException e){
+			logger.error("JiraClientException happened during execution of update method. CODE: "+e);
+		}catch(Exception e){
+			logger.error("Unknown exception happened during execution of update method. ",e);
 		}
 		
 	}

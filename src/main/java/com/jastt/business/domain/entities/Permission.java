@@ -35,6 +35,10 @@ public class Permission extends PersistentEntity<Integer>{
 	
 	public void setProject(Project project) {
 		this.project = project;
-	}	
-	
+	}
+
+	@Override
+	public String toString() {
+		return user + " " + project;
+	}
 }

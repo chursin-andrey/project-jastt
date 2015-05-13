@@ -3,6 +3,7 @@ package com.jastt.dal.providers;
 
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -27,5 +28,5 @@ public interface IssueDataProvider extends PageableDataProvider<IssueEntity, Iss
 	
 	public Issue getLatestIssue(Project  projects);
 	
-	public List<Issue> getIssues(Project project, IssueStatusEnum status, Assignee assignee, IssueTypeEnum issueType, Date fromDate, Date toDate);
+	public List<Issue> getIssues(Project project, Collection<IssueStatusEnum> status, Assignee assignee, Collection<IssueTypeEnum> issueType, Date fromDate, Date toDate);
 }

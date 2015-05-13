@@ -49,7 +49,7 @@ public class LoginBean implements Serializable {
 	private static final Logger LOG = LoggerFactory.getLogger(LoginBean.class);
 	private String login;
 	private String password;
-	private String url;
+	private String url = "https://seu30.gdc-sbr01.t-systems.com/jira";
 	private boolean adminSwitch;
 	private boolean rememberMe;
 
@@ -74,7 +74,7 @@ public class LoginBean implements Serializable {
 			try{
 				fc.getExternalContext().redirect("/project-jastt/protected/main.xhtml");
 			}catch(Exception e){
-				LOG.error("Exception happened during execution of checkState() method. ", e.getMessage());
+				LOG.error("Exception happened during execution of checkState() method. ", e);
 			}
 			
 		}
@@ -107,17 +107,17 @@ public class LoginBean implements Serializable {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
 					"Authentication error!", "Wrong username or password!");
 			fc.addMessage(null,fm);
-			LOG.error("Incorrect Credentials Exception happened during execution of doLogin method. ", ice.getMessage());
+			LOG.error("Incorrect Credentials Exception happened during execution of doLogin method. ", ice);
 			
 		} catch (AuthenticationException ae) {
 			
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
 					"Authentication error!", "Wrong username or password!");
 			fc.addMessage(null,fm);
-			LOG.error("Authentication exception happened during execution of doLogin method. ",ae.getMessage());
+			LOG.error("Authentication exception happened during execution of doLogin method. ",ae);
 			
 		}catch(Exception e){
-			LOG.error("Unknown  exception happened during execution of doLogin method. ", e.getMessage());
+			LOG.error("Unknown  exception happened during execution of doLogin method. ", e);
 		
 		} finally {
 			token.clear();

@@ -1,13 +1,15 @@
 package com.jastt.business.services.jira.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
+import com.atlassian.jira.rest.client.api.domain.IssueField;
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
 import com.jastt.business.domain.entities.Project;
@@ -19,6 +21,7 @@ import com.jastt.business.services.jira.JiraIssueService;
 //@Service("jiraIssueService")
 public class JiraIssueServiceImpl implements JiraIssueService {
 	private static final Logger LOG = LoggerFactory.getLogger(JiraIssueServiceImpl.class);
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	
 	@Override
 	public Set<Issue> getAllIssuesForProject(User user, Project project) throws JiraClientException {
@@ -60,7 +63,7 @@ public class JiraIssueServiceImpl implements JiraIssueService {
 		return issueSet;
 	}
 
-	static Issue convertJiraIssueToIssueEntity(com.atlassian.jira.rest.client.api.domain.Issue jiraIssue) {
+	private static Issue convertJiraIssueToIssueEntity(com.atlassian.jira.rest.client.api.domain.Issue jiraIssue) {
 		Issue issue = new Issue();
 		
 		issue.setKey(jiraIssue.getKey());
@@ -69,6 +72,19 @@ public class JiraIssueServiceImpl implements JiraIssueService {
 		issue.setStatus(jiraIssue.getStatus().getName());
 		issue.setCreated(jiraIssue.getCreationDate().toDate());
 		issue.setUpdated(jiraIssue.getUpdateDate().toDate());
+		DateTime dueDate = jiraIssue.getDueDate();
+		issue.setDue(dueDate==null?null:dueDate.toDate());
+		IssueField resolved = jiraIssue.getFieldByName("Resolved");
+		if (resolved != null) {
+			Object resolvedValue = resolved.getValue();
+			if (resolvedValue instanceof String) {
+				try {
+					issue.setResolved(dateFormat.parse( (String) resolvedValue));
+				} catch (ParseException e) {
+					LOG.error(e.getMessage());
+				}
+			}
+		}
 		
 		if (jiraIssue.getPriority() != null) issue.setPriority(jiraIssue.getPriority().getName());
 		if (jiraIssue.getTimeTracking() != null)
