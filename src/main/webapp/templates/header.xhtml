@@ -22,8 +22,8 @@
 		
 		<h:panelGroup id="menu" rendered="#{menuBean.visibleForAuthenticated}" styleClass="menu">
 			<p:commandLink value="Admin Panel" styleClass="menuItem" rendered="#{menuBean.visibleForAdmin}" action="/protected/admin.xhtml?faces-redirect=true"/>	
-			<p:commandLink value="Issues" styleClass="menuItem" rendered="#{menuBean.visibleForAuthenticated}" action="/protected/main.xhtml?faces-redirect=true"/>									
-			<p:commandLink value="Worklog" styleClass="menuItem" rendered="#{menuBean.visibleForAuthenticated}" action="/protected/worklog.xhtml?faces-redirect=true"/>
+			<p:commandLink value="Issues" styleClass="menuItem" rendered="#{menuBean.visibleForAuthenticated}" disabled="#{issuesPage}" action="/protected/main.xhtml?faces-redirect=true"/>									
+			<p:commandLink value="Worklog" styleClass="menuItem" rendered="#{menuBean.visibleForAuthenticated}" disabled="#{worklogsPage}" action="/protected/worklog.xhtml?faces-redirect=true"/>
 			<p:commandLink value="LogOut" action="#{loginBean.doLogout}" styleClass="menuItem" rendered="#{menuBean.visibleForAuthenticated}"/>
 		</h:panelGroup>
 		
