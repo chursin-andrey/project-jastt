@@ -68,7 +68,9 @@ public class WorklogBean implements Serializable {
 	private List<String> issueTypeList = new ArrayList<String>();
 	private List<String> issueStatusList = new ArrayList<String>();
 	private List<Worklog> worklogList = new ArrayList<Worklog>();
-	private List<WorklogReportItem> worklogReportList = new ArrayList<WorklogReportItem>();
+	private List<WorklogReportItem> byUserReportList = new ArrayList<WorklogReportItem>();
+	private List<WorklogReportItem> byComponentReportList = new ArrayList<WorklogReportItem>();
+	private List<WorklogReportItem> byTypeReportList = new ArrayList<WorklogReportItem>();
 	private List<String> predefinedDateList = new ArrayList<String>();
 	//values of UI components
 	private String currProjectName = "";
@@ -107,12 +109,17 @@ public class WorklogBean implements Serializable {
 	}
 	
 	public void showButtonClick() {
-		worklogList.clear(); worklogReportList.clear();
+		worklogList.clear();
+		byUserReportList.clear();
+		byTypeReportList.clear();
+		byComponentReportList.clear();
 		Project currProject = findProjectByName(currProjectName);
 		if (currProject != null) {
 			WorklogSearchOptions searchOptions = fillSearchOptions(currProject);
 			worklogList = worklogService.getWorklogs(searchOptions);
-			generateWorklogReport();
+			generateByUserList();
+			generateByTypeList();
+			generateByComponentList();
 		}
 	}
 
@@ -150,7 +157,9 @@ public class WorklogBean implements Serializable {
 	
 	public void clearButtonClick() {
 		worklogList.clear(); 
-		worklogReportList.clear();
+		byUserReportList.clear();
+		byComponentReportList.clear();
+		byTypeReportList.clear();
 	}
 	
 	public void updateButtonClick() throws JiraClientException {
@@ -160,7 +169,11 @@ public class WorklogBean implements Serializable {
 		
 		issueService.update(user);
 		currProjectName = "";
-		resetControls(); worklogList.clear(); worklogReportList.clear();
+		resetControls();
+		worklogList.clear();
+		byUserReportList.clear();
+		byComponentReportList.clear();
+		byTypeReportList.clear();
 		init();
 	}
 	
@@ -242,8 +255,8 @@ public class WorklogBean implements Serializable {
 		return reportParams;
 	}
 	
-	private void generateWorklogReport() {
-		worklogReportList = new ArrayList<WorklogReportItem>();
+	private void generateByUserList() {
+		byUserReportList = new ArrayList<WorklogReportItem>();
 		
 		Map<String, List<Worklog>> authorWorklogsMap = new LinkedHashMap<String, List<Worklog>>();
 		for (Worklog worklog : worklogList) {
@@ -254,8 +267,46 @@ public class WorklogBean implements Serializable {
 		
 		for (String author : authorWorklogsMap.keySet()) {
 			WorklogReportItem reportItem = new WorklogReportItem(author, authorWorklogsMap.get(author));
-			worklogReportList.add(reportItem);
+			byUserReportList.add(reportItem);
 		}
+
+		Collections.sort(byUserReportList, WorklogReportItem.getAuthorComparator());
+	}
+	
+	private void generateByTypeList() {
+		byTypeReportList = new ArrayList<WorklogReportItem>();
+		
+		Map<String, List<Worklog>> typeWorklogsMap = new LinkedHashMap<String, List<Worklog>>();
+		for (Worklog worklog : worklogList) {
+			String author = worklog.getIssue().getIssueType();
+			if (!typeWorklogsMap.containsKey(author)) typeWorklogsMap.put(author, new ArrayList<Worklog>());
+			typeWorklogsMap.get(author).add(worklog);
+		}
+		
+		for (String author : typeWorklogsMap.keySet()) {
+			WorklogReportItem reportItem = new WorklogReportItem(author, typeWorklogsMap.get(author));
+			byTypeReportList.add(reportItem);
+		}
+
+		Collections.sort(byUserReportList, WorklogReportItem.getAuthorComparator());
+	}
+	
+	private void generateByComponentList() {
+		byComponentReportList = new ArrayList<WorklogReportItem>();
+		
+		Map<String, List<Worklog>> typeWorklogsMap = new LinkedHashMap<String, List<Worklog>>();
+		for (Worklog worklog : worklogList) {
+			String author = worklog.getIssue().getComponent(); 
+			if (!typeWorklogsMap.containsKey(author)) typeWorklogsMap.put(author, new ArrayList<Worklog>());
+			typeWorklogsMap.get(author).add(worklog);
+		}
+		
+		for (String author : typeWorklogsMap.keySet()) {
+			WorklogReportItem reportItem = new WorklogReportItem(author, typeWorklogsMap.get(author));
+			byComponentReportList.add(reportItem);
+		}
+
+		Collections.sort(byUserReportList, WorklogReportItem.getAuthorComparator());
 	}
 	
 	private void resetControls() {
@@ -413,8 +464,8 @@ public class WorklogBean implements Serializable {
 		this.disableDateList = disableDateList;
 	}
 	
-	public List<WorklogReportItem> getWorklogReportList() {
-		return worklogReportList;
+	public List<WorklogReportItem> getByUserReportList() {
+		return byUserReportList;
 	}
 
 	/*public void setWorklogReportList(List<WorklogReportItem> worklogReportList) {
@@ -427,6 +478,14 @@ public class WorklogBean implements Serializable {
 			total += worklog.getTimeSpent();
 		}
 		return total;
+	}
+
+	public List<WorklogReportItem> getByComponentReportList() {
+	    return byComponentReportList;
+	}
+
+	public List<WorklogReportItem> getByTypeReportList() {
+	    return byTypeReportList;
 	}
 	
 }

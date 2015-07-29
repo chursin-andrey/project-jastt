@@ -1,7 +1,10 @@
 package com.jastt.business.domain.entities;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.joda.time.DateTime;
@@ -28,6 +31,7 @@ public class Issue extends PersistentEntity<Integer>{
 	private String summary;
 	private int timeSpent;
 	private Set<Worklog> worklogs = new HashSet<Worklog>(0);
+	private String component;
 	
 	public Issue(){
 		
@@ -186,6 +190,16 @@ public class Issue extends PersistentEntity<Integer>{
 	}
 
 
+	public String getComponent() {
+	    return component;
+	}
+
+
+	public void setComponent(String component) {
+	    this.component = component;
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -222,10 +236,70 @@ public class Issue extends PersistentEntity<Integer>{
 		return key + " " + summary;
 	}
 
-
 	public String getUrl() {
 		String serverUrl = project.getServer().getUrl();
 		return serverUrl + (serverUrl.endsWith("/") ? "" : "/") + "browse/"
 				+ key;
+	}
+
+	public static Comparator<Issue> getTypeComparator() {
+	    return new IssueTypeComparator();
+	}
+
+	public static Comparator<Issue> getNameComparator() {
+	    return new NameComparator();
+	}
+
+	public static Comparator<Issue> getComponentComparator() {
+	    return new ComponentComparator();
+	}
+
+	private static final class IssueTypeComparator implements Comparator<Issue> {
+	    @Override
+	    public int compare(Issue o1, Issue o2) {
+	    	if (o1 == o2) {
+	    		return 0;
+	    	}
+	    	if (o1 == null || o1.issueType == null) {
+	    		return -1;
+	    	}
+	    	if (o2 == null || o2.issueType == null) {
+	    		return 1;
+	    	}
+	    	return o1.issueType.compareTo(o2.issueType);
+	    }
+	}
+
+	private static final class NameComparator implements Comparator<Issue> {
+	    @Override
+	    public int compare(Issue i1, Issue i2) {	
+	    	if (i1 == i2) {
+	    		return 0;
+	    	}
+	    	if (i1 == null || i1.assignee == null) {
+	    		return -1;
+	    	}
+	    	if (i2 == null || i2.assignee == null) {
+	    		return 1;
+	    	}
+	    	return i1.assignee.getName().compareTo(i2.assignee.getName());
+	    }
+	}
+
+	// TODO
+	private static final class ComponentComparator implements Comparator<Issue> {
+	    @Override
+	    public int compare(Issue o1, Issue o2) {
+	    	if (o1 == o2) {
+	    		return 0;
+	    	}
+	    	if (o1 == null || o1.component == null) {
+	    		return -1;
+	    	}
+	    	if (o2 == null || o2.component == null) {
+	    		return 1;
+	    	}
+	    	return o1.component.compareTo(o2.component);
+	    }
 	}
 }

@@ -29,7 +29,7 @@ public class JiraClient {
 	public static final HashSet<String> SEARCH_REST_FIELDS = new HashSet<String>(
 			Arrays.asList(new String[] { "project", "summary", "issuetype",
 					"status", "created", "updated", "priority", "timetracking",
-					"versions", "assignee", "worklog", "duedate", "resolved", "resolutiondate", "self" }));
+					"versions", "assignee", "worklog", "duedate", "resolved", "resolutiondate", "self", "components" }));
 
 	private static final Logger LOG = LoggerFactory.getLogger(JiraClient.class);
 	

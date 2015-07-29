@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,6 +79,12 @@ public class ReportBean implements Serializable{
 	private int allTime;
 	
 	private List<Issue> reportIssues;
+	private List<Issue> reportIssuesByUser;
+	private List<IssueGrouping> byUserGrouping;
+	private List<Issue> reportIssuesByType;
+	private List<IssueGrouping> byTypeGrouping;
+	private List<Issue> reportIssuesByComponent;
+	private List<IssueGrouping> byComponentGrouping;
 	private List<Project> reportProjects;
 	private List<Assignee> reportAssignees;
 
@@ -150,12 +155,18 @@ public class ReportBean implements Serializable{
 		if(project == null) return;
 		Collection<IssueTypeEnum> type = null;
 		Collection<IssueStatusEnum> issueStatus = null;
-		if(reportIssues != null) reportIssues.clear();
+//		if(reportIssues != null) reportIssues.clear();
+//		if(reportIssuesByUser != null) reportIssuesByUser.clear();
+//		if(reportIssuesByType != null) reportIssuesByType.clear();
+//		if(reportIssuesByComponent != null) reportIssuesByComponent.clear();
 
 		if(issueType != null) type = IssueTypeEnum.getTypes(issueType);
 		//TODO the enum is not needed. getIssues() can work with Strings
 		if(status != null && !status.isEmpty())	issueStatus = getTypes();
-		reportIssues = new ArrayList<Issue>();
+//		reportIssues = new ArrayList<Issue>();
+//		reportIssuesByUser = new ArrayList<Issue>();
+//		reportIssuesByType = new ArrayList<Issue>();
+//		reportIssuesByComponent = new ArrayList<Issue>();
 		
 		reportAssignees = new ArrayList<Assignee>();
 		if (assignees_name != null)
@@ -171,13 +182,70 @@ public class ReportBean implements Serializable{
 			reportIssues = issueService.getIssues(project, issueStatus, reportAssignees, type, PredefinedDateEnum.getType(predefinedDate));
 
 						
+		reportIssuesByUser = new ArrayList<Issue>(reportIssues);
+		reportIssuesByType = new ArrayList<Issue>(reportIssues);
+		reportIssuesByComponent = new ArrayList<Issue>(reportIssues);
 		
 		addAssigneesName();
-		sortIssues(reportIssues);
+		Collections.sort(reportIssues, Issue.getNameComparator());
+		Collections.sort(reportIssuesByUser, Issue.getNameComparator());
+		byUserGrouping = createByUserGrouping(reportIssuesByUser);
+		Collections.sort(reportIssuesByType, Issue.getTypeComparator());
+		byTypeGrouping = createByTypeGrouping(reportIssuesByType);
+		Collections.sort(reportIssuesByComponent, Issue.getComponentComparator());
+		byComponentGrouping = createByComponentGrouping(reportIssuesByComponent);
 		showAllTime(reportIssues);
 		addMapIssue(reportIssues);
 		
 	}
+
+        private List<IssueGrouping> createByTypeGrouping(List<Issue> reportIssues) {
+            HashMap<String, IssueGrouping> groupings = new HashMap<String, IssueGrouping>();
+            for (Issue issue : reportIssues) {
+        	String name = issue.getIssueType();
+        	IssueGrouping issueGrouping = groupings.get(name);
+        	if (issueGrouping==null) {
+        	    issueGrouping = new IssueGrouping(name);
+        	    groupings.put(name, issueGrouping);
+        	}
+        	issueGrouping.addIssue(issue);
+	    }
+            List<IssueGrouping> arrayList = new ArrayList<IssueGrouping>(groupings.values());
+            Collections.sort(arrayList);
+	    return arrayList;
+        }
+
+        private List<IssueGrouping> createByComponentGrouping(List<Issue> reportIssues) {
+            HashMap<String, IssueGrouping> groupings = new HashMap<String, IssueGrouping>();
+            for (Issue issue : reportIssues) {
+        	String name = issue.getComponent();
+        	IssueGrouping issueGrouping = groupings.get(name);
+        	if (issueGrouping==null) {
+        	    issueGrouping = new IssueGrouping(name);
+        	    groupings.put(name, issueGrouping);
+        	}
+        	issueGrouping.addIssue(issue);
+	    }
+            List<IssueGrouping> arrayList = new ArrayList<IssueGrouping>(groupings.values());
+            Collections.sort(arrayList);
+	    return arrayList;
+        }
+
+        private List<IssueGrouping> createByUserGrouping(List<Issue> reportIssues) {
+            HashMap<String, IssueGrouping> groupings = new HashMap<String, IssueGrouping>();
+            for (Issue issue : reportIssues) {
+        	String name = issue.getAssignee().getName();
+        	IssueGrouping issueGrouping = groupings.get(name);
+        	if (issueGrouping==null) {
+        	    issueGrouping = new IssueGrouping(name);
+        	    groupings.put(name, issueGrouping);
+        	}
+        	issueGrouping.addIssue(issue);
+	    }
+            List<IssueGrouping> arrayList = new ArrayList<IssueGrouping>(groupings.values());
+            Collections.sort(arrayList);
+	    return arrayList;
+        }
 
 	private Collection<IssueStatusEnum> getTypes() {
 		Collection<IssueStatusEnum> issueStatus = new HashSet<IssueStatusEnum>();
@@ -192,17 +260,6 @@ public class ReportBean implements Serializable{
 		for(Assignee as : assignees) {
 			as.getName(); //???
 		 }
-	}
-	
-	private void sortIssues(List<Issue> report) {
-		
-		Collections.sort(report, new Comparator<Issue>() {
-
-			@Override
-			public int compare(Issue i1, Issue i2) {	
-				return i1.getAssignee().getName().compareTo(i2.getAssignee().getName());
-			}
-		});
 	}
 	
 	public int showAllTime(List<Issue> list) {
@@ -239,6 +296,9 @@ public class ReportBean implements Serializable{
 	}
 	public void cancelAction(){
 		reportIssues.clear();
+		reportIssuesByUser.clear();
+		reportIssuesByType.clear();
+		reportIssuesByComponent.clear();
 		setAllTime(0);
 		mapAssigneesIssues.clear();
 		entries.clear();
@@ -292,7 +352,7 @@ public class ReportBean implements Serializable{
 		FacesContext.getCurrentInstance().responseComplete();
 	}
 
-	public void buildByUserReport(ActionEvent actionEvent) throws JRException, IOException {		
+	public void exportByUserList(ActionEvent actionEvent) throws JRException, IOException {		
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String reportFormat = params.get("reportFormat");
 		if (!Arrays.asList("pdf", "xls", "xlsx").contains(reportFormat)) return;
@@ -305,15 +365,77 @@ public class ReportBean implements Serializable{
 		switch (reportFormat) {
 			case "pdf":
 				response.addHeader("Content-disposition","attachment; filename=byUserReport.pdf");
-				reportingService.exportToPdf("/pdfByUserReport.jasper", outputStream, reportParams, reportIssues);
+				reportingService.exportToPdf("/pdfByUserReport.jasper", outputStream, reportParams, reportIssuesByUser);
 				break;
 			case "xls":
 				response.addHeader("Content-disposition","attachment; filename=byUserReport.xls");
-				reportingService.exportToXls("/xlsByUserReport.jasper", outputStream, reportParams, reportIssues);
+				reportingService.exportToXls("/xlsByUserReport.jasper", outputStream, reportParams, reportIssuesByUser);
 				break;
 			case "xlsx":
 				response.addHeader("Content-disposition","attachment; filename=byUserReport.xlsx");
-				reportingService.exportToXlsx("/xlsByUserReport.jasper", outputStream, reportParams, reportIssues);
+				reportingService.exportToXlsx("/xlsByUserReport.jasper", outputStream, reportParams, reportIssuesByUser);
+			default: 
+				break;
+		}
+		
+		outputStream.flush();
+		outputStream.close();
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+	
+	public void exportByTypeList(ActionEvent actionEvent) throws JRException, IOException {		
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String reportFormat = params.get("reportFormat");
+		if (!Arrays.asList("pdf", "xls", "xlsx").contains(reportFormat)) return;
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();		
+		ServletOutputStream outputStream = response.getOutputStream();
+		
+		Map<String, Object> reportParams = fillReportParamsMap();
+//		Collections.sort(reportIssues, Issue.getTypeComparator());
+		switch (reportFormat) {
+			case "pdf":
+				response.addHeader("Content-disposition","attachment; filename=byTypeReport.pdf");
+				reportingService.exportToPdf("/pdfByTypeReport.jasper", outputStream, reportParams, reportIssuesByType);
+				break;
+			case "xls":
+				response.addHeader("Content-disposition","attachment; filename=byTypeReport.xls");
+				reportingService.exportToXls("/xlsByTypeReport.jasper", outputStream, reportParams, reportIssuesByType);
+				break;
+			case "xlsx":
+				response.addHeader("Content-disposition","attachment; filename=byTypeReport.xlsx");
+				reportingService.exportToXlsx("/xlsByTypeReport.jasper", outputStream, reportParams, reportIssuesByType);
+			default: 
+				break;
+		}
+		
+		outputStream.flush();
+		outputStream.close();
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+	
+	public void exportByComponentList(ActionEvent actionEvent) throws JRException, IOException {		
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String reportFormat = params.get("reportFormat");
+		if (!Arrays.asList("pdf", "xls", "xlsx").contains(reportFormat)) return;
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();		
+		ServletOutputStream outputStream = response.getOutputStream();
+		
+		Map<String, Object> reportParams = fillReportParamsMap();
+		
+		switch (reportFormat) {
+			case "pdf":
+				response.addHeader("Content-disposition","attachment; filename=byComponentReport.pdf");
+				reportingService.exportToPdf("/pdfByComponentReport.jasper", outputStream, reportParams, reportIssuesByComponent);
+				break;
+			case "xls":
+				response.addHeader("Content-disposition","attachment; filename=byComponentReport.xls");
+				reportingService.exportToXls("/xlsByComponentReport.jasper", outputStream, reportParams, reportIssuesByComponent);
+				break;
+			case "xlsx":
+				response.addHeader("Content-disposition","attachment; filename=byComponentReport.xlsx");
+				reportingService.exportToXlsx("/xlsByComponentReport.jasper", outputStream, reportParams, reportIssuesByComponent);
 			default: 
 				break;
 		}
@@ -570,6 +692,30 @@ public class ReportBean implements Serializable{
 
 	public void setAssigneeTime(int assigneeTime) {
 		this.assigneeTime = assigneeTime;
+	}
+
+	public List<Issue> getReportIssuesByUser() {
+	    return reportIssuesByUser;
+	}
+
+	public List<Issue> getReportIssuesByType() {
+	    return reportIssuesByType;
+	}
+
+	public List<Issue> getReportIssuesByComponent() {
+	    return reportIssuesByComponent;
+	}
+
+	public List<IssueGrouping> getByUserGrouping() {
+	    return byUserGrouping;
+	}
+
+	public List<IssueGrouping> getByTypeGrouping() {
+	    return byTypeGrouping;
+	}
+
+	public List<IssueGrouping> getByComponentGrouping() {
+	    return byComponentGrouping;
 	}
 
 

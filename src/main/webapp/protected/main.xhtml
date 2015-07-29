@@ -97,7 +97,7 @@
 	
 	
 		<p:tabView activeIndex="0" id="tabs" styleClass="tabView">
-			<p:tab title="Issues">
+			<p:tab title="All Issues">
 					<p:dataTable var="details" value="#{reportBean.reportIssues}" id="Details" rowIndexVar="rowIndex" >
 						<f:facet name="header">Total Time Spent (h:mm)              
     						<p:column datasource="Details" trigger="toggler"/>
@@ -113,17 +113,18 @@
 									<h:commandButton actionListener="#{reportBean.exportIssueList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="Issue report XLSX">
 										<f:param name="reportFormat" value="xlsx"/>
 									</h:commandButton>
-                                    <h:outputText value="&#160;&#160;" />
-									<h:commandButton  actionListener="#{reportBean.buildByUserReport}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By user report PDF">
+<!--                                     <h:outputText value="&#160;&#160;" />
+									<h:commandButton  actionListener="# {reportBean.exportByUserList}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By user report PDF">
 										<f:param name="reportFormat" value="pdf"/>
 									</h:commandButton>
-									<h:commandButton  actionListener="#{reportBean.buildByUserReport}"  image="/resources/img/xls32.png" styleClass="export-button" title="By user report XLS">
+									<h:commandButton  actionListener="# {reportBean.exportByUserList}"  image="/resources/img/xls32.png" styleClass="export-button" title="By user report XLS">
 										<f:param name="reportFormat" value="xls"/>
 									</h:commandButton>
-									<h:commandButton actionListener="#{reportBean.buildByUserReport}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By user report XLSX">
+									<h:commandButton actionListener="# {reportBean.exportByUserList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By user report XLSX">
 										<f:param name="reportFormat" value="xlsx"/>
 									</h:commandButton>
-								</div>
+ -->
+ 								</div>
                 			</p:outputPanel>            
             			</f:facet>
             			
@@ -157,7 +158,7 @@
 						<p:column headerText="Status" sortBy="#{details.status}" width="90">
 						 <h:outputText  value="#{details.status}"  />
 						</p:column>
-						<p:column headerText="Key" sortBy="#{details.key}" sortFunction="#{reportBean.sortInNaturalOrder}">			
+						<p:column headerText="Key" sortBy="#{details.key}"><!-- sortFunction="# {reportBean.sortInNaturalOrder}"-->			
 							<h:outputLink value="#{details.url}"  target="blank" styleClass="out-link">#{details.key}</h:outputLink>
 						</p:column>
 						<p:column headerText="Summary" sortBy="#{details.summary}">
@@ -184,14 +185,331 @@
 								<h:commandButton actionListener="#{reportBean.exportIssueList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="Issue report XLSX">
 									<f:param name="reportFormat" value="xlsx"/>
 								</h:commandButton>
+<!-- 
                                 <h:outputText value="&#160;&#160;" />
-								<h:commandButton  actionListener="#{reportBean.buildByUserReport}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By user report PDF">
+								<h:commandButton  actionListener="# {reportBean.exportByUserList}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By user report PDF">
 									<f:param name="reportFormat" value="pdf"/>
 								</h:commandButton>
-								<h:commandButton  actionListener="#{reportBean.buildByUserReport}"  image="/resources/img/xls32.png" styleClass="export-button" title="By user report XLS">
+								<h:commandButton  actionListener="# {reportBean.exportByUserList}"  image="/resources/img/xls32.png" styleClass="export-button" title="By user report XLS">
 									<f:param name="reportFormat" value="xls"/>
 								</h:commandButton>
-								<h:commandButton actionListener="#{reportBean.buildByUserReport}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By user report XLSX">
+								<h:commandButton actionListener="# {reportBean.exportByUserList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By user report XLSX">
+									<f:param name="reportFormat" value="xlsx"/>
+								</h:commandButton>
+ -->
+ 							</div>
+						</f:facet>
+					</p:dataTable>
+			</p:tab>
+
+            <p:tab title="By User">
+					<p:dataTable var="grouping" value="#{reportBean.byUserGrouping}" id="byUserList" rowIndexVar="rowIndex" >
+						<f:facet name="header">Total Time Spent (h:mm)              
+    						<p:column datasource="Details" trigger="toggler"/>
+                			<p:outputPanel>
+                    			<h:outputText value="#{reportBean.allTime}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+               					<div class="top-export-buttons-panel">
+									<h:commandButton  actionListener="#{reportBean.exportByUserList}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By user report PDF">
+										<f:param name="reportFormat" value="pdf"/>
+									</h:commandButton>
+									<h:commandButton  actionListener="#{reportBean.exportByUserList}"  image="/resources/img/xls32.png" styleClass="export-button" title="By user report XLS">
+										<f:param name="reportFormat" value="xls"/>
+									</h:commandButton>
+									<h:commandButton actionListener="#{reportBean.exportByUserList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By user report XLSX">
+										<f:param name="reportFormat" value="xlsx"/>
+									</h:commandButton>
+								</div>
+                			</p:outputPanel>            
+            			</f:facet>
+            			
+					<p:column>
+       					<p:rowToggler />
+   					</p:column>
+            			<p:column headerText="№" >
+            				<h:outputText  value="#{rowIndex+1}"  />
+            			</p:column>
+            			<p:column headerText="User" sortBy="#{grouping.name}">
+            				<h:outputText  value="#{grouping.name}" />
+            			</p:column>
+					<p:column headerText="Number of Issues" sortBy="#{grouping.issuesCount}">
+						<h:outputText  value="#{grouping.issuesCount}"/>
+					</p:column>
+					<p:column headerText="Spent (h:mm)" sortBy="#{grouping.totalTimeSpent}">
+						<h:outputText  value="#{grouping.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+					</p:column>
+
+						<p:rowExpansion>
+							
+							<p:dataTable value="#{grouping.issues}" var="details" rowIndexVar="rowIndex">
+		            			<p:column headerText="№" >
+		            				<h:outputText  value="#{rowIndex+1}"  />
+		            			</p:column>
+		            			<p:column headerText="Created" sortBy="#{details.created}">
+		            				<h:outputText  value="#{details.created}"  >
+		            					<f:convertDateTime pattern="dd.MM.yyyy" />
+		            				 </h:outputText>
+		            			</p:column>
+		            			<p:column headerText="Due Date" sortBy="#{details.due}">
+		            				<h:outputText  value="#{details.due}"  >
+		            					<f:convertDateTime pattern="dd.MM.yyyy" />
+		            				 </h:outputText>
+		            			</p:column>
+		            			<p:column headerText="Resolved" sortBy="#{details.resolved}">
+		            				<h:outputText  value="#{details.resolved}"  >
+		            					<f:convertDateTime pattern="dd.MM.yyyy" />
+		            				 </h:outputText>
+		            			</p:column>
+								<p:column headerText="Assignee" sortBy="#{details.assignee.name}" width="130">
+									<h:outputText  value="#{details.assignee.name}"  />
+		               			</p:column>
+								<p:column headerText="Project"  sortBy="#{details.project.name}" >
+									<h:outputText  value="#{details.project.name}"  />
+								</p:column>
+								<p:column headerText="Type" sortBy="#{details.issueType}">
+									<h:outputText  value="#{details.issueType}"  />
+								</p:column>
+								<p:column headerText="Status" sortBy="#{details.status}" width="90">
+								 <h:outputText  value="#{details.status}"  />
+								</p:column>
+								<p:column headerText="Key" sortBy="#{details.key}"><!-- sortFunction="# {reportBean.sortInNaturalOrder}"-->			
+									<h:outputLink value="#{details.url}"  target="blank" styleClass="out-link">#{details.key}</h:outputLink>
+								</p:column>
+								<p:column headerText="Summary" sortBy="#{details.summary}">
+									<h:outputLink value="#{details.url}" target="blank" styleClass="out-link">#{details.summary}</h:outputLink>
+								</p:column>
+								<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="80">
+									<h:outputText  value="#{details.timeSpent}"  converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+								</p:column>
+								<p:column headerText="Actuality (percent)" sortBy="#{details.actuality}" width="70">
+									<h:outputText  value="#{details.actuality}"/>
+								</p:column>
+							</p:dataTable>
+							
+						</p:rowExpansion>
+											
+						<f:facet name="footer">
+							<h:outputText value="&#160;" /><br/><h:outputText value="&#160;" />
+							
+								
+							<div class="bottom-export-buttons-panel">
+								<h:commandButton  actionListener="#{reportBean.exportByUserList}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By user report PDF">
+									<f:param name="reportFormat" value="pdf"/>
+								</h:commandButton>
+								<h:commandButton  actionListener="#{reportBean.exportByUserList}"  image="/resources/img/xls32.png" styleClass="export-button" title="By user report XLS">
+									<f:param name="reportFormat" value="xls"/>
+								</h:commandButton>
+								<h:commandButton actionListener="#{reportBean.exportByUserList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By user report XLSX">
+									<f:param name="reportFormat" value="xlsx"/>
+								</h:commandButton>
+							</div>
+						</f:facet>
+					</p:dataTable>
+			</p:tab>
+ 
+            <p:tab title="By Component">
+					<p:dataTable var="grouping" value="#{reportBean.byComponentGrouping}" id="byComponentList" rowIndexVar="rowIndex" >
+						<f:facet name="header">Total Time Spent (h:mm)              
+    						<p:column datasource="Details" trigger="toggler"/>
+                			<p:outputPanel>
+                    			<h:outputText value="#{reportBean.allTime}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+               					<div class="top-export-buttons-panel">
+									<h:commandButton  actionListener="#{reportBean.exportByComponentList}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By component report PDF">
+										<f:param name="reportFormat" value="pdf"/>
+									</h:commandButton>
+									<h:commandButton  actionListener="#{reportBean.exportByComponentList}"  image="/resources/img/xls32.png" styleClass="export-button" title="By component report XLS">
+										<f:param name="reportFormat" value="xls"/>
+									</h:commandButton>
+									<h:commandButton actionListener="#{reportBean.exportByComponentList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By component report XLSX">
+										<f:param name="reportFormat" value="xlsx"/>
+									</h:commandButton>
+								</div>
+                			</p:outputPanel>            
+            			</f:facet>
+            			
+					<p:column>
+       					<p:rowToggler />
+   					</p:column>
+            			<p:column headerText="№" >
+            				<h:outputText  value="#{rowIndex+1}"  />
+            			</p:column>
+            			<p:column headerText="Component" sortBy="#{grouping.name}">
+            				<h:outputText  value="#{grouping.name}" />
+            			</p:column>
+					<p:column headerText="Number of Issues" sortBy="#{grouping.issuesCount}">
+						<h:outputText  value="#{grouping.issuesCount}"/>
+					</p:column>
+					<p:column headerText="Spent (h:mm)" sortBy="#{grouping.totalTimeSpent}">
+						<h:outputText  value="#{grouping.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+					</p:column>
+
+						<p:rowExpansion>
+							
+							<p:dataTable value="#{grouping.issues}" var="details" rowIndexVar="rowIndex">
+            			<p:column headerText="№" >
+            				<h:outputText  value="#{rowIndex+1}"  />
+            			</p:column>
+            			<p:column headerText="Created" sortBy="#{details.created}">
+            				<h:outputText  value="#{details.created}"  >
+            					<f:convertDateTime pattern="dd.MM.yyyy" />
+            				 </h:outputText>
+            			</p:column>
+            			<p:column headerText="Due Date" sortBy="#{details.due}">
+            				<h:outputText  value="#{details.due}"  >
+            					<f:convertDateTime pattern="dd.MM.yyyy" />
+            				 </h:outputText>
+            			</p:column>
+            			<p:column headerText="Resolved" sortBy="#{details.resolved}">
+            				<h:outputText  value="#{details.resolved}"  >
+            					<f:convertDateTime pattern="dd.MM.yyyy" />
+            				 </h:outputText>
+            			</p:column>
+						<p:column headerText="Assignee" sortBy="#{details.assignee.name}" width="130">
+							<h:outputText  value="#{details.assignee.name}"  />
+               			</p:column>
+						<p:column headerText="Project"  sortBy="#{details.project.name}" >
+							<h:outputText  value="#{details.project.name}"  />
+						</p:column>
+						<p:column headerText="Component"  sortBy="#{details.component}" >
+							<h:outputText  value="#{details.component}"  />
+						</p:column>
+						<p:column headerText="Type" sortBy="#{details.issueType}">
+							<h:outputText  value="#{details.issueType}"  />
+						</p:column>
+						<p:column headerText="Status" sortBy="#{details.status}" width="90">
+						 <h:outputText  value="#{details.status}"  />
+						</p:column>
+						<p:column headerText="Key" sortBy="#{details.key}"><!-- sortFunction="# {reportBean.sortInNaturalOrder}"-->			
+							<h:outputLink value="#{details.url}"  target="blank" styleClass="out-link">#{details.key}</h:outputLink>
+						</p:column>
+						<p:column headerText="Summary" sortBy="#{details.summary}">
+							<h:outputLink value="#{details.url}" target="blank" styleClass="out-link">#{details.summary}</h:outputLink>
+						</p:column>
+						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="80">
+							<h:outputText  value="#{details.timeSpent}"  converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+						</p:column>
+						<p:column headerText="Actuality (percent)" sortBy="#{details.actuality}" width="70">
+							<h:outputText  value="#{details.actuality}"/>
+						</p:column>
+							</p:dataTable>
+							
+						</p:rowExpansion>
+						
+						<f:facet name="footer">
+							<h:outputText value="&#160;" /><br/><h:outputText value="&#160;" />
+							
+								
+							<div class="bottom-export-buttons-panel">
+								<h:commandButton  actionListener="#{reportBean.exportByComponentList}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By component report PDF">
+									<f:param name="reportFormat" value="pdf"/>
+								</h:commandButton>
+								<h:commandButton  actionListener="#{reportBean.exportByComponentList}"  image="/resources/img/xls32.png" styleClass="export-button" title="By component report XLS">
+									<f:param name="reportFormat" value="xls"/>
+								</h:commandButton>
+								<h:commandButton actionListener="#{reportBean.exportByComponentList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By component report XLSX">
+									<f:param name="reportFormat" value="xlsx"/>
+								</h:commandButton>
+							</div>
+						</f:facet>
+					</p:dataTable>
+			</p:tab>
+
+            <p:tab title="By Type">
+					<p:dataTable var="grouping" value="#{reportBean.byTypeGrouping}" id="byTypeList" rowIndexVar="rowIndex" >
+						<f:facet name="header">Total Time Spent (h:mm)              
+    						<p:column datasource="Details" trigger="toggler"/>
+                			<p:outputPanel>
+                    			<h:outputText value="#{reportBean.allTime}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+               					<div class="top-export-buttons-panel">
+									<h:commandButton  actionListener="#{reportBean.exportByTypeList}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By type report PDF">
+										<f:param name="reportFormat" value="pdf"/>
+									</h:commandButton>
+									<h:commandButton  actionListener="#{reportBean.exportByTypeList}"  image="/resources/img/xls32.png" styleClass="export-button" title="By type report XLS">
+										<f:param name="reportFormat" value="xls"/>
+									</h:commandButton>
+									<h:commandButton actionListener="#{reportBean.exportByTypeList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By type report XLSX">
+										<f:param name="reportFormat" value="xlsx"/>
+									</h:commandButton>
+								</div>
+                			</p:outputPanel>            
+            			</f:facet>
+            			
+					<p:column>
+       					<p:rowToggler />
+   					</p:column>
+            			<p:column headerText="№" >
+            				<h:outputText  value="#{rowIndex+1}"  />
+            			</p:column>
+            			<p:column headerText="Issue Type" sortBy="#{grouping.name}">
+            				<h:outputText  value="#{grouping.name}" />
+            			</p:column>
+					<p:column headerText="Number of Issues" sortBy="#{grouping.issuesCount}">
+						<h:outputText  value="#{grouping.issuesCount}"/>
+					</p:column>
+					<p:column headerText="Spent (h:mm)" sortBy="#{grouping.totalTimeSpent}">
+						<h:outputText  value="#{grouping.totalTimeSpent}" converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+					</p:column>
+
+						<p:rowExpansion>
+							
+							<p:dataTable value="#{grouping.issues}" var="details" rowIndexVar="rowIndex">
+            			<p:column headerText="№" >
+            				<h:outputText  value="#{rowIndex+1}"  />
+            			</p:column>
+            			<p:column headerText="Created" sortBy="#{details.created}">
+            				<h:outputText  value="#{details.created}"  >
+            					<f:convertDateTime pattern="dd.MM.yyyy" />
+            				 </h:outputText>
+            			</p:column>
+            			<p:column headerText="Due Date" sortBy="#{details.due}">
+            				<h:outputText  value="#{details.due}"  >
+            					<f:convertDateTime pattern="dd.MM.yyyy" />
+            				 </h:outputText>
+            			</p:column>
+            			<p:column headerText="Resolved" sortBy="#{details.resolved}">
+            				<h:outputText  value="#{details.resolved}"  >
+            					<f:convertDateTime pattern="dd.MM.yyyy" />
+            				 </h:outputText>
+            			</p:column>
+						<p:column headerText="Assignee" sortBy="#{details.assignee.name}" width="130">
+							<h:outputText  value="#{details.assignee.name}"  />
+               			</p:column>
+						<p:column headerText="Project"  sortBy="#{details.project.name}" >
+							<h:outputText  value="#{details.project.name}"  />
+						</p:column>
+						<p:column headerText="Type" sortBy="#{details.issueType}">
+							<h:outputText  value="#{details.issueType}"  />
+						</p:column>
+						<p:column headerText="Status" sortBy="#{details.status}" width="90">
+						 <h:outputText  value="#{details.status}"  />
+						</p:column>
+						<p:column headerText="Key" sortBy="#{details.key}"><!-- sortFunction="# {reportBean.sortInNaturalOrder}"-->			
+							<h:outputLink value="#{details.url}"  target="blank" styleClass="out-link">#{details.key}</h:outputLink>
+						</p:column>
+						<p:column headerText="Summary" sortBy="#{details.summary}">
+							<h:outputLink value="#{details.url}" target="blank" styleClass="out-link">#{details.summary}</h:outputLink>
+						</p:column>
+						<p:column headerText="Spent (h:mm)" sortBy="#{details.timeSpent}" width="80">
+							<h:outputText  value="#{details.timeSpent}"  converter="com.jastt.frontend.beans.worklog.IntToHMConverter"/>
+						</p:column>
+						<p:column headerText="Actuality (percent)" sortBy="#{details.actuality}" width="70">
+							<h:outputText  value="#{details.actuality}"/>
+						</p:column>
+							</p:dataTable>
+							
+						</p:rowExpansion>
+						
+						<f:facet name="footer">
+							<h:outputText value="&#160;" /><br/><h:outputText value="&#160;" />
+							
+								
+							<div class="bottom-export-buttons-panel">
+								<h:commandButton  actionListener="#{reportBean.exportByTypeList}"  image="/resources/img/pdf32.png" styleClass="export-button" title="By type report PDF">
+									<f:param name="reportFormat" value="pdf"/>
+								</h:commandButton>
+								<h:commandButton  actionListener="#{reportBean.exportByTypeList}"  image="/resources/img/xls32.png" styleClass="export-button" title="By type report XLS">
+									<f:param name="reportFormat" value="xls"/>
+								</h:commandButton>
+								<h:commandButton actionListener="#{reportBean.exportByTypeList}" image="/resources/img/xlsx32.png" styleClass="export-button" title="By type report XLSX">
 									<f:param name="reportFormat" value="xlsx"/>
 								</h:commandButton>
 							</div>

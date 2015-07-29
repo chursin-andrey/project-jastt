@@ -1,6 +1,7 @@
 package com.jastt.frontend.beans.worklog;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -69,4 +70,25 @@ public class WorklogReportItem implements Serializable {
 		}
 		return (sumOfActualities / issues.size()) + "%";
 	}
+
+    public static Comparator<WorklogReportItem> getAuthorComparator() {
+	return new AuthorComparator();
+    }
+
+    private static final class AuthorComparator implements
+            Comparator<WorklogReportItem> {
+        @Override
+        public int compare(WorklogReportItem o1, WorklogReportItem o2) {
+        if (o1 == o2) {
+            return 0;
+        }
+        if (o1 == null || o1.author == null) {
+            return -1;
+        }
+        if (o2 == null || o2.author == null) {
+            return 1;
+        }
+        return o1.author.compareTo(o2.author);
+        }
+    }
 }

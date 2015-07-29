@@ -2,13 +2,17 @@ package com.jastt.business.services.jira.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atlassian.jira.rest.client.api.domain.BasicComponent;
 import com.atlassian.jira.rest.client.api.domain.IssueField;
 import com.jastt.business.domain.entities.Assignee;
 import com.jastt.business.domain.entities.Issue;
@@ -125,6 +129,15 @@ public class JiraIssueServiceImpl implements JiraIssueService {
 			LOG.warn("Issue {} has no worklog", issue.getKey());
 		}
 		issue.setWorklogs(worklogSet);
+		
+		Iterable<BasicComponent> components = jiraIssue.getComponents();
+		ArrayList<String> componentsNames = new ArrayList<String>();
+		for (BasicComponent basicComponent : components) {
+		    String componentsName = basicComponent.getName();
+		    componentsNames.add(componentsName);
+		}
+		Collections.sort(componentsNames);
+		issue.setComponent(componentsNames.toString());
 		
 		return issue;
 	}
