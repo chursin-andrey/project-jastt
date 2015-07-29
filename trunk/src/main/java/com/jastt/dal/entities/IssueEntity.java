@@ -33,6 +33,7 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 	private Date due;
 	private Date resolved;
 	private String priority;
+	private String component;
 	private String summary;
 	private int timeSpent;
 	private Set<WorklogEntity> worklogEntities = new HashSet<WorklogEntity>(0);
@@ -43,7 +44,7 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 	public IssueEntity(AssigneeEntity assigneeEntity,
 			ProjectEntity projectEntity, String key, String issueType,
 			String status, Date created, Date updated, Date due,
-			Date resolved, String summary, int timeSpent) {
+			Date resolved, String component, String summary, int timeSpent) {
 		this.assigneeEntity = assigneeEntity;
 		this.projectEntity = projectEntity;
 		this.key = key;
@@ -60,7 +61,7 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 	public IssueEntity(AssigneeEntity assigneeEntity,
 			ProjectEntity projectEntity, String key, String issueType,
 			String status, Date created, Date updated, Date due,
-			Date resolved, String priority, String summary, int timeSpent, Set<WorklogEntity> worklogEntities) {
+			Date resolved, String priority, String component, String summary, int timeSpent, Set<WorklogEntity> worklogEntities) {
 		this.assigneeEntity = assigneeEntity;
 		this.projectEntity = projectEntity;
 		this.key = key;
@@ -71,6 +72,7 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 		this.due = due;
 		this.resolved = resolved;
 		this.priority = priority;
+		this.component = component;
 		this.summary = summary;
 		this.timeSpent = timeSpent;
 		this.worklogEntities = worklogEntities;
@@ -179,6 +181,15 @@ public class IssueEntity extends GenericDalEntity<Integer> implements java.io.Se
 
 	public void setPriority(String priority) {
 		this.priority = priority;
+	}
+	
+	@Column(name = "COMPONENT", length = 50)
+	public String getComponent() {
+	    return component;
+	}
+	
+	public void setComponent(String component) {
+	    this.component = component;
 	}
 
 	@Column(name = "SUMMARY",  length = 1024)
