@@ -20,7 +20,7 @@
 					<p:selectOneMenu id="project" value="#{worklogBean.currProjectName}" styleClass="item">
 						<f:selectItem itemLabel="Select a project" itemValue=""/>
 						<f:selectItems value="#{worklogBean.projectList}" var="project" itemLabel="#{project.name}" itemValue="#{project.name}"/>
-						<p:ajax update="members issueType issueStatus timeSelection" 
+						<p:ajax update="members issueType issueStatus timeSelection mainButtonsPanel" 
 						listener="#{worklogBean.projectChanged}"/>
 					</p:selectOneMenu>
 					<br/>
@@ -83,16 +83,19 @@
 				</h:panelGroup>
 			</h:panelGrid>
 			
-			<h:panelGrid styleClass="main-buttons-panel panel">
+			<h:panelGrid styleClass="main-buttons-panel panel" id="mainButtonsPanel">
 				<h:panelGroup>
 					<p:commandButton value="Show" styleClass="main-buttons"
-					actionListener="#{worklogBean.showButtonClick}" update="tabs:worklogList tabs:byUserList tabs:byComponentList tabs:btTypeList msgs"/>
+					actionListener="#{worklogBean.showButtonClick}" update="tabs:worklogList tabs:byUserList tabs:byComponentList tabs:btTypeList msgs"
+					disabled="#{worklogBean.disableMenu}"/>
 					
 					<p:commandButton value="Clear" styleClass="main-buttons"
-					actionListener="#{worklogBean.clearButtonClick}" update="tabs:worklogList tabs:byUserList tabs:byComponentList tabs:btTypeList msgs"/>
+					actionListener="#{worklogBean.clearButtonClick}" update="tabs:worklogList tabs:byUserList tabs:byComponentList tabs:btTypeList msgs"
+					disabled="#{worklogBean.disableMenu}"/>
 					
 					<p:commandButton value="Update" styleClass="main-buttons" ajax="false"
-					actionListener="#{worklogBean.updateButtonClick}"/>
+					actionListener="#{worklogBean.updateButtonClick}"
+					disabled="#{worklogBean.disableMenu}"/>
 				</h:panelGroup>
 			</h:panelGrid>
 			

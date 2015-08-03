@@ -11,13 +11,15 @@
 		
 	<h:form id="form">
 
+	<p:growl id="growl" sticky="true" showDetail="true" showSummary="true" autoUpdate="true"  />
+
 	<h:panelGrid columns="3"   styleClass="top-control-panels" columnClasses="top-left-panel panel, top-center-panel panel, top-right-panel panel">
 		<p:column >	
 			<p:outputLabel value="Project:"/><br />
 			<p:selectOneMenu id="project" value="#{reportBean.project_name}" styleClass="item" >
 				<f:selectItem itemLabel="Please select a project... " noSelectionOption="true" />
    				<f:selectItems var="project" value="#{reportBean.projects}" itemValue="#{project.name}" itemLabel="#{project.name} " />
-   				<f:ajax listener="#{reportBean.changeProject}" render="issue status assignees time" /> 
+   				<f:ajax listener="#{reportBean.changeProject}" render="issue status assignees time mainButtonsPanel" /> 
 			</p:selectOneMenu>	
 			<br />
 			<p:outputLabel value="Members:"/><br />
@@ -87,11 +89,11 @@
 	</h:panelGrid>
 	
 
-	<h:panelGrid columns="1" styleClass="main-buttons-panel panel" >
+	<h:panelGrid columns="1" styleClass="main-buttons-panel panel" id="mainButtonsPanel">
 		<h:column>
-			<p:commandButton value="Show" actionListener="#{reportBean.showReport()}" update="tabs" styleClass="main-buttons"/>
-			<p:commandButton value="Clear" actionListener="#{reportBean.cancelAction()}" update="tabs" styleClass="main-buttons"/>
-			<p:commandButton value="Update" action="#{reportBean.updateData()}" styleClass="main-buttons"/>
+			<p:commandButton value="Show" actionListener="#{reportBean.showReport()}" update="tabs" styleClass="main-buttons" disabled="#{reportBean.disableMenu}"/>
+			<p:commandButton value="Clear" actionListener="#{reportBean.cancelAction()}" update="tabs" styleClass="main-buttons" disabled="#{reportBean.disableMenu}"/>
+			<p:commandButton value="Update" action="#{reportBean.updateData()}" styleClass="main-buttons" disabled="#{reportBean.disableMenu}"/>
 		</h:column>
 	</h:panelGrid>
 	

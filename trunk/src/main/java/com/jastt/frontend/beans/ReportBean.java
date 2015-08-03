@@ -44,6 +44,7 @@ import com.jastt.business.services.ProjectService;
 import com.jastt.business.services.ReportingService;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.enums.PredefinedDateEnum;
+import com.jastt.frontend.utils.Faces;
 
 @Component
 @Scope("session")
@@ -73,7 +74,7 @@ public class ReportBean implements Serializable{
 	private boolean disableMenu;
 	private boolean disableSelectTime;
 	private boolean disableSelectDate;
-	private String timespent;
+	private String timespent = "allTime";
 	private Set<String> status;
 	private String predefinedDate;
 	private int allTime;
