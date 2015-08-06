@@ -62,7 +62,7 @@
    						<f:ajax listener="#{reportBean.changeTime}" render="issue allTime dateFrom dateTo" />
 				</p:selectOneRadio>
 				   
-				 <p:selectOneMenu id="allTime" value="#{reportBean.predefinedDate}" disabled="#{reportBean.disableSelectTime}"  styleClass="predefineddate">
+				 <p:selectOneMenu id="allTime" value="#{reportBean.predefinedDate}" disabled="#{reportBean.disableSelectTime} or #{reportBean.disableMenu}"  styleClass="predefineddate">
    					<f:selectItem itemValue="All Time" itemLabel="All Time" noSelectionOption="true" />
    					<f:selectItem itemValue="Today" itemLabel="Today" noSelectionOption="true" />
    					<f:selectItem itemValue="Yesterday" itemLabel="Yesterday" noSelectionOption="true" />
