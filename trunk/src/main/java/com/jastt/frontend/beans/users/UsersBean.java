@@ -29,7 +29,6 @@ import com.jastt.business.services.ServerService;
 import com.jastt.business.services.UserService;
 import com.jastt.business.services.jira.JiraClientException;
 import com.jastt.business.services.jira.JiraProjectService;
-import com.jastt.frontend.beans.LoginBean;
 import com.jastt.frontend.utils.Dialogs;
 import com.jastt.frontend.utils.Faces;
 
