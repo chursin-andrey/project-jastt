@@ -72,3 +72,6 @@
 	 text-decoration: underline; 
 }
 
+ul#javax_faces_developmentstage_messages li span {
+	white-space: pre;
+}

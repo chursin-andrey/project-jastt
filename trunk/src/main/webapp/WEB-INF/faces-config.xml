@@ -7,6 +7,10 @@
 
 	<application>  
 	  <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
-	 </application> 
- 
+	</application> 
+    <factory>
+      <exception-handler-factory>
+        com.jastt.frontend.utils.DefaultExceptionHandlerFactory
+      </exception-handler-factory>
+    </factory>
  </faces-config>
