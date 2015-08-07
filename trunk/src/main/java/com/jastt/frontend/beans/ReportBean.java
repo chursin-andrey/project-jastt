@@ -284,6 +284,7 @@ public class ReportBean implements Serializable{
 		issueService.update(user);
 	}
 	
+	// not used?
 	public void clearReport(){
 		if(projects != null) projects.clear();
 		projects = projectService.getAllProjects();
@@ -295,14 +296,20 @@ public class ReportBean implements Serializable{
 		disableMenu = true;
 		
 	}
+
 	public void cancelAction(){
-		reportIssues.clear();
-		reportIssuesByUser.clear();
-		reportIssuesByType.clear();
-		reportIssuesByComponent.clear();
+		if (reportIssues != null) reportIssues.clear();
+		if (reportIssuesByUser != null) reportIssuesByUser.clear();
+		if (reportIssuesByType != null) reportIssuesByType.clear();
+		if (reportIssuesByComponent != null) reportIssuesByComponent.clear();
+		
+		if (byUserGrouping != null) byUserGrouping.clear();
+		if (byComponentGrouping != null) byComponentGrouping.clear();
+		if (byTypeGrouping != null) byTypeGrouping.clear();
+		
 		setAllTime(0);
 		mapAssigneesIssues.clear();
-		entries.clear();
+		if (entries != null) entries.clear();
 	}
 	
 	public void addMapIssue(List<Issue> list) {
